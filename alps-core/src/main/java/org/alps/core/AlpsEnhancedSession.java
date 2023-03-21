@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.alps.core.frame.*;
 
 import java.net.InetAddress;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,6 +28,18 @@ public class AlpsEnhancedSession implements AlpsSession {
         this.dataCoderFactory = dataCoderFactory;
         this.frameListeners = frameListeners;
         this.config = config;
+    }
+
+
+    public <T> T attr(String key) {
+        return session.attr(key);
+    }
+
+
+    @Override
+    public AlpsEnhancedSession attr(String key, Object value) {
+        session.attr(key, value);
+        return this;
     }
 
     /**
@@ -72,23 +85,23 @@ public class AlpsEnhancedSession implements AlpsSession {
         receive(frame);
     }
 
-    ForgetCommand forget(int command) {
+    public ForgetCommand forget(int command) {
         return new ForgetCommand(this, command);
     }
 
-    RequestCommand request(int command) {
+    public RequestCommand request(int command) {
         return new RequestCommand(this, command);
     }
 
-    IdleCommand idle() {
+    public IdleCommand idle() {
         return new IdleCommand(this);
     }
 
-    ErrorCommand error() {
+    public ErrorCommand error() {
         return new ErrorCommand(this);
     }
 
-    ResponseCommand response() {
+    public ResponseCommand response() {
         return new ResponseCommand(this);
     }
 
@@ -213,7 +226,7 @@ public class AlpsEnhancedSession implements AlpsSession {
             return this;
         }
 
-        public <T> CompletableFuture<T> send(Class<T> responseClass) {
+        public CompletableFuture<Response> send() {
             AtomicReference<FrameListener> listener = new AtomicReference<>(null);
             return CompletableFuture.supplyAsync(() -> {
                         var id = session.nextId();
@@ -235,7 +248,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                     })
                     .orTimeout(5, TimeUnit.SECONDS)
                     .thenComposeAsync(ResponseResult::result)
-                    .thenApplyAsync(frame -> getResult(frame, responseClass))
+                    .thenApplyAsync(Response::new)
                     .whenComplete((res, err) -> {
                         if (listener.get() != null) {
                             session.frameListeners.removeFrameListener(ResponseFrame.class, listener.get());
@@ -253,6 +266,38 @@ public class AlpsEnhancedSession implements AlpsSession {
                 return null;
             }
             return data.dataArray()[0].object(responseClass);
+        }
+    }
+
+    public static class Response {
+        private final ResponseFrame frame;
+
+        public Response(ResponseFrame frame) {
+            this.frame = frame;
+        }
+
+        public AlpsMetadata metadata() {
+            return frame.metadata();
+        }
+
+        public AlpsData data() {
+            return frame.data();
+        }
+
+        public <T> Optional<T> data(Class<T> clazz) {
+            return data(0, clazz);
+        }
+
+        public <T> Optional<T> data(int index, Class<T> clazz) {
+            if (index < 0 || index >= frame.data().dataArray().length) {
+                return Optional.empty();
+            }
+            return Optional.ofNullable(frame.data().dataArray()[index].object(clazz));
+        }
+
+        @SuppressWarnings("unchecked")
+        public <T> Optional<T> metadata(String key, Class<T> clazz) {
+            return frame.metadata().getValue(key, clazz).map(e -> (T) e);
         }
     }
 

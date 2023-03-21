@@ -42,7 +42,13 @@ public class RouterDispatcher {
             var routerMap = routes.get(module);
             if (routerMap.containsKey(command)) {
                 var router = routerMap.get(command);
-                router.handle(session, frame);
+                try {
+                    router.handle(session, frame);
+                } catch (Exception e) {
+                    log.info("Handle exception", e);
+                    // TODO
+//                    session.error().code().data().send();
+                }
             }
         }
     }

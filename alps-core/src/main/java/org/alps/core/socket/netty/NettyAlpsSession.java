@@ -1,5 +1,6 @@
 package org.alps.core.socket.netty;
 
+import io.netty.util.AttributeKey;
 import org.alps.core.AlpsPacket;
 import org.alps.core.AlpsSession;
 import org.alps.core.AlpsSocket;
@@ -17,6 +18,18 @@ public class NettyAlpsSession implements AlpsSession {
         this.socket = socket;
         this.socketChannel = socketChannel;
         this.module = module;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T attr(String key) {
+        return (T) socketChannel.attr(AttributeKey.valueOf(key)).get();
+    }
+
+    @Override
+    public AlpsSession attr(String key, Object value) {
+        socketChannel.attr(AttributeKey.valueOf(key)).set(value);
+        return this;
     }
 
     @Override

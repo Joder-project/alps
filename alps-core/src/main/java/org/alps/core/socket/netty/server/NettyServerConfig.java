@@ -1,7 +1,9 @@
 package org.alps.core.socket.netty.server;
 
 import io.netty.channel.ChannelOption;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
@@ -16,6 +18,8 @@ public class NettyServerConfig {
     private Map<ChannelOption<?>, ?> childOptionSettings;
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Timeout {
         long readerIdleTime;
         long writerIdleTime;

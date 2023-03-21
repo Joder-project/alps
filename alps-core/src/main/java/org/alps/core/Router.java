@@ -19,5 +19,5 @@ public interface Router {
      */
     int command();
 
-    void handle(AlpsEnhancedSession session, CommandFrame frame);
+    void handle(AlpsEnhancedSession session, CommandFrame frame) throws Exception;
 }

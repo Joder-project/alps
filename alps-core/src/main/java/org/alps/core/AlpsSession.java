@@ -29,4 +29,24 @@ public interface AlpsSession {
 
     void close();
 
+    /**
+     * 获取session的内存属性
+     *
+     * @param key
+     * @param <T>
+     * @return
+     */
+    <T> T attr(String key);
+
+    /**
+     * 为session设置内存属性
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    default AlpsSession attr(String key, Object value) {
+        return this;
+    }
+
 }

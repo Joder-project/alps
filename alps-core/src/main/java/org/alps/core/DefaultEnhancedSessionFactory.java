@@ -10,8 +10,8 @@ public class DefaultEnhancedSessionFactory implements EnhancedSessionFactory {
     final FrameListeners frameListeners;
     final AlpsConfig config;
 
-    DefaultEnhancedSessionFactory(FrameCoders frameCoders, AlpsDataCoderFactory dataCoderFactory,
-                                  FrameListeners frameListeners, AlpsConfig config) {
+    public DefaultEnhancedSessionFactory(FrameCoders frameCoders, AlpsDataCoderFactory dataCoderFactory,
+                                         FrameListeners frameListeners, AlpsConfig config) {
         this.frameCoders = frameCoders;
         this.dataCoderFactory = dataCoderFactory;
         this.frameListeners = frameListeners;

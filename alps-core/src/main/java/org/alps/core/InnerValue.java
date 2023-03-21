@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * 携带数据包装类
  */
-class InnerValue {
+public class InnerValue {
     private final AlpsDataCoder coder;
     private volatile byte[] data;
     private volatile Object object;

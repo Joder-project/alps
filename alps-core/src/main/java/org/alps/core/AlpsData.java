@@ -107,6 +107,10 @@ public record AlpsData(
         return ret;
     }
 
+    public int dataSize() {
+        return dataArray.length;
+    }
+
 }
 
 class AlpsDataBuilder {

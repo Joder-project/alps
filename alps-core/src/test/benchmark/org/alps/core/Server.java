@@ -9,7 +9,6 @@ import org.alps.core.socket.netty.server.NettyAlpsServer;
 import org.alps.core.socket.netty.server.NettyServerConfig;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class Server {
@@ -44,11 +43,11 @@ public class Server {
                     @Override
                     public void handle(AlpsEnhancedSession session, CommandFrame frame) {
 //                        log.info("Command Received: " + command);
-                        try {
-                            TimeUnit.MICROSECONDS.sleep(20L);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
+//                        try {
+//                            TimeUnit.MICROSECONDS.sleep(20L);
+//                        } catch (InterruptedException e) {
+//                            throw new RuntimeException(e);
+//                        }
                         if (frame instanceof ForgetFrame forgetFrame) {
 
                         } else if (frame instanceof RequestFrame requestFrame) {

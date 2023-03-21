@@ -7,11 +7,12 @@
 
 ## 提供功能
 
-* [-] 提供自定义帧拓展能力。
-* [-] Forget 请求不管响应信息
-* [-] Request-Response 请求响应
+* [x] 提供自定义帧拓展能力。
+* [x] Spring Boot 依赖
+* [x] Forget 请求不管响应信息
+* [x] Request-Response 请求响应
 * [] Stream 流传输 （不支持）
-* [] Spring Boot 依赖 (不支持)
+
 
 ## Example
 
@@ -122,4 +123,125 @@ public class A {
         session.request(1).data(1).send(int.class).get();
     }
 }
+```
+
+## 结合SpringBoot Example
+
+```yaml
+alps:
+  modules:
+    - code: 1
+      name: 'User'
+      verify-token: 1
+      version: 1
+
+---
+spring:
+  config:
+    activate:
+      on-profile: server
+alps:
+  server:
+    port: 6195
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: client
+
+alps:
+  client:
+    host: 'localhost'
+    port: 6195
+
+```
+
+Server
+
+```java
+import org.alps.starter.AlpsExchange;
+import org.alps.starter.AlpsServer;
+import org.alps.starter.anno.AlpsModule;
+import org.alps.starter.anno.Command;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.test.context.ActiveProfiles;
+
+@SpringBootApplication
+@AlpsServer // 标记服务端
+public class ServerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ServerApplication.class, args);
+    }
+}
+
+/**
+ * 定义controller
+ */
+@AlpsModule(module = "User")
+class MyController {
+
+    @Command(command = 1, type = Command.Type.REQUEST_RESPONSE)
+    public String hello(String message, AlpsExchange exchange) {
+        exchange.session().forget(2).data("I am Server").send();
+        return "hello, " + message;
+    }
+}
+```
+
+Client
+
+```java
+import lombok.extern.slf4j.Slf4j;
+import org.alps.starter.AlpsClient;
+import org.alps.starter.ClientSessionManager;
+import org.alps.starter.anno.AlpsModule;
+import org.alps.starter.anno.Command;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
+import org.springframework.test.context.ActiveProfiles;
+
+@SpringBootApplication
+@AlpsClient // 标记客户端
+public class ClientApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ClientApplication.class, args);
+    }
+
+}
+
+@Slf4j
+@AlpsModule(module = "User")
+class MyController {
+
+    @Command(command = 2, type = Command.Type.FORGET)
+    public void hello(String message) {
+        log.info("receive msg: {}", message);
+    }
+}
+
+@Component
+@Slf4j
+class Runner implements CommandLineRunner {
+
+    private final ClientSessionManager sessionManager;
+
+    Runner(ClientSessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        var session = sessionManager.session("User").get();
+        var response = session.request(1).data("111").send().get();
+        log.info("Response: {}", response.data(String.class));
+    }
+}
+
 ```

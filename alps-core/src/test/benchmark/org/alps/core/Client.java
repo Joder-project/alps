@@ -24,7 +24,9 @@ public class Client {
     static void request(SessionState state) throws ExecutionException, InterruptedException {
         var ret = state.session.request(1)
                 .data("1234".repeat(1024))
-                .send(String.class).get();
+                .send()
+                .thenApply(response -> response.data(0, String.class).orElse(null))
+                .get();
         log.info("{}", ret);
     }
 

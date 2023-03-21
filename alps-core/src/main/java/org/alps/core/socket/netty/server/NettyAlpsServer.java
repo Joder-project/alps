@@ -88,12 +88,6 @@ public class NettyAlpsServer implements AlpsServer {
             throw new RuntimeException(e);
         }
         log.info("Server start finish. Listening port: {}", serverConfig.getPort());
-        //对关闭通道进行监听
-        try {
-            this.serverFeature.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-            throw new AlpsException(e);
-        }
     }
 
     private void handleChannel(SocketChannel socketChannel) {
@@ -120,6 +114,12 @@ public class NettyAlpsServer implements AlpsServer {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
             defaultGroup.shutdownGracefully();
+            //对关闭通道进行监听
+            try {
+                this.serverFeature.channel().closeFuture().sync();
+            } catch (InterruptedException e) {
+                throw new AlpsException(e);
+            }
         });
     }
 

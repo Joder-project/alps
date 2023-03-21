@@ -1,0 +1,27 @@
+alps:
+  modules:
+    - code: 1
+      name: 'User'
+      verify-token: 1
+      version: 1
+
+---
+spring:
+  config:
+    activate:
+      on-profile: server
+alps:
+  server:
+    port: 6195
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: client
+
+alps:
+  client:
+    host: 'localhost'
+    port: 6195

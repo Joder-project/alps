@@ -112,5 +112,15 @@ public class AlpsEnhancedSessionBenchmark {
         public void close() {
 
         }
+
+        @Override
+        public <T> T attr(String key) {
+            return null;
+        }
+
+        @Override
+        public AlpsSession attr(String key, Object value) {
+            return this;
+        }
     }
 }

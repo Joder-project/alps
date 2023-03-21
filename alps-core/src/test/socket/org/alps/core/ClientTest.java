@@ -20,7 +20,10 @@ public class ClientTest {
         }
         var session = client.get().session(((short) 1)).map(e -> ((AlpsEnhancedSession) e)).orElseThrow();
         session.forget(1).data(1).send().get();
-        var ret = session.request(2).data(1).send(int.class).get();
+        var ret = session.request(2).data(1)
+                .send()
+                .thenApply(response -> response.data(0, int.class).orElse(0))
+                .get();
         log.info("receive: {}", ret);
 
     }

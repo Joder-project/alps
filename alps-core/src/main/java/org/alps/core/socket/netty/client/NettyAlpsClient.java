@@ -1,23 +1,28 @@
 package org.alps.core.socket.netty.client;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.AlpsClient;
+import org.alps.core.AlpsPacket;
 import org.alps.core.AlpsSession;
 import org.alps.core.EnhancedSessionFactory;
 import org.alps.core.socket.netty.AlpsNettyDecoder;
 import org.alps.core.socket.netty.AlpsNettyEncoder;
 import org.alps.core.socket.netty.AlpsNioSocketChannel;
+import org.alps.core.socket.netty.RemotingHelper;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class NettyAlpsClient implements AlpsClient {
@@ -27,11 +32,9 @@ public class NettyAlpsClient implements AlpsClient {
     private final NettyClientConfig clientConfig;
     private final AlpsNettyEncoder encoder;
 
-    private final EnhancedSessionFactory sessionFactory;
-
-    private final List<Short> supportModules;
 
     private final AlpsClientProtocolHandler protocolHandler;
+    private final SocketConnectionHandle socketConnectionHandle;
 
     private Bootstrap bootstrap;
 
@@ -42,10 +45,9 @@ public class NettyAlpsClient implements AlpsClient {
                            List<Short> supportModules) {
         this.eventExecutors = eventExecutors;
         this.clientConfig = clientConfig;
-        this.sessionFactory = sessionFactory;
-        this.supportModules = Collections.unmodifiableList(supportModules);
         this.encoder = new AlpsNettyEncoder();
         this.protocolHandler = new AlpsClientProtocolHandler(NettyAlpsClient.this, sessionFactory, supportModules);
+        this.socketConnectionHandle = new SocketConnectionHandle();
     }
 
     @Override
@@ -74,7 +76,8 @@ public class NettyAlpsClient implements AlpsClient {
 
         //对通道关闭进行监听
         socketChannel = ((AlpsNioSocketChannel) channelFuture.channel());
-
+        while (!isReady()) {
+        }
         log.info("Connect Server=> {}:{}", clientConfig.getHost(), clientConfig.getPort());
 
     }
@@ -84,7 +87,15 @@ public class NettyAlpsClient implements AlpsClient {
                 encoder,
                 new AlpsNettyDecoder()
         );
-
+        if (clientConfig.getTimeout() != null) {
+            var timeout = clientConfig.getTimeout();
+            socketChannel.pipeline().addLast(new IdleStateHandler(
+                    timeout.getReaderIdleTime(),
+                    timeout.getWriterIdleTime(),
+                    timeout.getAllIdleTime(),
+                    TimeUnit.MILLISECONDS));
+            socketChannel.pipeline().addLast(socketConnectionHandle);
+        }
         //给pipeline管道设置处理器
         socketChannel.pipeline().addLast("client-handler", protocolHandler);
     }
@@ -111,6 +122,8 @@ public class NettyAlpsClient implements AlpsClient {
 
     @Override
     public List<AlpsSession> session() {
+        while (!isReady()) {
+        }
         return Collections.unmodifiableList(sessions);
     }
 
@@ -122,5 +135,24 @@ public class NettyAlpsClient implements AlpsClient {
     @Override
     public void removeSession(AlpsSession session) {
         sessions.remove(session);
+    }
+
+    @ChannelHandler.Sharable
+    static class SocketConnectionHandle extends ChannelInboundHandlerAdapter {
+        @Override
+        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+            if (evt instanceof IdleStateEvent event) {
+                if (event.state().equals(IdleState.ALL_IDLE)) {
+                    var map = ctx.channel().attr(RemotingHelper.KEY).get();
+                    if (map != null) {
+                        var session = map.get(AlpsPacket.ZERO_MODULE);
+                        if (session != null) {
+                            session.idle().send();
+                        }
+                    }
+                }
+            }
+            ctx.fireUserEventTriggered(evt);
+        }
     }
 }

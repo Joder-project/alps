@@ -24,6 +24,16 @@
         <module>alps-core</module>
         <module>spring-boot-starter-alps</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.alps</groupId>
+                <artifactId>alps-core</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <repositories>
         <repository>
             <id>aliyun</id>
