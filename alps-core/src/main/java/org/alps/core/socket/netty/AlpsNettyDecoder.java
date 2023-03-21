@@ -6,6 +6,8 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.AlpsPacket;
 
+import java.util.Arrays;
+
 @Slf4j
 public class AlpsNettyDecoder extends LengthFieldBasedFrameDecoder {
 
@@ -26,6 +28,7 @@ public class AlpsNettyDecoder extends LengthFieldBasedFrameDecoder {
                 return null;
             }
             AlpsPacket protocol = read(frame);
+            log.debug("receive data: {}, {}", Arrays.toString(protocol.metadata()), Arrays.toString(protocol.data()));
             return protocol;
         } catch (Exception e) {
             log.error("decode exception, " + RemotingHelper.parseChannelRemoteAddr(ctx.channel()), e);

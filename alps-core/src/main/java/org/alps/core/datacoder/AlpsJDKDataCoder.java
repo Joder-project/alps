@@ -14,9 +14,7 @@ public class AlpsJDKDataCoder implements AlpsDataCoder {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T encode(byte[] data, int offset, int size, Class<T> clazz) {
-        var inputStream = new ByteArrayInputStream(data, offset, size);
-        try {
-            var in = new ObjectInputStream(inputStream);
+        try (var inputStream = new ByteArrayInputStream(data, offset, size); var in = new ObjectInputStream(inputStream)) {
             return (T) in.readObject();
         } catch (Exception e) {
             log.error("解析失败", e);
@@ -26,9 +24,7 @@ public class AlpsJDKDataCoder implements AlpsDataCoder {
 
     @Override
     public byte[] decode(Object obj) {
-        var outputStream = new ByteArrayOutputStream();
-        try {
-            var out = new ObjectOutputStream(outputStream);
+        try (var outputStream = new ByteArrayOutputStream(); var out = new ObjectOutputStream(outputStream);) {
             out.writeObject(obj);
             return outputStream.toByteArray();
         } catch (Exception e) {

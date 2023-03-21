@@ -7,6 +7,8 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.AlpsPacket;
 
+import java.util.Arrays;
+
 @Slf4j
 @ChannelHandler.Sharable
 public class AlpsNettyEncoder extends MessageToByteEncoder<AlpsPacket> {
@@ -56,6 +58,7 @@ public class AlpsNettyEncoder extends MessageToByteEncoder<AlpsPacket> {
         } else {
             byteBuf.writeByte(dataSize);
         }
+        log.debug("send data: {}, {}", Arrays.toString(protocol.metadata()), Arrays.toString(protocol.data()));
         byteBuf.writeBytes(protocol.data());
 
     }

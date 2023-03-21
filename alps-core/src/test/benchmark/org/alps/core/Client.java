@@ -30,9 +30,9 @@ public class Client {
 
     public static void main(String[] args) throws Exception {
         var state = new SessionState();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
             request(state);
-//            forget(state);
+            forget(state);
         }
         state.tearDown();
     }
