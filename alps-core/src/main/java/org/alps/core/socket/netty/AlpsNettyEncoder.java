@@ -1,65 +1,35 @@
 package org.alps.core.socket.netty;
 
-import io.netty.buffer.ByteBuf;
+import com.google.protobuf.MessageLite;
+import com.google.protobuf.MessageLiteOrBuilder;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import lombok.extern.slf4j.Slf4j;
-import org.alps.core.AlpsPacket;
 
-import java.util.Arrays;
+import java.util.List;
+
+import static io.netty.buffer.Unpooled.wrappedBuffer;
 
 @Slf4j
 @ChannelHandler.Sharable
-public class AlpsNettyEncoder extends MessageToByteEncoder<AlpsPacket> {
+public class AlpsNettyEncoder extends ProtobufEncoder {
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, AlpsPacket protocol, ByteBuf byteBuf) throws Exception {
-        try {
-            write(protocol, byteBuf);
-        } catch (Exception e) {
-            log.error("encode exception, " + RemotingHelper.parseChannelRemoteAddr(channelHandlerContext.channel()), e);
-            if (protocol != null) {
-                log.error(protocol.toString());
-            }
-            RemotingHelper.closeChannel(channelHandlerContext.channel());
+    protected void encode(ChannelHandlerContext ctx, MessageLiteOrBuilder msg, List<Object> out) throws Exception {
+        if (msg instanceof MessageLite messageLite) {
+            var size = Unpooled.copyInt(messageLite.getSerializedSize());
+            var content = wrappedBuffer(messageLite.toByteArray());
+            out.add(size);
+            out.add(content);
+            return;
         }
-    }
-
-    void write(AlpsPacket protocol, ByteBuf byteBuf) {
-        int metadataSize = protocol.metadataSize();
-        int byteSize = 3;
-        if (protocol.hasExtMetadata()) {
-            metadataSize = metadataSize | 0x8000_0000;
-            byteSize += 4;
-        } else {
-            byteSize += 2;
+        if (msg instanceof MessageLite.Builder builder) {
+            var build = builder.build();
+            var size = Unpooled.copyInt(build.getSerializedSize());
+            var content = wrappedBuffer(build.toByteArray());
+            out.add(size);
+            out.add(content);
         }
-        byteSize += protocol.metadataSize();
-
-        int dataSize = protocol.dataSize();
-        if (protocol.hasData()) {
-            dataSize = dataSize | 0x8000_0000;
-            byteSize += 4;
-        } else {
-            byteSize += 1;
-        }
-        byteSize += protocol.dataSize();
-        byteBuf.writeInt(byteSize);
-        byteBuf.writeByte(protocol.magic());
-        byteBuf.writeShort(protocol.module());
-        if (protocol.hasExtMetadata()) {
-            byteBuf.writeInt(metadataSize);
-        } else {
-            byteBuf.writeShort(metadataSize);
-        }
-        byteBuf.writeBytes(protocol.metadata());
-        if (protocol.hasData()) {
-            byteBuf.writeInt(dataSize);
-        } else {
-            byteBuf.writeByte(dataSize);
-        }
-        log.debug("send data: {}, {}", Arrays.toString(protocol.metadata()), Arrays.toString(protocol.data()));
-        byteBuf.writeBytes(protocol.data());
-
     }
 }

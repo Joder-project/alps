@@ -33,17 +33,18 @@ public class AlpsConfig {
     @Data
     public static class MetaDataConfig {
         private boolean enabledZip = false;
-        private CoderType coder = CoderType.JDK;
+        private CoderType coder = CoderType.PROTOBUF;
     }
 
     @Data
     public static class DataConfig {
         private boolean enabledZip = false;
-        private CoderType coder = CoderType.JDK;
+        private CoderType coder = CoderType.PROTOBUF;
     }
 
     public enum CoderType {
-        JDK(0), JSON(1);
+        JDK(0), PROTOBUF(1),
+        ;
 
         @Getter
         final byte code;

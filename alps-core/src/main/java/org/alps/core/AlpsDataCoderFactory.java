@@ -1,6 +1,7 @@
 package org.alps.core;
 
 import org.alps.core.datacoder.AlpsJDKDataCoder;
+import org.alps.core.datacoder.AlpsProtobufDataCoder;
 
 import java.util.Map;
 import java.util.Objects;
@@ -15,9 +16,10 @@ public class AlpsDataCoderFactory {
 
     public AlpsDataCoderFactory() {
         addCoder((byte) 0, new AlpsJDKDataCoder());
+        addCoder((byte) 1, new AlpsProtobufDataCoder());
     }
 
-    AlpsDataCoder getCoder(byte code) {
+    public AlpsDataCoder getCoder(byte code) {
         return coderMap.get(code);
     }
 

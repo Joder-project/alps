@@ -4,18 +4,14 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.alps.core.AlpsClient;
-import org.alps.core.AlpsPacket;
-import org.alps.core.AlpsSession;
-import org.alps.core.EnhancedSessionFactory;
-import org.alps.core.socket.netty.AlpsNettyDecoder;
-import org.alps.core.socket.netty.AlpsNettyEncoder;
-import org.alps.core.socket.netty.AlpsNioSocketChannel;
-import org.alps.core.socket.netty.RemotingHelper;
+import org.alps.core.*;
+import org.alps.core.proto.AlpsProtocol;
+import org.alps.core.socket.netty.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,11 +26,13 @@ public class NettyAlpsClient implements AlpsClient {
     private final CopyOnWriteArrayList<AlpsSession> sessions = new CopyOnWriteArrayList<>();
     private final NioEventLoopGroup eventExecutors;
     private final NettyClientConfig clientConfig;
-    private final AlpsNettyEncoder encoder;
+    private final AlpsMessageEncoder encoder;
 
 
     private final AlpsClientProtocolHandler protocolHandler;
     private final SocketConnectionHandle socketConnectionHandle;
+
+    private final AlpsDataCoderFactory coderFactory;
 
     private Bootstrap bootstrap;
 
@@ -42,10 +40,11 @@ public class NettyAlpsClient implements AlpsClient {
     private volatile boolean isStart;
 
     public NettyAlpsClient(NioEventLoopGroup eventExecutors, NettyClientConfig clientConfig, EnhancedSessionFactory sessionFactory,
-                           List<Short> supportModules) {
+                           List<Short> supportModules, AlpsDataCoderFactory coderFactory) {
         this.eventExecutors = eventExecutors;
         this.clientConfig = clientConfig;
-        this.encoder = new AlpsNettyEncoder();
+        this.coderFactory = coderFactory;
+        this.encoder = new AlpsMessageEncoder();
         this.protocolHandler = new AlpsClientProtocolHandler(NettyAlpsClient.this, sessionFactory, supportModules);
         this.socketConnectionHandle = new SocketConnectionHandle();
     }
@@ -84,8 +83,11 @@ public class NettyAlpsClient implements AlpsClient {
 
     private void handleChannel(SocketChannel socketChannel) {
         socketChannel.pipeline().addLast(
+                new AlpsNettyEncoder(),
+                new AlpsNettyDecoder(),
+                new ProtobufDecoder(AlpsProtocol.AlpsPacket.getDefaultInstance()),
                 encoder,
-                new AlpsNettyDecoder()
+                new AlpsMessageDecoder(coderFactory)
         );
         if (clientConfig.getTimeout() != null) {
             var timeout = clientConfig.getTimeout();

@@ -3,6 +3,7 @@ package org.alps.core;
 import org.alps.core.frame.ForgetFrame;
 import org.alps.core.frame.RequestFrame;
 import org.alps.core.frame.ResponseFrame;
+import org.alps.core.proto.AlpsProtocol;
 import org.openjdk.jmh.annotations.*;
 
 import java.net.InetAddress;
@@ -105,6 +106,11 @@ public class AlpsEnhancedSessionBenchmark {
 
         @Override
         public void send(AlpsPacket protocol) {
+
+        }
+
+        @Override
+        public void send(AlpsProtocol.AlpsPacket protocol) {
 
         }
 

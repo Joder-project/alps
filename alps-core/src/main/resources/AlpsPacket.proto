@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option java_package = "org.alps.core.proto";
+option java_outer_classname = "AlpsProtocol";
+
+message AlpsPacket {
+  int32 magic = 1;
+  int32 module = 2;
+  AlpsMetadata metadata = 3;
+  optional AlpsData data = 4;
+
+  message AlpsData {
+    bool zip = 1;
+    Coder dataCoder = 2;
+    bytes zipDataArray = 3;
+    map<int32, bytes> dataArray = 4;
+  }
+
+  message AlpsMetadata {
+    bool zip = 1;
+    int32 version = 2;
+    int64 verifyToken = 3;
+    FrameType frameType = 4;
+    Coder containerCoder = 5;
+    bytes frame = 6;
+    bytes zipContainer = 7;
+    map<string, bytes> container = 8;
+  }
+
+  enum Coder {
+    JDK = 0;
+    PROTOBUF = 1;
+  }
+
+  enum FrameType {
+    IDLE = 0;
+    FORGET = 1;
+    REQUEST = 2;
+    RESPONSE = 3;
+    ERROR = 4;
+    STREAM = 5;
+  }
+}

@@ -2,8 +2,11 @@ package org.alps.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.frame.*;
+import org.alps.core.proto.AlpsProtocol;
 
 import java.net.InetAddress;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -76,13 +79,25 @@ public class AlpsEnhancedSession implements AlpsSession {
         session.send(protocol);
     }
 
+    @Override
+    public void send(AlpsProtocol.AlpsPacket protocol) {
+        session.send(protocol);
+    }
+
     void receive(Frame frame) {
         this.frameListeners.receiveFrame(this, frame);
     }
 
-    public void receive(AlpsPacket protocol) {
-        var frame = frameCoders.decode(new AlpsPacketWrapper(dataCoderFactory, protocol));
+    public void receive(AlpsPacket protocol) throws Exception {
+        var frame = frameCoders.decode(protocol);
         receive(frame);
+    }
+
+    public static BroadcastCommand broadcast(List<AlpsEnhancedSession> sessions, int command) {
+        if (sessions == null || sessions.isEmpty()) {
+            throw new IllegalArgumentException("sessions为空");
+        }
+        return new BroadcastCommand(sessions, command);
     }
 
     public ForgetCommand forget(int command) {
@@ -197,8 +212,49 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, id, metadata, data)).newProtocol();
+                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, id, metadata, data));
                 session.send(protocol);
+            }).whenComplete((ret, error) -> {
+                if (error != null) {
+                    log.error("Error sending", error);
+                }
+            });
+        }
+    }
+
+    public static class BroadcastCommand extends ForgetCommand {
+
+        final Collection<AlpsEnhancedSession> sessions;
+
+        public BroadcastCommand(List<AlpsEnhancedSession> sessions, int command) {
+            super(sessions.get(0), command);
+            this.sessions = sessions;
+        }
+
+        @Override
+        public ForgetCommand data(Object... data) {
+            super.data(data);
+            return this;
+        }
+
+        @Override
+        public ForgetCommand metadata(String key, Object value) {
+            super.metadata(key, value);
+            return this;
+        }
+
+        public CompletableFuture<Void> send() {
+            return CompletableFuture.runAsync(() -> {
+                //TODO id? 因为fnf id是没有效果
+                var id = session.nextId();
+                var frameBytes = ForgetFrame.toBytes(command, id);
+                var metadata = metadataBuilder
+                        .frameType(FrameCoders.DefaultFrame.FORGET.frameType)
+                        .frame(frameBytes)
+                        .build();
+                var data = dataBuilder.build();
+                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, id, metadata, data));
+                AlpsUtils.broadcast(sessions, protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
                     log.error("Error sending", error);
@@ -237,7 +293,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                                 .build();
                         var data = dataBuilder.build();
                         var requestFrame = new RequestFrame(command, id, metadata, data);
-                        var protocol = session.frameCoders.encode(session.module(), requestFrame).newProtocol();
+                        var protocol = session.frameCoders.encode(session.module(), requestFrame);
                         var responseResult = new ResponseResult(session, requestFrame);
                         listener.set((session, frame) -> responseResult.receive(((ResponseFrame) frame)));
                         session.frameListeners.addFrameListener(ResponseFrame.class,
@@ -314,7 +370,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frameType(FrameCoders.DefaultFrame.IDLE.frameType)
                         .frame(frameBytes)
                         .build();
-                var protocol = session.frameCoders.encode(session.module(), new IdleFrame(id, metadata)).newProtocol();
+                var protocol = session.frameCoders.encode(session.module(), new IdleFrame(id, metadata));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -356,7 +412,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(AlpsPacket.ZERO_MODULE, new ErrorFrame(id, code, metadata, data)).newProtocol();
+                var protocol = session.frameCoders.encode(AlpsPacket.ZERO_MODULE, new ErrorFrame(id, code, metadata, data));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -400,7 +456,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(session.module(), new ResponseFrame(id, reqId, metadata, data)).newProtocol();
+                var protocol = session.frameCoders.encode(session.module(), new ResponseFrame(id, reqId, metadata, data));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {

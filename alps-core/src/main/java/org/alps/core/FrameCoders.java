@@ -22,7 +22,7 @@ public class FrameCoders {
         this.dataCoderFactory = dataCoderFactory;
     }
 
-    public Frame decode(AlpsPacketWrapper protocol) {
+    public Frame decode(AlpsPacket protocol) throws Exception {
         var frameType = protocol.metadata().frameType();
         if (frameType >= 0 && frameType < defaultCoders.size()) {
             return defaultCoders.get(frameType).decode(protocol.metadata(), protocol.data());
@@ -32,7 +32,7 @@ public class FrameCoders {
         throw new AlpsException(String.format("不存在解码器(code=%d)", frameType));
     }
 
-    public AlpsPacketWrapper encode(short module, Frame frame) {
+    public AlpsPacket encode(short module, Frame frame) {
         Objects.requireNonNull(frame, "frame不能为空");
         return getFrameType(frame).encode(module, dataCoderFactory, frame);
     }

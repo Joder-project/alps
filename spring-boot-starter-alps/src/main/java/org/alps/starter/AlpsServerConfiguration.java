@@ -2,6 +2,7 @@ package org.alps.starter;
 
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
+import org.alps.core.AlpsDataCoderFactory;
 import org.alps.core.AlpsServer;
 import org.alps.core.EnhancedSessionFactory;
 import org.alps.core.socket.netty.server.NettyAlpsServer;
@@ -21,7 +22,8 @@ import java.util.Map;
 public class AlpsServerConfiguration {
 
     @Bean(initMethod = "start", destroyMethod = "close")
-    AlpsServer nettyAlpsServer(AlpsServerProperties properties, AlpsProperties alpsProperties, EnhancedSessionFactory sessionFactory) {
+    AlpsServer nettyAlpsServer(AlpsServerProperties properties, AlpsProperties alpsProperties,
+                               EnhancedSessionFactory sessionFactory, AlpsDataCoderFactory coderFactory) {
         var nettyConfig = properties.getNetty();
         var serverConfig = new NettyServerConfig();
         serverConfig.setPort(properties.getPort());
@@ -39,8 +41,8 @@ public class AlpsServerConfiguration {
                 new NioEventLoopGroup(nettyConfig.getWorkerThread()),
                 new NioEventLoopGroup(nettyConfig.getBizThread()),
                 serverConfig, sessionFactory,
-                alpsProperties.getModules().stream().map(AlpsProperties.ModuleProperties::getCode).toList()
-        );
+                alpsProperties.getModules().stream().map(AlpsProperties.ModuleProperties::getCode).toList(),
+                coderFactory);
     }
 
     @Bean

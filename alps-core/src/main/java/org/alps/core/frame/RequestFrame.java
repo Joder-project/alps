@@ -1,7 +1,7 @@
 package org.alps.core.frame;
 
 import org.alps.core.*;
-import org.alps.core.common.NumberHelper;
+import org.alps.core.proto.IFrame;
 
 public record RequestFrame(
         int id,
@@ -16,10 +16,10 @@ public record RequestFrame(
 
     @Override
     public byte[] toBytes() {
-        var data = new byte[8];
-        NumberHelper.writeInt(id, data, 0);
-        NumberHelper.writeInt(command, data, 4);
-        return data;
+        return IFrame.RequestFrame.newBuilder()
+                .setId(id)
+                .setCommand(command)
+                .build().toByteArray();
     }
 
     public static class Coder implements FrameCoder {
@@ -29,11 +29,9 @@ public record RequestFrame(
         }
 
         @Override
-        public Frame decode(AlpsMetadata metadata, AlpsData data) {
-            var frame = metadata.frame();
-            var id = NumberHelper.readInt(frame, 0);
-            var command = NumberHelper.readInt(frame, 4);
-            return new RequestFrame(id, command, metadata, data);
+        public Frame decode(AlpsMetadata metadata, AlpsData data) throws Exception {
+            var frame = IFrame.RequestFrame.parseFrom(metadata.frame());
+            return new RequestFrame(frame.getId(), frame.getCommand(), metadata, data);
         }
 
     }

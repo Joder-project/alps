@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 class ResponseFrameTest {
 
     @Test
-    void decode_encode() {
+    void decode_encode() throws Exception {
         var bytes = new byte[]{
                 1, 2, 3, 4, 5, 6, 7, 8
         };

@@ -1,5 +1,7 @@
 package org.alps.core;
 
+import org.alps.core.proto.AlpsProtocol;
+
 import java.net.InetAddress;
 
 /**
@@ -26,6 +28,8 @@ public interface AlpsSession {
      * @param protocol 数据包
      */
     void send(AlpsPacket protocol);
+
+    void send(AlpsProtocol.AlpsPacket protocol);
 
     void close();
 

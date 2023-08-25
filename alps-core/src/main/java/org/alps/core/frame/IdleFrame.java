@@ -4,7 +4,7 @@ import org.alps.core.AlpsData;
 import org.alps.core.AlpsMetadata;
 import org.alps.core.Frame;
 import org.alps.core.FrameCoder;
-import org.alps.core.common.NumberHelper;
+import org.alps.core.proto.IFrame;
 
 public record IdleFrame(
         int id,
@@ -22,9 +22,10 @@ public record IdleFrame(
 
     @Override
     public byte[] toBytes() {
-        var data = new byte[4];
-        NumberHelper.writeInt(id, data, 0);
-        return data;
+        return IFrame.IdleFrame.newBuilder()
+                .setId(id)
+                .build()
+                .toByteArray();
     }
 
     public static class Coder implements FrameCoder {
@@ -35,10 +36,9 @@ public record IdleFrame(
         }
 
         @Override
-        public Frame decode(AlpsMetadata metadata, AlpsData data) {
-            var frame = metadata.frame();
-            var id = NumberHelper.readInt(frame, 0);
-            return new IdleFrame(id, metadata);
+        public Frame decode(AlpsMetadata metadata, AlpsData data) throws Exception {
+            var idleFrame = IFrame.IdleFrame.parseFrom(metadata.frame());
+            return new IdleFrame(idleFrame.getId(), metadata);
         }
 
     }

@@ -1,5 +1,6 @@
 package org.alps.core;
 
+import com.google.protobuf.StringValue;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
@@ -49,11 +50,14 @@ public class Server {
 //                            throw new RuntimeException(e);
 //                        }
                         if (frame instanceof ForgetFrame forgetFrame) {
-
+//                            AlpsEnhancedSession.broadcast(Collections.singletonList(session), 1)
+//                                    .data(StringValue.of("11111"))
+//                                    .send();
+//                            log.info("send");
                         } else if (frame instanceof RequestFrame requestFrame) {
                             session.response()
                                     .reqId(frame.id())
-                                    .data("Hello")
+                                    .data(StringValue.of("Hello"))
                                     .send();
                         }
                     }
@@ -65,7 +69,7 @@ public class Server {
                 new NioEventLoopGroup(32),
                 new NioEventLoopGroup(32),
                 nettyServerConfig, enhancedSessionFactory,
-                enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList());
+                enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(), enhancedSessionFactory.dataCoderFactory);
         server.start();
     }
 

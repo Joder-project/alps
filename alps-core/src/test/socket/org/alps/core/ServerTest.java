@@ -27,7 +27,7 @@ public class ServerTest {
                 new NioEventLoopGroup(12),
                 new NioEventLoopGroup(12),
                 nettyServerConfig, enhancedSessionFactory,
-                enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList());
+                enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(), enhancedSessionFactory.dataCoderFactory);
         server.start();
     }
 }

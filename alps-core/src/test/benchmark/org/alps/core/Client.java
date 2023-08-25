@@ -1,5 +1,6 @@
 package org.alps.core;
 
+import com.google.protobuf.StringValue;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.frame.ForgetFrame;
@@ -17,17 +18,17 @@ public class Client {
 
     static void forget(SessionState state) throws ExecutionException, InterruptedException {
         state.session.forget(1)
-                .data("1234".repeat(1024))
+                .data(StringValue.of("1234".repeat(1024)))
                 .send().get();
     }
 
     static void request(SessionState state) throws ExecutionException, InterruptedException {
         var ret = state.session.request(1)
-                .data("1234".repeat(1024))
+                .data(StringValue.of("1234".repeat(1024)))
                 .send()
-                .thenApply(response -> response.data(0, String.class).orElse(null))
+                .thenApply(response -> response.data(0, StringValue.class).orElse(null))
                 .get();
-        log.info("{}", ret);
+        log.info("{}", ret.getValue());
     }
 
     public static void main(String[] args) throws Exception {
@@ -36,6 +37,7 @@ public class Client {
             request(state);
             forget(state);
         }
+//        while (true) {}
         state.tearDown();
     }
 
@@ -70,7 +72,7 @@ public class Client {
                         @Override
                         public void handle(AlpsEnhancedSession session, CommandFrame frame) {
                             if (frame instanceof ForgetFrame forgetFrame) {
-
+                                log.info("2222");
                             } else if (frame instanceof RequestFrame requestFrame) {
                                 var metadata = requestFrame.metadata();
                                 int id = session.nextId();
@@ -96,7 +98,7 @@ public class Client {
 
             var enhancedSessionFactory = new DefaultEnhancedSessionFactory(frameFactory, dataCoderFactory, listenerHandler, config);
             this.client = new NettyAlpsClient(new NioEventLoopGroup(2), nettyServerConfig, enhancedSessionFactory,
-                    enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList());
+                    enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(), dataCoderFactory);
             client.start();
             while (!client.isReady()) {
             }

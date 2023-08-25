@@ -12,7 +12,7 @@ class AlpsJDKDataCoderTest {
     }
 
     @Test
-    void encode_decode() {
+    void encode_decode() throws Exception {
         var coder = new AlpsJDKDataCoder();
         int a = 1;
         assertEquals(a, coder.encode(coder.decode(a), int.class));

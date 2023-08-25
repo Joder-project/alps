@@ -2,6 +2,7 @@ package org.alps.starter;
 
 import io.netty.channel.nio.NioEventLoopGroup;
 import org.alps.core.AlpsClient;
+import org.alps.core.AlpsDataCoderFactory;
 import org.alps.core.EnhancedSessionFactory;
 import org.alps.core.socket.netty.client.NettyAlpsClient;
 import org.alps.core.socket.netty.client.NettyClientConfig;
@@ -15,7 +16,8 @@ import org.springframework.context.annotation.Configuration;
 public class AlpsClientConfiguration {
 
     @Bean(initMethod = "start", destroyMethod = "close")
-    AlpsClient nettyAlpsClient(AlpsClientProperties clientProperties, AlpsProperties properties, EnhancedSessionFactory sessionFactory) {
+    AlpsClient nettyAlpsClient(AlpsClientProperties clientProperties, AlpsProperties properties,
+                               EnhancedSessionFactory sessionFactory, AlpsDataCoderFactory coderFactory) {
         var nettyConfig = clientProperties.getNetty();
         var nettyClientConfig = new NettyClientConfig();
         var timeout = clientProperties.getTimeout();
@@ -25,8 +27,8 @@ public class AlpsClientConfiguration {
         return new NettyAlpsClient(
                 new NioEventLoopGroup(nettyConfig.getBossThread()),
                 nettyClientConfig, sessionFactory,
-                properties.getModules().stream().map(AlpsProperties.ModuleProperties::getCode).toList()
-        );
+                properties.getModules().stream().map(AlpsProperties.ModuleProperties::getCode).toList(),
+                coderFactory);
     }
 
     @Bean

@@ -5,11 +5,11 @@ package org.alps.core;
  */
 public interface AlpsDataCoder {
 
-    <T> T encode(byte[] data, int offset, int size, Class<T> clazz);
+    <T> T encode(byte[] data, int offset, int size, Class<T> clazz) throws Exception;
 
-    default <T> T encode(byte[] data, Class<T> clazz) {
+    default <T> T encode(byte[] data, Class<T> clazz) throws Exception {
         return encode(data, 0, data.length, clazz);
     }
 
-    byte[] decode(Object obj);
+    byte[] decode(Object obj) throws Exception;
 }

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class InnerValueTest {
 
     @Test
-    void data() {
+    void data() throws Exception {
         var coder = Mockito.mock(AlpsDataCoder.class);
         byte[] b1 = {10};
         byte[] b2 = {1};

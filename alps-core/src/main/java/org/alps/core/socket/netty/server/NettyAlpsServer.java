@@ -3,17 +3,18 @@ package org.alps.core.socket.netty.server;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.alps.core.AlpsDataCoderFactory;
 import org.alps.core.AlpsServer;
 import org.alps.core.AlpsSession;
 import org.alps.core.EnhancedSessionFactory;
 import org.alps.core.common.AlpsException;
-import org.alps.core.socket.netty.AlpsNettyDecoder;
-import org.alps.core.socket.netty.AlpsNettyEncoder;
-import org.alps.core.socket.netty.RemotingHelper;
+import org.alps.core.proto.AlpsProtocol;
+import org.alps.core.socket.netty.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,26 +33,29 @@ public class NettyAlpsServer implements AlpsServer {
     private final EnhancedSessionFactory sessionFactory;
 
     private final SocketConnectionHandle socketConnectionHandle;
-    private final AlpsNettyEncoder encoder;
+    private final AlpsMessageEncoder encoder;
     private final EventLoopGroup defaultGroup;
 
     private final List<AlpsSession> sessions = new CopyOnWriteArrayList<>();
     private final List<Short> supportModules;
     private final AlpsServerProtocolHandler protocolHandler;
 
+    private final AlpsDataCoderFactory coderFactory;
+
     private ServerBootstrap bootstrap;
     private ChannelFuture serverFeature;
 
     public NettyAlpsServer(EventLoopGroup bossGroup, EventLoopGroup workerGroup, EventLoopGroup defaultGroup,
                            NettyServerConfig serverConfig, EnhancedSessionFactory sessionFactory,
-                           List<Short> supportModules) {
+                           List<Short> supportModules, AlpsDataCoderFactory coderFactory) {
         this.bossGroup = bossGroup;
         this.workerGroup = workerGroup;
         this.serverConfig = serverConfig;
         this.sessionFactory = sessionFactory;
         this.supportModules = Collections.unmodifiableList(supportModules);
+        this.coderFactory = coderFactory;
         this.socketConnectionHandle = new SocketConnectionHandle();
-        this.encoder = new AlpsNettyEncoder();
+        this.encoder = new AlpsMessageEncoder();
         this.defaultGroup = defaultGroup;
         this.protocolHandler = new AlpsServerProtocolHandler(NettyAlpsServer.this, sessionFactory, supportModules);
     }
@@ -92,8 +96,11 @@ public class NettyAlpsServer implements AlpsServer {
 
     private void handleChannel(SocketChannel socketChannel) {
         socketChannel.pipeline().addLast(
+                new AlpsNettyEncoder(),
+                new AlpsNettyDecoder(),
+                new ProtobufDecoder(AlpsProtocol.AlpsPacket.getDefaultInstance()),
                 encoder,
-                new AlpsNettyDecoder()
+                new AlpsMessageDecoder(coderFactory)
         );
         if (serverConfig.getTimeout() != null) {
             NettyServerConfig.Timeout timeout = serverConfig.getTimeout();

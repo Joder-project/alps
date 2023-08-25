@@ -4,6 +4,7 @@ import io.netty.util.AttributeKey;
 import org.alps.core.AlpsPacket;
 import org.alps.core.AlpsSession;
 import org.alps.core.AlpsSocket;
+import org.alps.core.proto.AlpsProtocol;
 
 import java.net.InetAddress;
 
@@ -50,6 +51,11 @@ public class NettyAlpsSession implements AlpsSession {
     @Override
     public void send(AlpsPacket msg) {
         socketChannel.writeAndFlush(msg);
+    }
+
+    @Override
+    public void send(AlpsProtocol.AlpsPacket protocol) {
+        socketChannel.writeAndFlush(protocol);
     }
 
     @Override

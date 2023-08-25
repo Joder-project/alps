@@ -1,5 +1,7 @@
 package org.alps.core;
 
+import org.alps.core.common.AlpsException;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -12,7 +14,7 @@ public class InnerValue {
     private volatile Object object;
 
     public InnerValue(AlpsDataCoder coder, byte[] data) {
-        this.coder = new AlpsDataCoderDecorator(Objects.requireNonNull(coder, "coder不能为空"));
+        this.coder = Objects.requireNonNull(coder, "coder不能为空");
         this.data = data;
     }
 
@@ -28,7 +30,11 @@ public class InnerValue {
                     if (object == null) {
                         data = new byte[0];
                     } else {
-                        data = coder.decode(object);
+                        try {
+                            data = coder.decode(object);
+                        } catch (Exception e) {
+                            throw new AlpsException("数据转换异常", e);
+                        }
                     }
                 }
             }
@@ -45,7 +51,11 @@ public class InnerValue {
                     if (data == null) {
                         object = null;
                     } else {
-                        object = coder.encode(data, clazz);
+                        try {
+                            object = coder.encode(data, clazz);
+                        } catch (Exception e) {
+                            throw new AlpsException("数据转换异常" + clazz.getName(), e);
+                        }
                     }
                 }
             }

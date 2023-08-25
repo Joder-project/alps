@@ -1,5 +1,6 @@
 package org.alps.core;
 
+import com.google.protobuf.StringValue;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.frame.ForgetFrame;
@@ -22,7 +23,7 @@ public class ClientBenchmark {
     @Benchmark
     public void forget(SessionState state) throws ExecutionException, InterruptedException {
         state.session.forget(1)
-                .data("1234".repeat(1024))
+                .data(StringValue.of("1234".repeat(1024)))
                 .send().get();
     }
 
@@ -30,11 +31,11 @@ public class ClientBenchmark {
     @Threads(32)
     public void request(SessionState state) throws ExecutionException, InterruptedException {
         var ret = state.session.request(1)
-                .data("1234".repeat(1024))
+                .data(StringValue.of("1234".repeat(1024)))
                 .send()
-                .thenApply(response -> response.data(0, String.class).orElse(null))
+                .thenApply(response -> response.data(0, StringValue.class).orElse(null))
                 .get();
-//        log.info("{}", ret);
+//        log.info("{}", ret.getValue());
     }
 
 
@@ -96,7 +97,7 @@ public class ClientBenchmark {
 
             var enhancedSessionFactory = new DefaultEnhancedSessionFactory(frameFactory, dataCoderFactory, listenerHandler, config);
             this.client = new NettyAlpsClient(new NioEventLoopGroup(), nettyServerConfig, enhancedSessionFactory,
-                    enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList());
+                    enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(), dataCoderFactory);
             client.start();
             while (!client.isReady()) {
             }
