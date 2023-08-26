@@ -7,6 +7,7 @@
 
 ## 提供功能
 
+* [x] 支持 QUIC
 * [x] 支持Protobuf编解码
 * [x] 提供自定义帧拓展能力。
 * [x] Spring Boot 依赖
@@ -25,7 +26,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import org.alps.core.frame.ForgetFrame;
 import org.alps.core.frame.RequestFrame;
 import org.alps.core.frame.ResponseFrame;
-import org.alps.core.socket.netty.server.NettyAlpsServer;
+import org.alps.core.socket.netty.server.AlpsTcpServer;
 import org.alps.core.socket.netty.server.NettyServerConfig;
 
 import java.util.Map;
@@ -94,7 +95,7 @@ Client
 
 ```java
 import io.netty.channel.nio.NioEventLoopGroup;
-import org.alps.core.socket.netty.client.NettyAlpsClient;
+import org.alps.core.socket.netty.client.AlpsTcpClient;
 import org.alps.core.socket.netty.client.NettyClientConfig;
 
 import java.util.concurrent.ExecutionException;

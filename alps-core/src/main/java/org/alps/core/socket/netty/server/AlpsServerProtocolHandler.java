@@ -5,8 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.AlpsPacket;
+import org.alps.core.AlpsServer;
 import org.alps.core.EnhancedSessionFactory;
-import org.alps.core.socket.netty.AlpsNioSocketChannel;
 import org.alps.core.socket.netty.NettyAlpsSession;
 import org.alps.core.socket.netty.RemotingHelper;
 
@@ -17,11 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @ChannelHandler.Sharable
 public class AlpsServerProtocolHandler extends SimpleChannelInboundHandler<AlpsPacket> {
 
-    private final NettyAlpsServer server;
+    private final AlpsServer server;
     private final EnhancedSessionFactory sessionFactory;
     private final List<Short> supportModules;
 
-    public AlpsServerProtocolHandler(NettyAlpsServer server, EnhancedSessionFactory sessionFactory, List<Short> supportModules) {
+    public AlpsServerProtocolHandler(AlpsServer server, EnhancedSessionFactory sessionFactory, List<Short> supportModules) {
         this.server = server;
         this.sessionFactory = sessionFactory;
         this.supportModules = supportModules;
@@ -59,14 +59,14 @@ public class AlpsServerProtocolHandler extends SimpleChannelInboundHandler<AlpsP
         }
         map.computeIfAbsent(AlpsPacket.ZERO_MODULE,
                 key -> {
-                    var sess = sessionFactory.create(new NettyAlpsSession(server, AlpsPacket.ZERO_MODULE, ((AlpsNioSocketChannel) ctx.channel())));
+                    var sess = sessionFactory.create(new NettyAlpsSession(server, AlpsPacket.ZERO_MODULE, ctx.channel()));
                     this.server.addSession(sess);
                     return sess;
                 });
         for (Short module : supportModules) {
             map.computeIfAbsent(module,
                     key -> {
-                        var sess = sessionFactory.create(new NettyAlpsSession(server, module, ((AlpsNioSocketChannel) ctx.channel())));
+                        var sess = sessionFactory.create(new NettyAlpsSession(server, module, ctx.channel()));
                         this.server.addSession(sess);
                         return sess;
                     });
@@ -94,7 +94,7 @@ public class AlpsServerProtocolHandler extends SimpleChannelInboundHandler<AlpsP
         }
         var session = map.computeIfAbsent(msg.module(),
                 key -> {
-                    var sess = sessionFactory.create(new NettyAlpsSession(server, msg.module(), ((AlpsNioSocketChannel) ctx.channel())));
+                    var sess = sessionFactory.create(new NettyAlpsSession(server, msg.module(), ctx.channel()));
                     this.server.addSession(sess);
                     return sess;
                 });

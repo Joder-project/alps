@@ -6,7 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.alps.core.frame.ForgetFrame;
 import org.alps.core.frame.RequestFrame;
 import org.alps.core.frame.ResponseFrame;
-import org.alps.core.socket.netty.client.NettyAlpsClient;
+import org.alps.core.socket.netty.client.AbstractAlpsClient;
+import org.alps.core.socket.netty.client.AlpsQuicClient;
 import org.alps.core.socket.netty.client.NettyClientConfig;
 import org.openjdk.jmh.annotations.*;
 
@@ -28,7 +29,7 @@ public class ClientBenchmark {
     }
 
     @Benchmark
-    @Threads(32)
+//    @Threads(32)
     public void request(SessionState state) throws ExecutionException, InterruptedException {
         var ret = state.session.request(1)
                 .data(StringValue.of("1234".repeat(1024)))
@@ -43,7 +44,7 @@ public class ClientBenchmark {
     public static class SessionState {
         AlpsEnhancedSession session;
 
-        NettyAlpsClient client;
+        AbstractAlpsClient client;
 
         @Setup
         public void setup() {
@@ -52,6 +53,7 @@ public class ClientBenchmark {
             var routerDispatcher = new RouterDispatcher();
             var listenerHandler = new FrameListeners(routerDispatcher);
             var config = new AlpsConfig();
+            config.getDataConfig().setEnabledZip(true);
             for (int i = 0; i < 10; i++) {
                 short module = (short) (i + 1);
                 config.getModules().add(new AlpsConfig.ModuleConfig((short) i, (short) 1, 1L));
@@ -96,10 +98,15 @@ public class ClientBenchmark {
             nettyServerConfig.setHost("127.0.0.1");
 
             var enhancedSessionFactory = new DefaultEnhancedSessionFactory(frameFactory, dataCoderFactory, listenerHandler, config);
-            this.client = new NettyAlpsClient(new NioEventLoopGroup(), nettyServerConfig, enhancedSessionFactory,
+//            this.client = new AlpsTcpClient(new NioEventLoopGroup(), nettyServerConfig, enhancedSessionFactory,
+//                    enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(), dataCoderFactory);
+
+            this.client = new AlpsQuicClient(new NioEventLoopGroup(2), nettyServerConfig, enhancedSessionFactory,
                     enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(), dataCoderFactory);
+
+
             client.start();
-            while (!client.isReady()) {
+            while (client.isNotReady()) {
             }
             this.session = client.session((short) 1).map(e -> ((AlpsEnhancedSession) e)).get();
         }

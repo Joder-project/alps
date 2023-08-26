@@ -1,7 +1,7 @@
 package org.alps.core;
 
 import lombok.extern.slf4j.Slf4j;
-import org.alps.core.socket.netty.client.NettyAlpsClient;
+import org.alps.core.socket.netty.client.AlpsTcpClient;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -10,12 +10,12 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ClientTest {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        AtomicReference<NettyAlpsClient> client = new AtomicReference<>();
+        AtomicReference<AlpsTcpClient> client = new AtomicReference<>();
         var thread = new Thread(() -> {
 
         });
         thread.start();
-        while (client.get() == null || !client.get().isReady()) {
+        while (client.get() == null || client.get().isNotReady()) {
 
         }
         var session = client.get().session(((short) 1)).map(e -> ((AlpsEnhancedSession) e)).orElseThrow();

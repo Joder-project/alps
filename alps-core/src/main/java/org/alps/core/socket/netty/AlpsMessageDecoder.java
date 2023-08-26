@@ -38,7 +38,7 @@ public class AlpsMessageDecoder extends MessageToMessageDecoder<AlpsProtocol.Alp
         var coder = dataCoderFactory.getCoder(containerCoder);
         Map<String, InnerValue> container;
         if (isZip) {
-            container = parseContainer(GZipHelper.unzip(metadata.getZipContainer().toByteArray(), 0), coder);
+            container = parseContainer(GZipHelper.unzip(metadata.getZipContainer().toByteArray()), coder);
         } else {
             var map = new HashMap<String, InnerValue>();
             metadata.getContainerMap().forEach((k, v) -> map.put(k, new InnerValue(coder, v.toByteArray())));
@@ -57,7 +57,7 @@ public class AlpsMessageDecoder extends MessageToMessageDecoder<AlpsProtocol.Alp
         var coder = dataCoderFactory.getCoder(dataCoder);
         InnerValue[] dataArray;
         if (isZip) {
-            dataArray = parseData(GZipHelper.unzip(data.getZipDataArray().toByteArray(), 0), coder);
+            dataArray = parseData(GZipHelper.unzip(data.getZipDataArray().toByteArray()), coder);
         } else {
             dataArray = new TreeMap<>(data.getDataArrayMap())
                     .values()
@@ -75,7 +75,7 @@ public class AlpsMessageDecoder extends MessageToMessageDecoder<AlpsProtocol.Alp
                 WireFormat.FieldType.STRING, "", WireFormat.FieldType.BYTES, ByteString.EMPTY);
         var inputStream = CodedInputStream.newInstance(data);
         var map = new HashMap<String, InnerValue>();
-        while (inputStream.getTotalBytesRead() > 0) {
+        while (inputStream.getBytesUntilLimit() > 0) {
             var resultArray = inputStream.readMessage(entry.getParserForType(), ExtensionRegistryLite.getEmptyRegistry());
             map.put(resultArray.getKey(), parseBytes(coder, resultArray.getValue().toByteArray()));
         }
@@ -88,7 +88,7 @@ public class AlpsMessageDecoder extends MessageToMessageDecoder<AlpsProtocol.Alp
                 WireFormat.FieldType.INT32, 0, WireFormat.FieldType.BYTES, ByteString.EMPTY);
         var inputStream = CodedInputStream.newInstance(data);
         var map = new TreeMap<Integer, InnerValue>();
-        while (inputStream.getTotalBytesRead() > 0) {
+        while (inputStream.getBytesUntilLimit() > 0) {
             var resultArray = inputStream.readMessage(entry.getParserForType(), ExtensionRegistryLite.getEmptyRegistry());
             map.put(resultArray.getKey(), parseBytes(coder, resultArray.getValue().toByteArray()));
         }

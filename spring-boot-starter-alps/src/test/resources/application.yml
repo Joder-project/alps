@@ -1,18 +1,21 @@
-alps:
-  modules:
-    - code: 1
-      name: 'User'
-      verify-token: 1
-      version: 1
 
 ---
 spring:
   config:
     activate:
       on-profile: server
+
 alps:
+  modules:
+    - code: 1
+      name: 'User'
+      verify-token: 1
+      version: 1
   server:
+    type: quic
     port: 6195
+
+
 
 ---
 
@@ -22,6 +25,14 @@ spring:
       on-profile: client
 
 alps:
+  modules:
+    - code: 1
+      name: 'User'
+      verify-token: 1
+      version: 1
   client:
+    type: quic
     host: 'localhost'
     port: 6195
+    quic:
+      boss-thread: 2

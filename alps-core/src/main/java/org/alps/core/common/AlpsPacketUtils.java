@@ -31,10 +31,10 @@ public class AlpsPacketUtils {
                 .setContainerCoderValue(metadata.containerCoder())
                 .setFrame(ByteString.copyFrom(metadata.frame()));
         if (metadata.isZip()) {
-            builder.setZipContainer(ByteString.copyFrom(GZipHelper.zip(buildContainer(metadata.container()).toByteArray())))
-                    .setZipContainer(ByteString.EMPTY);
+            builder.setZipContainer(ByteString.copyFrom(GZipHelper.zip(buildContainer(metadata.container()).toByteArray())));
         } else {
             metadata.container().forEach((k, v) -> builder.putContainer(k, ByteString.copyFrom(v.data())));
+            builder.setZipContainer(ByteString.EMPTY);
         }
         return builder.build();
     }
@@ -66,12 +66,12 @@ public class AlpsPacketUtils {
                 .setZip(data.isZip())
                 .setDataCoderValue(data.dataCoder());
         if (data.isZip()) {
-            builder.setZipDataArray(ByteString.copyFrom(GZipHelper.zip(buildData(data.dataArray()).toByteArray())))
-                    .setZipDataArray(ByteString.EMPTY);
+            builder.setZipDataArray(ByteString.copyFrom(GZipHelper.zip(buildData(data.dataArray()).toByteArray())));
         } else {
             for (int i = 0; i < data.dataArray().length; i++) {
                 builder.putDataArray(i, ByteString.copyFrom(data.dataArray()[i].data()));
             }
+            builder.setZipDataArray(ByteString.EMPTY);
         }
         return builder.build();
     }
@@ -96,6 +96,8 @@ public class AlpsPacketUtils {
             for (var key : keys) {
                 out.writeMessageNoTag(entry.newBuilderForType().setKey(key).setValue(m.get(key)).build());
             }
+            out.flush();
+            os.flush();
             return ByteString.copyFrom(os.toByteArray());
         }
     }

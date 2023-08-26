@@ -1,5 +1,6 @@
 package org.alps.core.socket.netty;
 
+import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import org.alps.core.AlpsPacket;
 import org.alps.core.AlpsSession;
@@ -7,15 +8,16 @@ import org.alps.core.AlpsSocket;
 import org.alps.core.proto.AlpsProtocol;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 public class NettyAlpsSession implements AlpsSession {
 
     private final AlpsSocket socket;
-    private final AlpsNioSocketChannel socketChannel;
+    private final Channel socketChannel;
 
     private final short module;
 
-    public NettyAlpsSession(AlpsSocket socket, short module, AlpsNioSocketChannel socketChannel) {
+    public NettyAlpsSession(AlpsSocket socket, short module, Channel socketChannel) {
         this.socket = socket;
         this.socketChannel = socketChannel;
         this.module = module;
@@ -40,12 +42,12 @@ public class NettyAlpsSession implements AlpsSession {
 
     @Override
     public InetAddress selfAddress() {
-        return socketChannel.localAddress().getAddress();
+        return ((InetSocketAddress) socketChannel.localAddress()).getAddress();
     }
 
     @Override
     public InetAddress targetAddress() {
-        return socketChannel.remoteAddress().getAddress();
+        return ((InetSocketAddress) socketChannel.remoteAddress()).getAddress();
     }
 
     @Override

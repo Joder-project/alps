@@ -3,7 +3,7 @@ package org.alps.core;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
-import org.alps.core.socket.netty.server.NettyAlpsServer;
+import org.alps.core.socket.netty.server.AlpsTcpServer;
 import org.alps.core.socket.netty.server.NettyServerConfig;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ public class ServerTest {
         var routerDispatcher = new RouterDispatcher();
 
         var enhancedSessionFactory = new ClientTest.DefaultEnhancedSessionFactory(routerDispatcher);
-        var server = new NettyAlpsServer(new NioEventLoopGroup(1),
+        var server = new AlpsTcpServer(new NioEventLoopGroup(1),
                 new NioEventLoopGroup(12),
                 new NioEventLoopGroup(12),
                 nettyServerConfig, enhancedSessionFactory,
