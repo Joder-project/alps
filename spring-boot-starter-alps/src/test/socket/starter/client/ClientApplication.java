@@ -1,5 +1,6 @@
 package starter.client;
 
+import com.google.protobuf.StringValue;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.starter.AlpsClient;
 import org.alps.starter.ClientSessionManager;
@@ -27,8 +28,8 @@ public class ClientApplication {
 class MyController {
 
     @Command(command = 2, type = Command.Type.FORGET)
-    public void hello(String message) {
-        log.info("receive msg: {}", message);
+    public void hello(StringValue message) {
+        log.info("receive msg: {}", message.getValue());
     }
 }
 
@@ -45,7 +46,7 @@ class Runner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         var session = sessionManager.session("User").get();
-        var response = session.request(1).data("111").send().get();
-        log.info("Response: {}", response.data(String.class));
+        var response = session.request(1).data(StringValue.of("111")).send().get();
+        log.info("Response: {}", response.data(StringValue.class).get().getValue());
     }
 }

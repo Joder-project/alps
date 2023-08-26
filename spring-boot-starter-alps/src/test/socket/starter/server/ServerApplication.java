@@ -1,5 +1,6 @@
 package starter.server;
 
+import com.google.protobuf.StringValue;
 import org.alps.starter.AlpsExchange;
 import org.alps.starter.AlpsServer;
 import org.alps.starter.anno.AlpsModule;
@@ -23,8 +24,8 @@ class MyController {
 
 
     @Command(command = 1, type = Command.Type.REQUEST_RESPONSE)
-    public String hello(String message, AlpsExchange exchange) {
-        exchange.session().forget(2).data("I am Server").send();
-        return "hello, " + message;
+    public StringValue hello(StringValue message, AlpsExchange exchange) {
+        exchange.session().forget(2).data(StringValue.of("I am Server")).send();
+        return StringValue.of("hello, " + message);
     }
 }

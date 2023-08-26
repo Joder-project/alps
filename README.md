@@ -7,6 +7,7 @@
 
 ## 提供功能
 
+* [x] 支持Protobuf编解码
 * [x] 提供自定义帧拓展能力。
 * [x] Spring Boot 依赖
 * [x] Forget 请求不管响应信息
