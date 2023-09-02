@@ -11,6 +11,7 @@ import org.alps.core.socket.netty.client.AlpsQuicClient;
 import org.alps.core.socket.netty.client.NettyClientConfig;
 import org.openjdk.jmh.annotations.TearDown;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -35,7 +36,7 @@ public class Client {
     public static void main(String[] args) throws Exception {
         var state = new SessionState();
         for (int i = 0; i < 1; i++) {
-            request(state);
+//            request(state);
             forget(state);
         }
 //        while (true) {}

@@ -28,4 +28,9 @@ class MyController {
         exchange.session().forget(2).data(StringValue.of("I am Server")).send();
         return StringValue.of("hello, " + message);
     }
+
+    @Command(command = 3, type = Command.Type.FORGET)
+    public void helloForget(StringValue message, AlpsExchange exchange) {
+        exchange.session().forget(2).data(StringValue.of("I am Server")).send();
+    }
 }

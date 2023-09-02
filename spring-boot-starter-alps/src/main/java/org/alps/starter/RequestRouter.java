@@ -3,6 +3,7 @@ package org.alps.starter;
 import org.alps.core.AlpsEnhancedSession;
 import org.alps.core.CommandFrame;
 import org.alps.core.Router;
+import org.alps.core.frame.RequestFrame;
 import org.alps.starter.anno.AlpsModule;
 import org.alps.starter.anno.Command;
 import org.alps.starter.anno.Metadata;
@@ -28,7 +29,7 @@ record RequestRouter(short module, int command, Object target, Method method) im
         var alpsExchange = new AlpsExchange(session, frame.metadata(), frame.data());
         var descriptor = MethodDescriptor.create(alpsExchange, target, method);
         var ret = descriptor.invoke(frame);
-        var responseCommand = session.response().reqId(frame.id());
+        var responseCommand = session.response().reqId(((RequestFrame)frame).id());
         if (ret != null) {
             responseCommand.data(ret);
         }
