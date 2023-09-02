@@ -60,7 +60,7 @@ public class Server {
 //                            log.info("send");
                         } else if (frame instanceof RequestFrame requestFrame) {
                             session.response()
-                                    .reqId(frame.id())
+                                    .reqId(requestFrame.id())
                                     .data(StringValue.of("Hello"))
                                     .send();
                         }

@@ -77,15 +77,14 @@ public class Client {
                                 log.info("2222");
                             } else if (frame instanceof RequestFrame requestFrame) {
                                 var metadata = requestFrame.metadata();
-                                int id = session.nextId();
-                                session.receive(new ResponseFrame(id, requestFrame.id(),
+                                session.receive(new ResponseFrame(requestFrame.id(),
                                         new AlpsMetadataBuilder().isZip(metadata.isZip())
                                                 .verifyToken(metadata.verifyToken())
                                                 .version(metadata.version())
                                                 .containerCoder(metadata.containerCoder())
                                                 .coder(metadata.coder())
                                                 .frameType(FrameCoders.DefaultFrame.RESPONSE.frameType)
-                                                .frame(ResponseFrame.toBytes(id, requestFrame.id()))
+                                                .frame(ResponseFrame.toBytes(requestFrame.id()))
                                                 .build()
                                         , requestFrame.data()));
                             }

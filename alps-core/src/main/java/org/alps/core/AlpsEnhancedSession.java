@@ -205,14 +205,13 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         public CompletableFuture<Void> send() {
             return CompletableFuture.runAsync(() -> {
-                var id = session.nextId();
-                var frameBytes = ForgetFrame.toBytes(command, id);
+                var frameBytes = ForgetFrame.toBytes(command);
                 var metadata = metadataBuilder
                         .frameType(FrameCoders.DefaultFrame.FORGET.frameType)
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, id, metadata, data));
+                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, metadata, data));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -245,15 +244,13 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         public CompletableFuture<Void> send() {
             return CompletableFuture.runAsync(() -> {
-                //TODO id? 因为fnf id是没有效果
-                var id = session.nextId();
-                var frameBytes = ForgetFrame.toBytes(command, id);
+                var frameBytes = ForgetFrame.toBytes(command);
                 var metadata = metadataBuilder
                         .frameType(FrameCoders.DefaultFrame.FORGET.frameType)
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, id, metadata, data));
+                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, metadata, data));
                 AlpsUtils.broadcast(sessions, protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -364,13 +361,12 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         public CompletableFuture<Void> send() {
             return CompletableFuture.runAsync(() -> {
-                var id = session.nextId();
-                var frameBytes = IdleFrame.toBytes(id);
+                var frameBytes = IdleFrame.toErrorBytes();
                 var metadata = metadataBuilder
                         .frameType(FrameCoders.DefaultFrame.IDLE.frameType)
                         .frame(frameBytes)
                         .build();
-                var protocol = session.frameCoders.encode(session.module(), new IdleFrame(id, metadata));
+                var protocol = session.frameCoders.encode(session.module(), new IdleFrame(metadata));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -405,14 +401,13 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         public CompletableFuture<Void> send() {
             return CompletableFuture.runAsync(() -> {
-                var id = session.nextId();
-                var frameBytes = ErrorFrame.toBytes(id, code);
+                var frameBytes = ErrorFrame.toBytes(code);
                 var metadata = metadataBuilder
                         .frameType(FrameCoders.DefaultFrame.ERROR.frameType)
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(AlpsPacket.ZERO_MODULE, new ErrorFrame(id, code, metadata, data));
+                var protocol = session.frameCoders.encode(AlpsPacket.ZERO_MODULE, new ErrorFrame(code, metadata, data));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -449,14 +444,13 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         public CompletableFuture<Void> send() {
             return CompletableFuture.runAsync(() -> {
-                var id = session.nextId();
-                var frameBytes = ResponseFrame.toBytes(id, reqId);
+                var frameBytes = ResponseFrame.toBytes(reqId);
                 var metadata = metadataBuilder
                         .frameType(FrameCoders.DefaultFrame.RESPONSE.frameType)
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(session.module(), new ResponseFrame(id, reqId, metadata, data));
+                var protocol = session.frameCoders.encode(session.module(), new ResponseFrame(reqId, metadata, data));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {

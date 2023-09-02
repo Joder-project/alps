@@ -4,12 +4,11 @@ option java_package = "org.alps.core.proto";
 option java_outer_classname = "IFrame";
 
 message IdleFrame {
-  int32 id = 1;
+
 }
 
 message ForgetFrame {
-  int32 id = 1;
-  int32 command = 2;
+  int32 command = 1;
 }
 
 message RequestFrame {
@@ -18,11 +17,9 @@ message RequestFrame {
 }
 
 message ResponseFrame{
-  int32 id = 1;
-  int32 reqId = 2;
+  int32 reqId = 1;
 }
 
 message ErrorFrame {
-  int32 id = 1;
-  int32 code = 2;
+  int32 code = 1;
 }

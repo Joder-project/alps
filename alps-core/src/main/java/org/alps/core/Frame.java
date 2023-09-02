@@ -11,8 +11,6 @@ public interface Frame {
     int RESPONSE = 3;
     int ERROR = 4;
 
-    int id();
-
     AlpsMetadata metadata();
 
     AlpsData data();

@@ -7,12 +7,11 @@ import org.alps.core.FrameCoder;
 import org.alps.core.proto.IFrame;
 
 public record IdleFrame(
-        int id,
         AlpsMetadata metadata
 ) implements Frame {
 
-    public static byte[] toBytes(int id) {
-        return new IdleFrame(id, null).toBytes();
+    public static byte[] toErrorBytes() {
+        return new IdleFrame(null).toBytes();
     }
 
     @Override
@@ -23,7 +22,6 @@ public record IdleFrame(
     @Override
     public byte[] toBytes() {
         return IFrame.IdleFrame.newBuilder()
-                .setId(id)
                 .build()
                 .toByteArray();
     }
@@ -38,7 +36,7 @@ public record IdleFrame(
         @Override
         public Frame decode(AlpsMetadata metadata, AlpsData data) throws Exception {
             var idleFrame = IFrame.IdleFrame.parseFrom(metadata.frame());
-            return new IdleFrame(idleFrame.getId(), metadata);
+            return new IdleFrame(metadata);
         }
 
     }

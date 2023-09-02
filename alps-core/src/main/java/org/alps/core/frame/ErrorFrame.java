@@ -7,20 +7,18 @@ import org.alps.core.FrameCoder;
 import org.alps.core.proto.IFrame;
 
 public record ErrorFrame(
-        int id,
         short code,
         AlpsMetadata metadata,
         AlpsData data
 ) implements Frame {
 
-    public static byte[] toBytes(int id, short code) {
-        return new ErrorFrame(id, code, null, null).toBytes();
+    public static byte[] toBytes(short code) {
+        return new ErrorFrame(code, null, null).toBytes();
     }
 
     @Override
     public byte[] toBytes() {
         return IFrame.ErrorFrame.newBuilder()
-                .setId(id)
                 .setCode(code)
                 .build().toByteArray();
     }
@@ -37,7 +35,7 @@ public record ErrorFrame(
         public Frame decode(AlpsMetadata metadata, AlpsData data) throws Exception {
             var frame = metadata.frame();
             var errorFrame = IFrame.ErrorFrame.parseFrom(metadata.frame());
-            return new ErrorFrame(errorFrame.getId(), ((short) errorFrame.getCode()), metadata, data);
+            return new ErrorFrame(((short) errorFrame.getCode()), metadata, data);
         }
 
     }
