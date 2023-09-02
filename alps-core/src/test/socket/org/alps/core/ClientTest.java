@@ -1,5 +1,6 @@
 package org.alps.core;
 
+import com.google.protobuf.Int32Value;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.socket.netty.client.AlpsTcpClient;
 
@@ -19,11 +20,11 @@ public class ClientTest {
 
         }
         var session = client.get().session(((short) 1)).map(e -> ((AlpsEnhancedSession) e)).orElseThrow();
-        session.forget(1).data(1).send().get();
+        session.forget(1).data(1).send().subscribe();
         var ret = session.request(2).data(1)
-                .send()
-                .thenApply(response -> response.data(0, int.class).orElse(0))
-                .get();
+                .send(Int32Value.class)
+                .map(Int32Value::getValue)
+                .block();
         log.info("receive: {}", ret);
 
     }

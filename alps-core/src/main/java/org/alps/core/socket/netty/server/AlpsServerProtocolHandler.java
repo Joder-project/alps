@@ -45,6 +45,7 @@ public class AlpsServerProtocolHandler extends SimpleChannelInboundHandler<AlpsP
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.error("Register an inactive channel");
+        RemotingHelper.closeChannel(ctx.channel());
     }
 
 
@@ -77,6 +78,7 @@ public class AlpsServerProtocolHandler extends SimpleChannelInboundHandler<AlpsP
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         log.debug("remove client! client info: {}", ctx.channel().remoteAddress());
+        RemotingHelper.closeChannel(ctx.channel());
     }
 
     @Override

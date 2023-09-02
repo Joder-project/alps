@@ -17,10 +17,13 @@ public class NettyAlpsSession implements AlpsSession {
 
     private final short module;
 
+    private volatile boolean closeState;
+
     public NettyAlpsSession(AlpsSocket socket, short module, Channel socketChannel) {
         this.socket = socket;
         this.socketChannel = socketChannel;
         this.module = module;
+        this.closeState = false;
     }
 
     @Override
@@ -62,6 +65,15 @@ public class NettyAlpsSession implements AlpsSession {
 
     @Override
     public void close() {
+        if (this.closeState) {
+            return;
+        }
         socket.removeSession(this);
+        this.closeState = true;
+    }
+
+    @Override
+    public boolean isClose() {
+        return closeState;
     }
 }

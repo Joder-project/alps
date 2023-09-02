@@ -1,15 +1,10 @@
 package org.alps.core;
 
 import lombok.extern.slf4j.Slf4j;
-import org.alps.core.frame.ErrorFrame;
-import org.alps.core.frame.ForgetFrame;
-import org.alps.core.frame.IdleFrame;
-import org.alps.core.frame.RequestFrame;
+import org.alps.core.frame.*;
+import org.alps.core.listener.CommandFrameListener;
 import org.alps.core.listener.ErrorFrameListener;
-import org.alps.core.listener.ForgetFrameListener;
 import org.alps.core.listener.IdleFrameListener;
-import org.alps.core.listener.RequestFrameListener;
-import org.alps.core.proto.AlpsProtocol;
 
 import java.util.Map;
 import java.util.Objects;
@@ -25,11 +20,13 @@ public class FrameListeners {
     private final Set<Listener> globalFrames = ConcurrentHashMap.newKeySet();
 
     public FrameListeners(RouterDispatcher routerDispatcher) {
+        var commandFrameListener = new CommandFrameListener(routerDispatcher);
         Map<Class<? extends Frame>, FrameListener> map = Map.of(
                 IdleFrame.class, new IdleFrameListener(),
                 ErrorFrame.class, new ErrorFrameListener(),
-                ForgetFrame.class, new ForgetFrameListener(routerDispatcher),
-                RequestFrame.class, new RequestFrameListener(routerDispatcher)
+                ForgetFrame.class, commandFrameListener,
+                RequestFrame.class, commandFrameListener,
+                StreamRequestFrame.class, commandFrameListener
         );
         map.forEach(this::addFrameListener);
     }

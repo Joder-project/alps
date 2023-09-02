@@ -15,6 +15,7 @@ public class AlpsPacketUtils {
 
     public static AlpsProtocol.AlpsPacket encode(AlpsPacket packet) throws Exception {
         return AlpsProtocol.AlpsPacket.newBuilder()
+                .setConnectTypeValue(packet.connectType())
                 .setMagic(AlpsPacket.MAGIC_NUM)
                 .setModule(packet.module())
                 .setMetadata(buildMetadata(packet.metadata()))

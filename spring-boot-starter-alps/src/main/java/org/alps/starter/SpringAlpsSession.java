@@ -11,4 +11,8 @@ public record SpringAlpsSession(AlpsEnhancedSession session) {
     public AlpsEnhancedSession.RequestCommand request(int command) {
         return session.request(command);
     }
+
+    public AlpsEnhancedSession.StreamRequestCommand stream(int command) {
+        return session.streamRequest(command);
+    }
 }

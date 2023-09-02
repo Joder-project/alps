@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.alps.core.frame.ForgetFrame;
 import org.alps.core.frame.RequestFrame;
 import org.alps.core.frame.ResponseFrame;
-import org.alps.core.proto.AlpsProtocol;
 import org.alps.core.socket.netty.client.AbstractAlpsClient;
 import org.alps.core.socket.netty.client.AlpsQuicClient;
 import org.alps.core.socket.netty.client.NettyClientConfig;
@@ -21,26 +20,38 @@ public class Client {
     static void forget(SessionState state) throws ExecutionException, InterruptedException {
         state.session.forget(1)
                 .data(StringValue.of("1234".repeat(1024)))
-                .send().get();
+                .send().block();
     }
 
     static void request(SessionState state) throws ExecutionException, InterruptedException {
         var ret = state.session.request(1)
                 .data(StringValue.of("1234".repeat(1024)))
-                .send()
-                .thenApply(response -> response.data(0, StringValue.class).orElse(null))
-                .get();
-        log.info("{}", ret.getValue());
+                .send(StringValue.class)
+                .map(StringValue::getValue)
+                .block();
+        log.info("request: {}", ret);
+    }
+
+    static void stream(SessionState state) throws ExecutionException, InterruptedException {
+        var ret = state.session.streamRequest(1)
+                .data(StringValue.of("1234".repeat(1024)))
+                .send(StringValue.class)
+                .map(StringValue::getValue)
+                .doOnNext(v -> log.info("stream: {}", v))
+                .doOnComplete(() -> log.info("complete"))
+                .subscribe();
     }
 
     public static void main(String[] args) throws Exception {
         var state = new SessionState();
         for (int i = 0; i < 1; i++) {
 //            request(state);
-            forget(state);
+            stream(state);
+//            forget(state);
         }
-//        while (true) {}
-        state.tearDown();
+        while (true) {
+        }
+//        state.tearDown();
     }
 
 

@@ -15,6 +15,11 @@ public class AlpsProperties {
 
     public static final String PATH = "alps";
 
+    /**
+     * 是否是服务端
+     */
+    private boolean server = false;
+
     private List<ModuleProperties> modules = new ArrayList<>();
 
     private AlpsConfig.MetaDataConfig metadataConfig = new AlpsConfig.MetaDataConfig();

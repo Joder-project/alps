@@ -32,6 +32,8 @@ public class RouterBeanPostProcessor implements BeanPostProcessor {
                         routerDispatcher.addRouter(RequestRouter.create(bean, method, properties.getModules()));
                     } else if (annotation.type() == Command.Type.FORGET) {
                         routerDispatcher.addRouter(ForgetRouter.create(bean, method, properties.getModules()));
+                    } else if (annotation.type() == Command.Type.STREAM) {
+                        routerDispatcher.addRouter(StreamRouter.create(bean, method, properties.getModules()));
                     }
                 });
         return bean;

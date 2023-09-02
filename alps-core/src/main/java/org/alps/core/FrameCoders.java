@@ -12,7 +12,7 @@ import static org.alps.core.FrameCoders.DefaultFrame.*;
 public class FrameCoders {
 
     private final List<FrameCoder> defaultCoders = Stream.of(
-            IDLE, FORGET, REQUEST, RESPONSE
+            IDLE, FORGET, REQUEST, RESPONSE, ERROR, STREAM_REQUEST, STREAM_RESPONSE
     ).sorted(Comparator.comparingInt(x -> x.frameType)).map(e -> e.coder).toList();
     private final Map<Byte, FrameCoder> customCoder = new HashMap<>(16);
 
@@ -32,9 +32,9 @@ public class FrameCoders {
         throw new AlpsException(String.format("不存在解码器(code=%d)", frameType));
     }
 
-    public AlpsPacket encode(short module, Frame frame) {
+    public AlpsPacket encode(boolean server, short module, Frame frame) {
         Objects.requireNonNull(frame, "frame不能为空");
-        return getFrameType(frame).encode(module, dataCoderFactory, frame);
+        return getFrameType(frame).encode(server, module, dataCoderFactory, frame);
     }
 
     FrameCoder getFrameType(Frame frame) {
@@ -71,6 +71,8 @@ public class FrameCoders {
         REQUEST(RequestFrame.class, (byte) 2, new RequestFrame.Coder()),
         RESPONSE(ResponseFrame.class, (byte) 3, new ResponseFrame.Coder()),
         ERROR(ErrorFrame.class, (byte) 4, new ErrorFrame.Coder()),
+        STREAM_REQUEST(StreamRequestFrame.class, (byte) 5, new StreamRequestFrame.Coder()),
+        STREAM_RESPONSE(StreamResponseFrame.class, (byte) 6, new StreamResponseFrame.Coder()),
         ;
 
 

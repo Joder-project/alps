@@ -4,10 +4,11 @@ option java_package = "org.alps.core.proto";
 option java_outer_classname = "AlpsProtocol";
 
 message AlpsPacket {
-  int32 magic = 1;
-  int32 module = 2;
-  AlpsMetadata metadata = 3;
-  optional AlpsData data = 4;
+  ConnectType connectType = 1;
+  int32 magic = 2;
+  int32 module = 3;
+  AlpsMetadata metadata = 4;
+  optional AlpsData data = 5;
 
   message AlpsData {
     bool zip = 1;
@@ -27,6 +28,11 @@ message AlpsPacket {
     map<string, bytes> container = 8;
   }
 
+  enum ConnectType {
+    CLIENT = 0;
+    SERVER = 1;
+  }
+
   enum Coder {
     JDK = 0;
     PROTOBUF = 1;
@@ -38,6 +44,8 @@ message AlpsPacket {
     REQUEST = 2;
     RESPONSE = 3;
     ERROR = 4;
-    STREAM = 5;
+    STREAM_REQUEST = 5;
+    STREAM_RESPONSE = 6;
+    GATEWAY = 7;
   }
 }

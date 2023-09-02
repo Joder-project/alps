@@ -20,14 +20,14 @@ public class AlpsEnhancedSessionBenchmark {
     public void forget(SessionState state) throws ExecutionException, InterruptedException {
         state.session.forget(1)
                 .data("1234".repeat(1024))
-                .send().get();
+                .send().block();
     }
 
     @Benchmark
     public void request(SessionState state) throws ExecutionException, InterruptedException {
         state.session.forget(1)
                 .data("1234".repeat(1024))
-                .send().get();
+                .send().block();
     }
 
 
@@ -116,6 +116,11 @@ public class AlpsEnhancedSessionBenchmark {
         @Override
         public void close() {
 
+        }
+
+        @Override
+        public boolean isClose() {
+            return false;
         }
 
         @Override

@@ -1,13 +1,19 @@
 package org.alps.starter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.alps.core.AlpsEnhancedSession;
 import org.alps.core.CommandFrame;
 import org.alps.core.Router;
 import org.alps.core.frame.RequestFrame;
+import org.alps.core.frame.StreamRequestFrame;
 import org.alps.starter.anno.AlpsModule;
 import org.alps.starter.anno.Command;
 import org.alps.starter.anno.Metadata;
 import org.alps.starter.anno.RawPacket;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -15,8 +21,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+@Slf4j
+record StreamRouter(short module, int command, Object target, Method method) implements Router {
+
+    public static StreamRouter create(Object target, Method method, List<AlpsProperties.ModuleProperties> properties) {
+        return Utils.create(target, method, properties, StreamRouter::new);
+    }
+
+
+    @Override
+    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Exception {
+        var alpsExchange = new AlpsExchange(session, frame.metadata(), frame.data());
+        var descriptor = MethodDescriptor.create(alpsExchange, target, method);
+        var ret = descriptor.invoke(frame);
+        if (ret instanceof Flux<?> flux) {
+            AtomicReference<Disposable> disposable = new AtomicReference<>();
+            // 关闭流
+            disposable.set(flux.flatMap(d -> {
+                        var dis = disposable.get();
+                        if (session.isClose() && dis != null && !dis.isDisposed()) {
+                            dis.dispose();
+                            return Mono.empty();
+                        } else {
+                            var responseCommand = session.streamResponse().reqId(((StreamRequestFrame) frame).id());
+                            if (!alpsExchange.getMetadata().isEmpty()) {
+                                // todo don't copy?
+                                alpsExchange.getMetadata().forEach(responseCommand::metadata);
+                            }
+                            responseCommand.data(d);
+                            return responseCommand.send();
+                        }
+                    })
+                    .publishOn(Schedulers.boundedElastic()).doOnComplete(() -> {
+                        session.streamResponse()
+                                .reqId(((StreamRequestFrame) frame).id())
+                                .finish(true)
+                                .send().subscribe();
+                    })
+                    .subscribe());
+        }
+    }
+}
 
 record RequestRouter(short module, int command, Object target, Method method) implements Router {
 
@@ -31,13 +79,26 @@ record RequestRouter(short module, int command, Object target, Method method) im
         var descriptor = MethodDescriptor.create(alpsExchange, target, method);
         var ret = descriptor.invoke(frame);
         var responseCommand = session.response().reqId(((RequestFrame) frame).id());
-        if (ret != null) {
-            responseCommand.data(ret);
-        }
         if (!alpsExchange.getMetadata().isEmpty()) {
+            // todo don't copy?
             alpsExchange.getMetadata().forEach(responseCommand::metadata);
         }
-        responseCommand.send();
+        if (ret instanceof Mono<?> mono) {
+            mono.flatMap(d -> {
+                responseCommand.data(d);
+                return responseCommand.send();
+            }).subscribe();
+        } else if (ret instanceof Flux<?> flux) {
+            flux.collectList().flatMap(d -> {
+                responseCommand.data(d);
+                return responseCommand.send();
+            }).subscribe();
+        } else {
+            if (ret != null) {
+                responseCommand.data(ret);
+            }
+            responseCommand.send().subscribe();
+        }
     }
 }
 
@@ -67,7 +128,7 @@ class Utils {
                         method.getDeclaringClass().getAnnotation(AlpsModule.class), "@AlpsModule为空").module())
                 .flatMap(e -> properties.stream().filter(ele -> ele.getName().equals(e)).findFirst())
                 .map(AlpsProperties.ModuleProperties::getCode)
-                .orElseThrow(() -> new IllegalArgumentException("模块没有配置"));
+                .orElseThrow(() -> new IllegalArgumentException("模块没有配置" + method.getName()));
         method.setAccessible(true);
         return router.create(module, command, target, method);
     }

@@ -12,7 +12,7 @@ public class AlpsConfiguration {
     @Bean
     EnhancedSessionFactory sessionFactory(FrameCoders frameCoders, AlpsDataCoderFactory dataCoderFactory,
                                           FrameListeners frameListeners, AlpsProperties properties) {
-        AlpsConfig config = new AlpsConfig(null, properties.getMetadataConfig(), properties.getDataConfig(),
+        AlpsConfig config = new AlpsConfig(properties.isServer(), properties.getMetadataConfig(), properties.getDataConfig(),
                 properties.getModules().stream()
                         .map(e -> new AlpsConfig.ModuleConfig(e.getCode(), e.getVersion(), e.getVerifyToken())).toList());
         return new DefaultEnhancedSessionFactory(frameCoders, dataCoderFactory, frameListeners, config);

@@ -20,6 +20,20 @@ message ResponseFrame{
   int32 reqId = 1;
 }
 
+message StreamRequestFrame{
+  int32 id = 1;
+  int32 command = 2;
+}
+
+message StreamResponseFrame{
+  int32 reqId = 1;
+  bool finish = 2;
+}
+
 message ErrorFrame {
   int32 code = 1;
+}
+
+message GatewayFrame {
+  bytes data = 1;
 }

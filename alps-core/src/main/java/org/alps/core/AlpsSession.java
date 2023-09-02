@@ -33,6 +33,8 @@ public interface AlpsSession {
 
     void close();
 
+    boolean isClose();
+
     /**
      * 获取session的内存属性
      *

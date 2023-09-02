@@ -7,12 +7,18 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.frame.ForgetFrame;
 import org.alps.core.frame.RequestFrame;
+import org.alps.core.frame.StreamRequestFrame;
 import org.alps.core.socket.netty.server.AlpsQuicServer;
 import org.alps.core.socket.netty.server.NettyServerConfig;
 import org.alps.core.socket.netty.server.QuicServerConfig;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 public class Server {
@@ -26,6 +32,7 @@ public class Server {
         nettyServerConfig.setChildOptionSettings(Map.of(
                 ChannelOption.SO_KEEPALIVE, true
         ));
+        nettyServerConfig.setTimeout(new NettyServerConfig.Timeout(5000, 5000, 5000));
         var routerDispatcher = new RouterDispatcher();
         var config = new AlpsConfig();
         config.getDataConfig().setEnabledZip(true);
@@ -47,6 +54,7 @@ public class Server {
 
                     @Override
                     public void handle(AlpsEnhancedSession session, CommandFrame frame) {
+                        log.info("1: {}", frame.getClass());
 //                        log.info("Command Received: " + command);
 //                        try {
 //                            TimeUnit.MICROSECONDS.sleep(20L);
@@ -62,7 +70,27 @@ public class Server {
                             session.response()
                                     .reqId(requestFrame.id())
                                     .data(StringValue.of("Hello"))
-                                    .send();
+                                    .send().subscribe();
+                        } else if (frame instanceof StreamRequestFrame streamRequestFrame) {
+                            AtomicReference<Disposable> disposable = new AtomicReference<>();
+                            disposable.set(Flux.interval(Duration.ofSeconds(1L))
+                                    .publishOn(Schedulers.boundedElastic())
+                                    .doOnNext(n -> {
+                                        /*else if (n == 5) {
+                                            session.streamResponse()
+                                                    .reqId(streamRequestFrame.id())
+                                                    .finish(true)
+                                                    .send().subscribe();
+                                        }*/
+                                        if (session.isClose() && disposable.get() != null) {
+                                            disposable.get().dispose();
+                                        }
+                                        session.streamResponse()
+                                                .reqId(streamRequestFrame.id())
+                                                .data(StringValue.of("Hello" + n))
+                                                .send().subscribe();
+                                        log.info("send: {} {}", n, session.isClose());
+                                    }).subscribe());
                         }
                     }
                 });

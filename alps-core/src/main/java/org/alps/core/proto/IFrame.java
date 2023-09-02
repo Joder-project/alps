@@ -1911,6 +1911,1193 @@ public final class IFrame {
 
   }
 
+  public interface StreamRequestFrameOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:StreamRequestFrame)
+          com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int32 id = 1;</code>
+     *
+     * @return The id.
+     */
+    int getId();
+
+    /**
+     * <code>int32 command = 2;</code>
+     *
+     * @return The command.
+     */
+    int getCommand();
+  }
+
+  /**
+   * Protobuf type {@code StreamRequestFrame}
+   */
+  public static final class StreamRequestFrame extends
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:StreamRequestFrame)
+          StreamRequestFrameOrBuilder {
+    private static final long serialVersionUID = 0L;
+
+    // Use StreamRequestFrame.newBuilder() to construct.
+    private StreamRequestFrame(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+
+    private StreamRequestFrame() {
+    }
+
+    @Override
+    @SuppressWarnings({"unused"})
+    protected Object newInstance(
+            UnusedPrivateParameter unused) {
+      return new StreamRequestFrame();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+    getDescriptor() {
+      return IFrame.internal_static_StreamRequestFrame_descriptor;
+    }
+
+    @Override
+    protected FieldAccessorTable
+    internalGetFieldAccessorTable() {
+      return IFrame.internal_static_StreamRequestFrame_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                      StreamRequestFrame.class, Builder.class);
+    }
+
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_ = 0;
+
+    /**
+     * <code>int32 id = 1;</code>
+     *
+     * @return The id.
+     */
+    @Override
+    public int getId() {
+      return id_;
+    }
+
+    public static final int COMMAND_FIELD_NUMBER = 2;
+    private int command_ = 0;
+
+    /**
+     * <code>int32 command = 2;</code>
+     *
+     * @return The command.
+     */
+    @Override
+    public int getCommand() {
+      return command_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    @Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+            throws java.io.IOException {
+      if (id_ != 0) {
+        output.writeInt32(1, id_);
+      }
+      if (command_ != 0) {
+        output.writeInt32(2, command_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (id_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeInt32Size(1, id_);
+      }
+      if (command_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeInt32Size(2, command_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof StreamRequestFrame)) {
+        return super.equals(obj);
+      }
+      StreamRequestFrame other = (StreamRequestFrame) obj;
+
+      if (getId()
+              != other.getId()) return false;
+      if (getCommand()
+              != other.getCommand()) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ID_FIELD_NUMBER;
+      hash = (53 * hash) + getId();
+      hash = (37 * hash) + COMMAND_FIELD_NUMBER;
+      hash = (53 * hash) + getCommand();
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static StreamRequestFrame parseFrom(
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static StreamRequestFrame parseFrom(
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static StreamRequestFrame parseFrom(
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static StreamRequestFrame parseFrom(
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static StreamRequestFrame parseFrom(byte[] data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static StreamRequestFrame parseFrom(
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static StreamRequestFrame parseFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static StreamRequestFrame parseFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static StreamRequestFrame parseDelimitedFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static StreamRequestFrame parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static StreamRequestFrame parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static StreamRequestFrame parseFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @Override
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(StreamRequestFrame prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    @Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+              ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+            BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+
+    /**
+     * Protobuf type {@code StreamRequestFrame}
+     */
+    public static final class Builder extends
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:StreamRequestFrame)
+            StreamRequestFrameOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+      getDescriptor() {
+        return IFrame.internal_static_StreamRequestFrame_descriptor;
+      }
+
+      @Override
+      protected FieldAccessorTable
+      internalGetFieldAccessorTable() {
+        return IFrame.internal_static_StreamRequestFrame_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                        StreamRequestFrame.class, Builder.class);
+      }
+
+      // Construct using org.alps.core.proto.IFrame.StreamRequestFrame.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+              BuilderParent parent) {
+        super(parent);
+
+      }
+
+      @Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        id_ = 0;
+        command_ = 0;
+        return this;
+      }
+
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+      getDescriptorForType() {
+        return IFrame.internal_static_StreamRequestFrame_descriptor;
+      }
+
+      @Override
+      public StreamRequestFrame getDefaultInstanceForType() {
+        return StreamRequestFrame.getDefaultInstance();
+      }
+
+      @Override
+      public StreamRequestFrame build() {
+        StreamRequestFrame result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @Override
+      public StreamRequestFrame buildPartial() {
+        StreamRequestFrame result = new StreamRequestFrame(this);
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(StreamRequestFrame result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.id_ = id_;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.command_ = command_;
+        }
+      }
+
+      @Override
+      public Builder clone() {
+        return super.clone();
+      }
+
+      @Override
+      public Builder setField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return super.setField(field, value);
+      }
+
+      @Override
+      public Builder clearField(
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+
+      @Override
+      public Builder clearOneof(
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+
+      @Override
+      public Builder setRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+
+      @Override
+      public Builder addRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return super.addRepeatedField(field, value);
+      }
+
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof StreamRequestFrame) {
+          return mergeFrom((StreamRequestFrame) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(StreamRequestFrame other) {
+        if (other == StreamRequestFrame.getDefaultInstance()) return this;
+        if (other.getId() != 0) {
+          setId(other.getId());
+        }
+        if (other.getCommand() != 0) {
+          setCommand(other.getCommand());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @Override
+      public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                id_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                command_ = input.readInt32();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+
+      private int bitField0_;
+
+      private int id_;
+
+      /**
+       * <code>int32 id = 1;</code>
+       *
+       * @return The id.
+       */
+      @Override
+      public int getId() {
+        return id_;
+      }
+
+      /**
+       * <code>int32 id = 1;</code>
+       *
+       * @param value The id to set.
+       * @return This builder for chaining.
+       */
+      public Builder setId(int value) {
+
+        id_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>int32 id = 1;</code>
+       *
+       * @return This builder for chaining.
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int command_;
+
+      /**
+       * <code>int32 command = 2;</code>
+       *
+       * @return The command.
+       */
+      @Override
+      public int getCommand() {
+        return command_;
+      }
+
+      /**
+       * <code>int32 command = 2;</code>
+       *
+       * @param value The command to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCommand(int value) {
+
+        command_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>int32 command = 2;</code>
+       *
+       * @return This builder for chaining.
+       */
+      public Builder clearCommand() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        command_ = 0;
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @Override
+      public final Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:StreamRequestFrame)
+    }
+
+    // @@protoc_insertion_point(class_scope:StreamRequestFrame)
+    private static final StreamRequestFrame DEFAULT_INSTANCE;
+
+    static {
+      DEFAULT_INSTANCE = new StreamRequestFrame();
+    }
+
+    public static StreamRequestFrame getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<StreamRequestFrame>
+            PARSER = new com.google.protobuf.AbstractParser<StreamRequestFrame>() {
+      @Override
+      public StreamRequestFrame parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<StreamRequestFrame> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<StreamRequestFrame> getParserForType() {
+      return PARSER;
+    }
+
+    @Override
+    public StreamRequestFrame getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface StreamResponseFrameOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:StreamResponseFrame)
+          com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int32 reqId = 1;</code>
+     *
+     * @return The reqId.
+     */
+    int getReqId();
+
+    /**
+     * <code>bool finish = 2;</code>
+     *
+     * @return The finish.
+     */
+    boolean getFinish();
+  }
+
+  /**
+   * Protobuf type {@code StreamResponseFrame}
+   */
+  public static final class StreamResponseFrame extends
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:StreamResponseFrame)
+          StreamResponseFrameOrBuilder {
+    private static final long serialVersionUID = 0L;
+
+    // Use StreamResponseFrame.newBuilder() to construct.
+    private StreamResponseFrame(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+
+    private StreamResponseFrame() {
+    }
+
+    @Override
+    @SuppressWarnings({"unused"})
+    protected Object newInstance(
+            UnusedPrivateParameter unused) {
+      return new StreamResponseFrame();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+    getDescriptor() {
+      return IFrame.internal_static_StreamResponseFrame_descriptor;
+    }
+
+    @Override
+    protected FieldAccessorTable
+    internalGetFieldAccessorTable() {
+      return IFrame.internal_static_StreamResponseFrame_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                      StreamResponseFrame.class, Builder.class);
+    }
+
+    public static final int REQID_FIELD_NUMBER = 1;
+    private int reqId_ = 0;
+
+    /**
+     * <code>int32 reqId = 1;</code>
+     * @return The reqId.
+     */
+    @Override
+    public int getReqId() {
+      return reqId_;
+    }
+
+    public static final int FINISH_FIELD_NUMBER = 2;
+    private boolean finish_ = false;
+
+    /**
+     * <code>bool finish = 2;</code>
+     * @return The finish.
+     */
+    @Override
+    public boolean getFinish() {
+      return finish_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    @Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+            throws java.io.IOException {
+      if (reqId_ != 0) {
+        output.writeInt32(1, reqId_);
+      }
+      if (finish_ != false) {
+        output.writeBool(2, finish_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (reqId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeInt32Size(1, reqId_);
+      }
+      if (finish_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeBoolSize(2, finish_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof StreamResponseFrame)) {
+        return super.equals(obj);
+      }
+      StreamResponseFrame other = (StreamResponseFrame) obj;
+
+      if (getReqId()
+              != other.getReqId()) return false;
+      if (getFinish()
+              != other.getFinish()) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + REQID_FIELD_NUMBER;
+      hash = (53 * hash) + getReqId();
+      hash = (37 * hash) + FINISH_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+              getFinish());
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static StreamResponseFrame parseFrom(
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static StreamResponseFrame parseFrom(
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static StreamResponseFrame parseFrom(
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static StreamResponseFrame parseFrom(
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static StreamResponseFrame parseFrom(byte[] data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static StreamResponseFrame parseFrom(
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static StreamResponseFrame parseFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static StreamResponseFrame parseFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static StreamResponseFrame parseDelimitedFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static StreamResponseFrame parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static StreamResponseFrame parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static StreamResponseFrame parseFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @Override
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(StreamResponseFrame prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    @Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+              ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+            BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+
+    /**
+     * Protobuf type {@code StreamResponseFrame}
+     */
+    public static final class Builder extends
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:StreamResponseFrame)
+            StreamResponseFrameOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+      getDescriptor() {
+        return IFrame.internal_static_StreamResponseFrame_descriptor;
+      }
+
+      @Override
+      protected FieldAccessorTable
+      internalGetFieldAccessorTable() {
+        return IFrame.internal_static_StreamResponseFrame_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                        StreamResponseFrame.class, Builder.class);
+      }
+
+      // Construct using org.alps.core.proto.IFrame.StreamResponseFrame.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+              BuilderParent parent) {
+        super(parent);
+
+      }
+
+      @Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        reqId_ = 0;
+        finish_ = false;
+        return this;
+      }
+
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+      getDescriptorForType() {
+        return IFrame.internal_static_StreamResponseFrame_descriptor;
+      }
+
+      @Override
+      public StreamResponseFrame getDefaultInstanceForType() {
+        return StreamResponseFrame.getDefaultInstance();
+      }
+
+      @Override
+      public StreamResponseFrame build() {
+        StreamResponseFrame result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @Override
+      public StreamResponseFrame buildPartial() {
+        StreamResponseFrame result = new StreamResponseFrame(this);
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(StreamResponseFrame result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.reqId_ = reqId_;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.finish_ = finish_;
+        }
+      }
+
+      @Override
+      public Builder clone() {
+        return super.clone();
+      }
+
+      @Override
+      public Builder setField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return super.setField(field, value);
+      }
+
+      @Override
+      public Builder clearField(
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+
+      @Override
+      public Builder clearOneof(
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+
+      @Override
+      public Builder setRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+
+      @Override
+      public Builder addRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return super.addRepeatedField(field, value);
+      }
+
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof StreamResponseFrame) {
+          return mergeFrom((StreamResponseFrame) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(StreamResponseFrame other) {
+        if (other == StreamResponseFrame.getDefaultInstance()) return this;
+        if (other.getReqId() != 0) {
+          setReqId(other.getReqId());
+        }
+        if (other.getFinish() != false) {
+          setFinish(other.getFinish());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @Override
+      public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                reqId_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                finish_ = input.readBool();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+
+      private int bitField0_;
+
+      private int reqId_;
+
+      /**
+       * <code>int32 reqId = 1;</code>
+       * @return The reqId.
+       */
+      @Override
+      public int getReqId() {
+        return reqId_;
+      }
+
+      /**
+       * <code>int32 reqId = 1;</code>
+       * @param value The reqId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setReqId(int value) {
+
+        reqId_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>int32 reqId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearReqId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        reqId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private boolean finish_;
+
+      /**
+       * <code>bool finish = 2;</code>
+       * @return The finish.
+       */
+      @Override
+      public boolean getFinish() {
+        return finish_;
+      }
+
+      /**
+       * <code>bool finish = 2;</code>
+       * @param value The finish to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFinish(boolean value) {
+
+        finish_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>bool finish = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFinish() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        finish_ = false;
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @Override
+      public final Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:StreamResponseFrame)
+    }
+
+    // @@protoc_insertion_point(class_scope:StreamResponseFrame)
+    private static final StreamResponseFrame DEFAULT_INSTANCE;
+
+    static {
+      DEFAULT_INSTANCE = new StreamResponseFrame();
+    }
+
+    public static StreamResponseFrame getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<StreamResponseFrame>
+            PARSER = new com.google.protobuf.AbstractParser<StreamResponseFrame>() {
+      @Override
+      public StreamResponseFrame parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<StreamResponseFrame> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<StreamResponseFrame> getParserForType() {
+      return PARSER;
+    }
+
+    @Override
+    public StreamResponseFrame getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface ErrorFrameOrBuilder extends
       // @@protoc_insertion_point(interface_extends:ErrorFrame)
       com.google.protobuf.MessageOrBuilder {
@@ -2387,6 +3574,521 @@ public final class IFrame {
 
   }
 
+  public interface GatewayFrameOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:GatewayFrame)
+          com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>bytes data = 1;</code>
+     *
+     * @return The data.
+     */
+    com.google.protobuf.ByteString getData();
+  }
+
+  /**
+   * Protobuf type {@code GatewayFrame}
+   */
+  public static final class GatewayFrame extends
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:GatewayFrame)
+          GatewayFrameOrBuilder {
+    private static final long serialVersionUID = 0L;
+
+    // Use GatewayFrame.newBuilder() to construct.
+    private GatewayFrame(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+
+    private GatewayFrame() {
+      data_ = com.google.protobuf.ByteString.EMPTY;
+    }
+
+    @Override
+    @SuppressWarnings({"unused"})
+    protected Object newInstance(
+            UnusedPrivateParameter unused) {
+      return new GatewayFrame();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+    getDescriptor() {
+      return IFrame.internal_static_GatewayFrame_descriptor;
+    }
+
+    @Override
+    protected FieldAccessorTable
+    internalGetFieldAccessorTable() {
+      return IFrame.internal_static_GatewayFrame_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                      GatewayFrame.class, Builder.class);
+    }
+
+    public static final int DATA_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+
+    /**
+     * <code>bytes data = 1;</code>
+     * @return The data.
+     */
+    @Override
+    public com.google.protobuf.ByteString getData() {
+      return data_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+
+    @Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+            throws java.io.IOException {
+      if (!data_.isEmpty()) {
+        output.writeBytes(1, data_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!data_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeBytesSize(1, data_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+        return true;
+      }
+      if (!(obj instanceof GatewayFrame)) {
+        return super.equals(obj);
+      }
+      GatewayFrame other = (GatewayFrame) obj;
+
+      if (!getData()
+              .equals(other.getData())) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + DATA_FIELD_NUMBER;
+      hash = (53 * hash) + getData().hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static GatewayFrame parseFrom(
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static GatewayFrame parseFrom(
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static GatewayFrame parseFrom(
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static GatewayFrame parseFrom(
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static GatewayFrame parseFrom(byte[] data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+
+    public static GatewayFrame parseFrom(
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+
+    public static GatewayFrame parseFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static GatewayFrame parseFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static GatewayFrame parseDelimitedFrom(java.io.InputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static GatewayFrame parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static GatewayFrame parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input);
+    }
+
+    public static GatewayFrame parseFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @Override
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+
+    public static Builder newBuilder(GatewayFrame prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+
+    @Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+              ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+            BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+
+    /**
+     * Protobuf type {@code GatewayFrame}
+     */
+    public static final class Builder extends
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:GatewayFrame)
+            GatewayFrameOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+      getDescriptor() {
+        return IFrame.internal_static_GatewayFrame_descriptor;
+      }
+
+      @Override
+      protected FieldAccessorTable
+      internalGetFieldAccessorTable() {
+        return IFrame.internal_static_GatewayFrame_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                        GatewayFrame.class, Builder.class);
+      }
+
+      // Construct using org.alps.core.proto.IFrame.GatewayFrame.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+              BuilderParent parent) {
+        super(parent);
+
+      }
+
+      @Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        data_ = com.google.protobuf.ByteString.EMPTY;
+        return this;
+      }
+
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+      getDescriptorForType() {
+        return IFrame.internal_static_GatewayFrame_descriptor;
+      }
+
+      @Override
+      public GatewayFrame getDefaultInstanceForType() {
+        return GatewayFrame.getDefaultInstance();
+      }
+
+      @Override
+      public GatewayFrame build() {
+        GatewayFrame result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @Override
+      public GatewayFrame buildPartial() {
+        GatewayFrame result = new GatewayFrame(this);
+        if (bitField0_ != 0) {
+          buildPartial0(result);
+        }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(GatewayFrame result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.data_ = data_;
+        }
+      }
+
+      @Override
+      public Builder clone() {
+        return super.clone();
+      }
+
+      @Override
+      public Builder setField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return super.setField(field, value);
+      }
+
+      @Override
+      public Builder clearField(
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+
+      @Override
+      public Builder clearOneof(
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+
+      @Override
+      public Builder setRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+
+      @Override
+      public Builder addRepeatedField(
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              Object value) {
+        return super.addRepeatedField(field, value);
+      }
+
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof GatewayFrame) {
+          return mergeFrom((GatewayFrame) other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(GatewayFrame other) {
+        if (other == GatewayFrame.getDefaultInstance()) return this;
+        if (other.getData() != com.google.protobuf.ByteString.EMPTY) {
+          setData(other.getData());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @Override
+      public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                data_ = input.readBytes();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+
+      private int bitField0_;
+
+      private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+
+      /**
+       * <code>bytes data = 1;</code>
+       * @return The data.
+       */
+      @Override
+      public com.google.protobuf.ByteString getData() {
+        return data_;
+      }
+
+      /**
+       * <code>bytes data = 1;</code>
+       * @param value The data to set.
+       * @return This builder for chaining.
+       */
+      public Builder setData(com.google.protobuf.ByteString value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        data_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>bytes data = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearData() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        data_ = getDefaultInstance().getData();
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @Override
+      public final Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:GatewayFrame)
+    }
+
+    // @@protoc_insertion_point(class_scope:GatewayFrame)
+    private static final GatewayFrame DEFAULT_INSTANCE;
+
+    static {
+      DEFAULT_INSTANCE = new GatewayFrame();
+    }
+
+    public static GatewayFrame getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GatewayFrame>
+            PARSER = new com.google.protobuf.AbstractParser<GatewayFrame>() {
+      @Override
+      public GatewayFrame parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                  .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<GatewayFrame> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<GatewayFrame> getParserForType() {
+      return PARSER;
+    }
+
+    @Override
+    public GatewayFrame getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_IdleFrame_descriptor;
   private static final 
@@ -2399,34 +4101,54 @@ public final class IFrame {
       internal_static_ForgetFrame_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_RequestFrame_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_RequestFrame_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+          internal_static_ResponseFrame_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_ResponseFrame_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+          internal_static_StreamRequestFrame_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_RequestFrame_fieldAccessorTable;
+      internal_static_StreamRequestFrame_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_ResponseFrame_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_ResponseFrame_fieldAccessorTable;
+    internal_static_StreamResponseFrame_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_StreamResponseFrame_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_ErrorFrame_descriptor;
+          internal_static_ErrorFrame_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ErrorFrame_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_GatewayFrame_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_GatewayFrame_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+
+  private static com.google.protobuf.Descriptors.FileDescriptor
+          descriptor;
+
   static {
     String[] descriptorData = {
-      "\n\013Frame.proto\"\013\n\tIdleFrame\"\036\n\013ForgetFram" +
-      "e\022\017\n\007command\030\001 \001(\005\"+\n\014RequestFrame\022\n\n\002id" +
-      "\030\001 \001(\005\022\017\n\007command\030\002 \001(\005\"\036\n\rResponseFrame" +
-      "\022\r\n\005reqId\030\001 \001(\005\"\032\n\nErrorFrame\022\014\n\004code\030\001 " +
-      "\001(\005B\035\n\023org.alps.core.protoB\006IFrameb\006prot" +
-      "o3"
+            "\n\013Frame.proto\"\013\n\tIdleFrame\"\036\n\013ForgetFram" +
+                    "e\022\017\n\007command\030\001 \001(\005\"+\n\014RequestFrame\022\n\n\002id" +
+                    "\030\001 \001(\005\022\017\n\007command\030\002 \001(\005\"\036\n\rResponseFrame" +
+                    "\022\r\n\005reqId\030\001 \001(\005\"1\n\022StreamRequestFrame\022\n\n" +
+      "\002id\030\001 \001(\005\022\017\n\007command\030\002 \001(\005\"4\n\023StreamResp" +
+      "onseFrame\022\r\n\005reqId\030\001 \001(\005\022\016\n\006finish\030\002 \001(\010" +
+      "\"\032\n\nErrorFrame\022\014\n\004code\030\001 \001(\005\"\034\n\014GatewayF" +
+      "rame\022\014\n\004data\030\001 \001(\014B\035\n\023org.alps.core.prot" +
+      "oB\006IFrameb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -2448,20 +4170,38 @@ public final class IFrame {
       getDescriptor().getMessageTypes().get(2);
     internal_static_RequestFrame_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_RequestFrame_descriptor,
-        new String[] { "Id", "Command", });
+            internal_static_RequestFrame_descriptor,
+            new String[] { "Id", "Command", });
     internal_static_ResponseFrame_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+            getDescriptor().getMessageTypes().get(3);
     internal_static_ResponseFrame_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_ResponseFrame_descriptor,
+            new String[]{"ReqId",});
+    internal_static_StreamRequestFrame_descriptor =
+            getDescriptor().getMessageTypes().get(4);
+    internal_static_StreamRequestFrame_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_StreamRequestFrame_descriptor,
+            new String[]{"Id", "Command",});
+    internal_static_StreamResponseFrame_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_StreamResponseFrame_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_ResponseFrame_descriptor,
-        new String[] { "ReqId", });
+            internal_static_StreamResponseFrame_descriptor,
+            new String[]{"ReqId", "Finish",});
     internal_static_ErrorFrame_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+            getDescriptor().getMessageTypes().get(6);
     internal_static_ErrorFrame_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ErrorFrame_descriptor,
         new String[] { "Code", });
+    internal_static_GatewayFrame_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_GatewayFrame_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_GatewayFrame_descriptor,
+        new String[] { "Data", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

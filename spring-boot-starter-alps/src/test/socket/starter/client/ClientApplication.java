@@ -46,7 +46,12 @@ class Runner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         var session = sessionManager.session("User").get();
-        var response = session.request(1).data(StringValue.of("111")).send().get();
-        log.info("Response: {}", response.data(StringValue.class).get().getValue());
+        var response = session.request(1).data(StringValue.of("111")).send(StringValue.class).block();
+        log.info("Response: {}", response.getValue());
+
+        session.stream(5).data(StringValue.of("1"))
+                .send(StringValue.class)
+                .doOnNext(s -> log.info("receive stream: {}", s))
+                .subscribe();
     }
 }

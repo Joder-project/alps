@@ -12,6 +12,6 @@ public @interface Command {
     Type type();
 
     enum Type {
-        FORGET, REQUEST_RESPONSE
+        FORGET, REQUEST_RESPONSE, STREAM
     }
 }
