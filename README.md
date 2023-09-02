@@ -13,7 +13,7 @@
 * [x] Spring Boot 依赖
 * [x] Forget 请求不管响应信息
 * [x] Request-Response 请求响应
-* [] Stream 流传输 （不支持）
+* [ ] Stream 流传输 （不支持）
 
 
 ## Example
