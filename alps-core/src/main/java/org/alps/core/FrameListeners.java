@@ -9,6 +9,7 @@ import org.alps.core.listener.ErrorFrameListener;
 import org.alps.core.listener.ForgetFrameListener;
 import org.alps.core.listener.IdleFrameListener;
 import org.alps.core.listener.RequestFrameListener;
+import org.alps.core.proto.AlpsProtocol;
 
 import java.util.Map;
 import java.util.Objects;

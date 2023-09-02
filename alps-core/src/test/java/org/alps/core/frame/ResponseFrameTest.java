@@ -19,7 +19,7 @@ class ResponseFrameTest {
         var data = AlpsData.EMPTY;
 
         var coder = new ResponseFrame.Coder();
-        var frame = coder.decode(metadata, data);
+        var frame = coder.decode(metadata, data, null);
         var bytes1 = frame.toBytes();
         assertArrayEquals(bytes1, bytes, "ResponseFrame解析失败");
 

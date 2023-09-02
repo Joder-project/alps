@@ -7,6 +7,7 @@ import org.alps.core.frame.RequestFrame;
 import org.alps.starter.anno.AlpsModule;
 import org.alps.starter.anno.Command;
 import org.alps.starter.anno.Metadata;
+import org.alps.starter.anno.RawPacket;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -29,7 +30,7 @@ record RequestRouter(short module, int command, Object target, Method method) im
         var alpsExchange = new AlpsExchange(session, frame.metadata(), frame.data());
         var descriptor = MethodDescriptor.create(alpsExchange, target, method);
         var ret = descriptor.invoke(frame);
-        var responseCommand = session.response().reqId(((RequestFrame)frame).id());
+        var responseCommand = session.response().reqId(((RequestFrame) frame).id());
         if (ret != null) {
             responseCommand.data(ret);
         }
@@ -85,9 +86,13 @@ record MethodDescriptor(AlpsExchange exchange, Object target, Method method,
                 continue;
             }
             var metadataAnnotation = parameter.getAnnotation(Metadata.class);
+            var rawPacketAnnotation = parameter.getAnnotation(RawPacket.class);
             if (metadataAnnotation != null) {
                 var key = metadataAnnotation.value();
                 suppliers.add(frame -> frame.metadata().getValue(key, parameter.getType()));
+            } else if (rawPacketAnnotation != null) {
+                // 如果是获取，保证一定有
+                suppliers.add(frame -> frame.rawPacket().orElseThrow());
             } else {
                 var i = index++;
                 suppliers.add(frame -> frame.data().dataArray()[i].object(parameter.getType()));

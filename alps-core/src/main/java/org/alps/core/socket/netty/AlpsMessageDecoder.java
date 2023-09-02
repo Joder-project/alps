@@ -24,7 +24,7 @@ public class AlpsMessageDecoder extends MessageToMessageDecoder<AlpsProtocol.Alp
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, AlpsProtocol.AlpsPacket alpsPacket, List<Object> list) throws Exception {
         var packet = new AlpsPacket((short) alpsPacket.getModule(), dataCoderFactory,
-                buildMetadata(alpsPacket.getMetadata()), buildData(alpsPacket.getData()));
+                buildMetadata(alpsPacket.getMetadata()), buildData(alpsPacket.getData()), alpsPacket);
         list.add(packet);
     }
 

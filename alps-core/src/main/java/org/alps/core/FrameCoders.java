@@ -25,9 +25,9 @@ public class FrameCoders {
     public Frame decode(AlpsPacket protocol) throws Exception {
         var frameType = protocol.metadata().frameType();
         if (frameType >= 0 && frameType < defaultCoders.size()) {
-            return defaultCoders.get(frameType).decode(protocol.metadata(), protocol.data());
+            return defaultCoders.get(frameType).decode(protocol.metadata(), protocol.data(), protocol.rawPacket());
         } else if (customCoder.containsKey(frameType)) {
-            return customCoder.get(frameType).decode(protocol.metadata(), protocol.data());
+            return customCoder.get(frameType).decode(protocol.metadata(), protocol.data(), protocol.rawPacket());
         }
         throw new AlpsException(String.format("不存在解码器(code=%d)", frameType));
     }

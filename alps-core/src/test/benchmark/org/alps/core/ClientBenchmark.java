@@ -85,7 +85,7 @@ public class ClientBenchmark {
                                                 .frameType(FrameCoders.DefaultFrame.RESPONSE.frameType)
                                                 .frame(ResponseFrame.toBytes(requestFrame.id()))
                                                 .build()
-                                        , requestFrame.data()));
+                                        , requestFrame.data(), null));
                             }
                         }
                     });

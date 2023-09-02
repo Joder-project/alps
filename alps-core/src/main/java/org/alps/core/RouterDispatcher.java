@@ -1,6 +1,7 @@
 package org.alps.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.alps.core.proto.AlpsProtocol;
 
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,18 @@ public class RouterDispatcher {
     private final Map<Short, Map<Integer, Router>> routes = new ConcurrentHashMap<>();
     private final List<RouterFilter> filters = new CopyOnWriteArrayList<>();
 
+    /**
+     * 注册路由
+     */
     public void addRouter(Router router) {
         routes.computeIfAbsent(router.module(), k -> new ConcurrentHashMap<>()).put(router.command(), router);
+    }
+
+    /**
+     * 取消注册路由
+     */
+    public void removeRouter(Router router) {
+        routes.computeIfAbsent(router.module(), k -> new ConcurrentHashMap<>()).remove(router.command());
     }
 
     public void addFilter(RouterFilter filter) {
@@ -46,7 +57,7 @@ public class RouterDispatcher {
                     router.handle(session, frame);
                 } catch (Exception e) {
                     log.info("Handle exception", e);
-                    // TODO
+                    // TODO 定义默认
 //                    session.error().code().data().send();
                 }
             }

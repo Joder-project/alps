@@ -19,7 +19,7 @@ class IdleFrameTest {
         var data = AlpsData.EMPTY;
 
         var coder = new IdleFrame.Coder();
-        var frame = coder.decode(metadata, data);
+        var frame = coder.decode(metadata, data, null);
         var bytes1 = frame.toBytes();
         assertArrayEquals(bytes1, bytes, "ForgetFrame解析失败");
 

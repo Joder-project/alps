@@ -19,7 +19,7 @@ class ErrorFrameTest {
         var data = AlpsData.EMPTY;
 
         var coder = new ErrorFrame.Coder();
-        var frame = coder.decode(metadata, data);
+        var frame = coder.decode(metadata, data, null);
         var bytes1 = frame.toBytes();
         assertArrayEquals(bytes1, bytes, "ErrorFrame解析失败");
 

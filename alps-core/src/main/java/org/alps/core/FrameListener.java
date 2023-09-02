@@ -1,5 +1,7 @@
 package org.alps.core;
 
+import org.alps.core.proto.AlpsProtocol;
+
 public interface FrameListener {
 
     /**

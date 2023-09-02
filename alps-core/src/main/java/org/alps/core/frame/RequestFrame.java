@@ -1,17 +1,27 @@
 package org.alps.core.frame;
 
 import org.alps.core.*;
+import org.alps.core.proto.AlpsProtocol;
 import org.alps.core.proto.IFrame;
+
+import java.util.Optional;
 
 public record RequestFrame(
         int id,
         int command,
         AlpsMetadata metadata,
-        AlpsData data
+        AlpsData data,
+        AlpsProtocol.AlpsPacket packet
 ) implements CommandFrame {
 
+    @Override
+    public Optional<AlpsProtocol.AlpsPacket> rawPacket() {
+        return Optional.ofNullable(packet);
+    }
+
+
     public static byte[] toBytes(int command, int id) {
-        return new RequestFrame(id, command, null, null).toBytes();
+        return new RequestFrame(id, command, null, null, null).toBytes();
     }
 
     @Override
@@ -29,9 +39,9 @@ public record RequestFrame(
         }
 
         @Override
-        public Frame decode(AlpsMetadata metadata, AlpsData data) throws Exception {
+        public Frame decode(AlpsMetadata metadata, AlpsData data, AlpsProtocol.AlpsPacket rawPacket) throws Exception {
             var frame = IFrame.RequestFrame.parseFrom(metadata.frame());
-            return new RequestFrame(frame.getId(), frame.getCommand(), metadata, data);
+            return new RequestFrame(frame.getId(), frame.getCommand(), metadata, data, rawPacket);
         }
 
     }

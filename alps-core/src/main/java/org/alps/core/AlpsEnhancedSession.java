@@ -88,6 +88,7 @@ public class AlpsEnhancedSession implements AlpsSession {
         this.frameListeners.receiveFrame(this, frame);
     }
 
+
     public void receive(AlpsPacket protocol) throws Exception {
         var frame = frameCoders.decode(protocol);
         receive(frame);
@@ -211,7 +212,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, metadata, data));
+                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, metadata, data, null));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -250,7 +251,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, metadata, data));
+                var protocol = session.frameCoders.encode(session.module(), new ForgetFrame(command, metadata, data, null));
                 AlpsUtils.broadcast(sessions, protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -289,7 +290,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                                 .frame(frameBytes)
                                 .build();
                         var data = dataBuilder.build();
-                        var requestFrame = new RequestFrame(command, id, metadata, data);
+                        var requestFrame = new RequestFrame(command, id, metadata, data, null);
                         var protocol = session.frameCoders.encode(session.module(), requestFrame);
                         var responseResult = new ResponseResult(session, requestFrame);
                         listener.set((session, frame) -> responseResult.receive(((ResponseFrame) frame)));
@@ -366,7 +367,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frameType(FrameCoders.DefaultFrame.IDLE.frameType)
                         .frame(frameBytes)
                         .build();
-                var protocol = session.frameCoders.encode(session.module(), new IdleFrame(metadata));
+                var protocol = session.frameCoders.encode(session.module(), new IdleFrame(metadata, null));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -407,7 +408,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(AlpsPacket.ZERO_MODULE, new ErrorFrame(code, metadata, data));
+                var protocol = session.frameCoders.encode(AlpsPacket.ZERO_MODULE, new ErrorFrame(code, metadata, data, null));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {
@@ -450,7 +451,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(session.module(), new ResponseFrame(reqId, metadata, data));
+                var protocol = session.frameCoders.encode(session.module(), new ResponseFrame(reqId, metadata, data, null));
                 session.send(protocol);
             }).whenComplete((ret, error) -> {
                 if (error != null) {

@@ -1,5 +1,7 @@
 package org.alps.core;
 
+import org.alps.core.proto.AlpsProtocol;
+
 /**
  * 对指令数据进行处理
  */
