@@ -1,7 +1,7 @@
 package org.alps.core;
 
 import lombok.extern.slf4j.Slf4j;
-import org.alps.core.proto.AlpsProtocol;
+import org.alps.core.proto.Errors;
 
 import java.util.List;
 import java.util.Map;
@@ -14,8 +14,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Slf4j
 public class RouterDispatcher {
 
-    private final Map<Short, Map<Integer, Router>> routes = new ConcurrentHashMap<>();
+    private final Map<String, Map<Integer, Router>> routes = new ConcurrentHashMap<>();
     private final List<RouterFilter> filters = new CopyOnWriteArrayList<>();
+
+    private final List<UnknownRouter> unknownRouters = new CopyOnWriteArrayList<>();
 
     /**
      * 注册路由
@@ -29,6 +31,14 @@ public class RouterDispatcher {
      */
     public void removeRouter(Router router) {
         routes.computeIfAbsent(router.module(), k -> new ConcurrentHashMap<>()).remove(router.command());
+    }
+
+    public void addRouter(UnknownRouter router) {
+        unknownRouters.add(router);
+    }
+
+    public void removeRouter(UnknownRouter router) {
+        unknownRouters.remove(router);
     }
 
     public void addFilter(RouterFilter filter) {
@@ -47,7 +57,7 @@ public class RouterDispatcher {
                 return;
             }
         }
-        short module = session.module();
+        var module = session.module();
         int command = frame.command();
         if (routes.containsKey(module)) {
             var routerMap = routes.get(module);
@@ -55,11 +65,21 @@ public class RouterDispatcher {
                 var router = routerMap.get(command);
                 try {
                     router.handle(session, frame);
+                    return;
                 } catch (Exception e) {
                     log.info("Handle exception", e);
                     // TODO 定义默认
-//                    session.error().code().data().send();
+                    session.error().code(Errors.Code.Handle_Error_VALUE).data().send().subscribe();
                 }
+            }
+        }
+        for (UnknownRouter unknownRouter : unknownRouters) {
+            try {
+                unknownRouter.handle(session, module, frame);
+            } catch (Exception e) {
+                log.info("Handle exception", e);
+                // TODO 定义默认
+                session.error().code(Errors.Code.Global_Handle_Error_VALUE).data().send().subscribe();
             }
         }
     }

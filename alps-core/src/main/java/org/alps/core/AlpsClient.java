@@ -1,20 +1,19 @@
 package org.alps.core;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public interface AlpsClient extends AlpsSocket {
 
     /**
      * 获取所有连接
-     *
-     * @return
      */
     List<AlpsSession> session();
 
-    default Optional<AlpsSession> session(short module) {
+    default Optional<AlpsSession> session(String module) {
         return session().stream()
-                .filter(e -> e.module() == module)
+                .filter(e -> Objects.equals(e.module(), module))
                 .findFirst();
     }
 }

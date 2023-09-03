@@ -5,10 +5,7 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
-import org.alps.core.AlpsDataCoderFactory;
-import org.alps.core.AlpsServer;
-import org.alps.core.AlpsSession;
-import org.alps.core.EnhancedSessionFactory;
+import org.alps.core.*;
 import org.alps.core.proto.AlpsProtocol;
 import org.alps.core.socket.netty.*;
 
@@ -28,11 +25,11 @@ public abstract class AbstractAlpsServer implements AlpsServer {
     final AlpsServerProtocolHandler protocolHandler;
     final EnhancedSessionFactory sessionFactory;
     final List<AlpsSession> sessions = new CopyOnWriteArrayList<>();
-    final List<Short> supportModules;
+    final List<AlpsConfig.ModuleConfig> supportModules;
 
     protected AbstractAlpsServer(NettyServerConfig serverConfig, AlpsDataCoderFactory coderFactory,
                                  EventLoopGroup defaultGroup, EnhancedSessionFactory sessionFactory,
-                                 List<Short> supportModules) {
+                                 List<AlpsConfig.ModuleConfig> supportModules) {
         this.serverConfig = serverConfig;
         this.coderFactory = coderFactory;
         this.defaultGroup = defaultGroup;

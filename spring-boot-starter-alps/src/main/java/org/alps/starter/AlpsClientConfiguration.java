@@ -2,6 +2,7 @@ package org.alps.starter;
 
 import io.netty.channel.nio.NioEventLoopGroup;
 import org.alps.core.AlpsClient;
+import org.alps.core.AlpsConfig;
 import org.alps.core.AlpsDataCoderFactory;
 import org.alps.core.EnhancedSessionFactory;
 import org.alps.core.socket.netty.client.AlpsQuicClient;
@@ -37,7 +38,8 @@ public class AlpsClientConfiguration {
         return new AlpsTcpClient(
                 new NioEventLoopGroup(nettyConfig.getBossThread()),
                 nettyClientConfig, sessionFactory,
-                properties.getModules().stream().map(AlpsProperties.ModuleProperties::getCode).toList(),
+                properties.getModules().stream()
+                        .map(e -> new AlpsConfig.ModuleConfig(e.getName(), e.getVersion(), e.getVerifyToken())).toList(),
                 coderFactory);
     }
 
@@ -51,7 +53,9 @@ public class AlpsClientConfiguration {
         nettyClientConfig.setTimeout(new NettyClientConfig.Timeout(timeout.getReaderIdleTime(),
                 timeout.getWriterIdleTime(), timeout.getAllIdleTime()));
         return new AlpsQuicClient(new NioEventLoopGroup(nettyConfig.getBossThread()), nettyClientConfig, sessionFactory,
-                properties.getModules().stream().map(AlpsProperties.ModuleProperties::getCode).toList(), coderFactory);
+                properties.getModules().stream()
+                        .map(e -> new AlpsConfig.ModuleConfig(e.getName(), e.getVersion(), e.getVerifyToken())).toList(),
+                coderFactory);
 
     }
 

@@ -2,8 +2,12 @@ package org.alps.core;
 
 import org.alps.core.common.AlpsException;
 import org.alps.core.frame.*;
+import org.alps.core.proto.AlpsProtocol.AlpsPacket.FrameType;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.alps.core.FrameCoders.DefaultFrame.*;
@@ -11,9 +15,9 @@ import static org.alps.core.FrameCoders.DefaultFrame.*;
 
 public class FrameCoders {
 
-    private final List<FrameCoder> defaultCoders = Stream.of(
-            IDLE, FORGET, REQUEST, RESPONSE, ERROR, STREAM_REQUEST, STREAM_RESPONSE
-    ).sorted(Comparator.comparingInt(x -> x.frameType)).map(e -> e.coder).toList();
+    private final Map<Byte, FrameCoder> defaultCoders = Stream.of(
+            IDLE, FORGET, REQUEST, RESPONSE, ERROR, STREAM_REQUEST, STREAM_RESPONSE, MODULE_AUTH
+    ).collect(Collectors.toUnmodifiableMap(e -> e.frameType, e -> e.coder));
     private final Map<Byte, FrameCoder> customCoder = new HashMap<>(16);
 
     private final AlpsDataCoderFactory dataCoderFactory;
@@ -24,7 +28,7 @@ public class FrameCoders {
 
     public Frame decode(AlpsPacket protocol) throws Exception {
         var frameType = protocol.metadata().frameType();
-        if (frameType >= 0 && frameType < defaultCoders.size()) {
+        if (defaultCoders.containsKey(frameType)) {
             return defaultCoders.get(frameType).decode(protocol.metadata(), protocol.data(), protocol.rawPacket());
         } else if (customCoder.containsKey(frameType)) {
             return customCoder.get(frameType).decode(protocol.metadata(), protocol.data(), protocol.rawPacket());
@@ -32,7 +36,7 @@ public class FrameCoders {
         throw new AlpsException(String.format("不存在解码器(code=%d)", frameType));
     }
 
-    public AlpsPacket encode(boolean server, short module, Frame frame) {
+    public AlpsPacket encode(boolean server, String module, Frame frame) {
         Objects.requireNonNull(frame, "frame不能为空");
         return getFrameType(frame).encode(server, module, dataCoderFactory, frame);
     }
@@ -66,13 +70,14 @@ public class FrameCoders {
     }
 
     enum DefaultFrame {
-        IDLE(IdleFrame.class, (byte) 0, new IdleFrame.Coder()),
-        FORGET(ForgetFrame.class, (byte) 1, new ForgetFrame.Coder()),
-        REQUEST(RequestFrame.class, (byte) 2, new RequestFrame.Coder()),
-        RESPONSE(ResponseFrame.class, (byte) 3, new ResponseFrame.Coder()),
-        ERROR(ErrorFrame.class, (byte) 4, new ErrorFrame.Coder()),
-        STREAM_REQUEST(StreamRequestFrame.class, (byte) 5, new StreamRequestFrame.Coder()),
-        STREAM_RESPONSE(StreamResponseFrame.class, (byte) 6, new StreamResponseFrame.Coder()),
+        IDLE(IdleFrame.class, (byte) FrameType.IDLE_VALUE, new IdleFrame.Coder()),
+        FORGET(ForgetFrame.class, (byte) FrameType.FORGET_VALUE, new ForgetFrame.Coder()),
+        REQUEST(RequestFrame.class, (byte) FrameType.REQUEST_VALUE, new RequestFrame.Coder()),
+        RESPONSE(ResponseFrame.class, (byte) FrameType.RESPONSE_VALUE, new ResponseFrame.Coder()),
+        ERROR(ErrorFrame.class, (byte) FrameType.ERROR_VALUE, new ErrorFrame.Coder()),
+        STREAM_REQUEST(StreamRequestFrame.class, (byte) FrameType.STREAM_REQUEST_VALUE, new StreamRequestFrame.Coder()),
+        STREAM_RESPONSE(StreamResponseFrame.class, (byte) FrameType.STREAM_RESPONSE_VALUE, new StreamResponseFrame.Coder()),
+        MODULE_AUTH(ModuleAuthFrame.class, (byte) FrameType.MODULE_AUTH_VALUE, new ModuleAuthFrame.Coder()),
         ;
 
 

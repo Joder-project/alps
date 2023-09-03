@@ -6,7 +6,7 @@ option java_outer_classname = "AlpsProtocol";
 message AlpsPacket {
   ConnectType connectType = 1;
   int32 magic = 2;
-  int32 module = 3;
+  string module = 3;
   AlpsMetadata metadata = 4;
   optional AlpsData data = 5;
 
@@ -47,5 +47,6 @@ message AlpsPacket {
     STREAM_REQUEST = 5;
     STREAM_RESPONSE = 6;
     GATEWAY = 7;
+    MODULE_AUTH = 8; // 模块认证帧
   }
 }

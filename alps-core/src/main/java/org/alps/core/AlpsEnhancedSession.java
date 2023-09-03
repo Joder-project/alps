@@ -9,10 +9,10 @@ import reactor.core.publisher.Sinks;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
-import java.net.InetAddress;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadFactory;
@@ -63,6 +63,16 @@ public class AlpsEnhancedSession implements AlpsSession {
         return this;
     }
 
+    @Override
+    public boolean isAuth() {
+        return session.isAuth();
+    }
+
+    @Override
+    public void auth(int version, long verifyToken) {
+        session.auth(version, verifyToken);
+    }
+
     /**
      * 获取下个请求Id
      */
@@ -76,17 +86,17 @@ public class AlpsEnhancedSession implements AlpsSession {
     }
 
     @Override
-    public short module() {
+    public String module() {
         return session.module();
     }
 
     @Override
-    public InetAddress selfAddress() {
+    public Optional<String> selfAddress() {
         return session.selfAddress();
     }
 
     @Override
-    public InetAddress targetAddress() {
+    public Optional<String> targetAddress() {
         return session.targetAddress();
     }
 
@@ -127,6 +137,11 @@ public class AlpsEnhancedSession implements AlpsSession {
 
     public IdleCommand idle() {
         return new IdleCommand(this, ioScheduler);
+    }
+
+
+    public ModuleAuthCommand moduleAuth() {
+        return new ModuleAuthCommand(this, ioScheduler);
     }
 
     public ErrorCommand error() {
@@ -174,11 +189,11 @@ public class AlpsEnhancedSession implements AlpsSession {
 
             var code = config.getDataConfig().getCoder().getCode();
             AlpsConfig.ModuleConfig moduleConfig;
-            if (session.module() == AlpsPacket.ZERO_MODULE) {
+            if (Objects.equals(session.module(), AlpsPacket.ZERO_MODULE)) {
                 moduleConfig = AlpsConfig.ModuleConfig.ZERO;
             } else {
                 moduleConfig = config.getModules().stream()
-                        .filter(e -> e.getModule() == session.module())
+                        .filter(e -> Objects.equals(e.getModule(), session.module()))
                         .findFirst().orElseThrow();
             }
 
@@ -376,6 +391,40 @@ public class AlpsEnhancedSession implements AlpsSession {
         }
     }
 
+    public static class ModuleAuthCommand extends BaseCommand {
+
+        int version;
+        long verifyToken;
+
+        public ModuleAuthCommand(AlpsEnhancedSession session, Scheduler ioScheduler) {
+            super(session, ioScheduler);
+        }
+
+        public ModuleAuthCommand version(int version) {
+            this.version = version;
+            return this;
+        }
+
+        public ModuleAuthCommand verifyToken(long verifyToken) {
+            this.verifyToken = verifyToken;
+            return this;
+        }
+
+        public Mono<Void> send() {
+            return Mono.fromRunnable(() -> {
+                        var frameBytes = ModuleAuthFrame.toBytes(version, verifyToken);
+                        var metadata = metadataBuilder
+                                .frameType(FrameCoders.DefaultFrame.MODULE_AUTH.frameType)
+                                .frame(frameBytes)
+                                .build();
+                        var protocol = session.frameCoders.encode(config.isServer(), session.module(),
+                                new ModuleAuthFrame(version, verifyToken, metadata, null));
+                        session.send(protocol);
+                    }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error))
+                    .then();
+        }
+    }
+
     public static class IdleCommand extends BaseCommand {
         public IdleCommand(AlpsEnhancedSession session, Scheduler ioScheduler) {
             super(session, ioScheduler);
@@ -383,7 +432,7 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         public Mono<Void> send() {
             return Mono.fromRunnable(() -> {
-                        var frameBytes = IdleFrame.toErrorBytes();
+                        var frameBytes = IdleFrame.toIdleBytes();
                         var metadata = metadataBuilder
                                 .frameType(FrameCoders.DefaultFrame.IDLE.frameType)
                                 .frame(frameBytes)
@@ -398,7 +447,7 @@ public class AlpsEnhancedSession implements AlpsSession {
 
     public static class ErrorCommand extends BaseCommand {
 
-        private short code;
+        private int code;
 
         public ErrorCommand(AlpsEnhancedSession session, Scheduler ioScheduler) {
             super(session, ioScheduler);
@@ -414,7 +463,7 @@ public class AlpsEnhancedSession implements AlpsSession {
             return (ErrorCommand) super.metadata(key, value);
         }
 
-        public ErrorCommand code(short code) {
+        public ErrorCommand code(int code) {
             this.code = code;
             return this;
         }

@@ -30,7 +30,7 @@ public abstract class AbstractAlpsClient implements AlpsClient, IAlpsClientReady
     final NettyClientConfig clientConfig;
 
     AbstractAlpsClient(NettyClientConfig clientConfig, EnhancedSessionFactory sessionFactory,
-                       List<Short> supportModules, AlpsDataCoderFactory coderFactory) {
+                       List<AlpsConfig.ModuleConfig> supportModules, AlpsDataCoderFactory coderFactory) {
         this.coderFactory = coderFactory;
         this.encoder = new AlpsMessageEncoder();
         this.protocolHandler = new AlpsClientProtocolHandler(this, sessionFactory, supportModules);

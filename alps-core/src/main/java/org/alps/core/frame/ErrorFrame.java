@@ -10,7 +10,7 @@ import org.alps.core.proto.IFrame;
 import java.util.Optional;
 
 public record ErrorFrame(
-        short code,
+        int code,
         AlpsMetadata metadata,
         AlpsData data,
         AlpsProtocol.AlpsPacket packet
@@ -21,7 +21,7 @@ public record ErrorFrame(
         return Optional.ofNullable(packet);
     }
 
-    public static byte[] toBytes(short code) {
+    public static byte[] toBytes(int code) {
         return new ErrorFrame(code, null, null, null).toBytes();
     }
 

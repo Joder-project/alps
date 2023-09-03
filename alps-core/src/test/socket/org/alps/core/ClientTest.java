@@ -19,7 +19,7 @@ public class ClientTest {
         while (client.get() == null || client.get().isNotReady()) {
 
         }
-        var session = client.get().session(((short) 1)).map(e -> ((AlpsEnhancedSession) e)).orElseThrow();
+        var session = client.get().session("1").map(e -> ((AlpsEnhancedSession) e)).orElseThrow();
         session.forget(1).data(1).send().subscribe();
         var ret = session.request(2).data(1)
                 .send(Int32Value.class)
@@ -38,12 +38,12 @@ public class ClientTest {
 
         DefaultEnhancedSessionFactory(RouterDispatcher routerDispatcher) {
             this.dataCoderFactory = new AlpsDataCoderFactory();
-            this.frameListeners = new FrameListeners(routerDispatcher);
             this.config = new AlpsConfig();
             this.config.getDataConfig().setEnabledZip(true);
             this.config.getMetaDataConfig().setEnabledZip(true);
-            this.config.getModules().add(new AlpsConfig.ModuleConfig((short) 1, (short) 1, 1L));
+            this.config.getModules().add(new AlpsConfig.ModuleConfig("1", (short) 1, 1L));
             this.frameCoders = new FrameCoders(dataCoderFactory);
+            this.frameListeners = new FrameListeners(routerDispatcher);
         }
 
         @Override

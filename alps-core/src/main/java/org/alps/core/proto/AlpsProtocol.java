@@ -15,18 +15,16 @@ public final class AlpsProtocol {
             (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface AlpsPacketOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:AlpsPacket)
+          // @@protoc_insertion_point(interface_extends:alps.AlpsPacket)
           com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>.AlpsPacket.ConnectType connectType = 1;</code>
+     * <code>.alps.AlpsPacket.ConnectType connectType = 1;</code>
      * @return The enum numeric value on the wire for connectType.
      */
     int getConnectTypeValue();
-
     /**
-     * <code>.AlpsPacket.ConnectType connectType = 1;</code>
-     *
+     * <code>.alps.AlpsPacket.ConnectType connectType = 1;</code>
      * @return The connectType.
      */
     AlpsPacket.ConnectType getConnectType();
@@ -38,60 +36,69 @@ public final class AlpsProtocol {
     int getMagic();
 
     /**
-     * <code>int32 module = 3;</code>
+     * <code>string module = 3;</code>
      * @return The module.
      */
-    int getModule();
+    String getModule();
 
-    /**
-     * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+      /**
+       * <code>string module = 3;</code>
+       *
+       * @return The bytes for module.
+       */
+      com.google.protobuf.ByteString
+      getModuleBytes();
+
+      /**
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
      * @return Whether the metadata field is set.
      */
     boolean hasMetadata();
 
-    /**
-     * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+      /**
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
      * @return The metadata.
      */
     AlpsPacket.AlpsMetadata getMetadata();
 
-    /**
-     * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+      /**
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
      */
     AlpsPacket.AlpsMetadataOrBuilder getMetadataOrBuilder();
 
-    /**
-     * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+      /**
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
      * @return Whether the data field is set.
      */
     boolean hasData();
 
-    /**
-     * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+      /**
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
      * @return The data.
      */
     AlpsPacket.AlpsData getData();
 
-    /**
-     * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+      /**
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
      */
     AlpsPacket.AlpsDataOrBuilder getDataOrBuilder();
   }
-  /**
-   * Protobuf type {@code AlpsPacket}
+
+    /**
+     * Protobuf type {@code alps.AlpsPacket}
    */
   public static final class AlpsPacket extends
-          com.google.protobuf.GeneratedMessageV3 implements
-          // @@protoc_insertion_point(message_implements:AlpsPacket)
-          AlpsPacketOrBuilder {
-    private static final long serialVersionUID = 0L;
+            com.google.protobuf.GeneratedMessageV3 implements
+            // @@protoc_insertion_point(message_implements:alps.AlpsPacket)
+            AlpsPacketOrBuilder {
+        private static final long serialVersionUID = 0L;
     // Use AlpsPacket.newBuilder() to construct.
     private AlpsPacket(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private AlpsPacket() {
-      connectType_ = 0;
+        connectType_ = 0;
+      module_ = "";
     }
 
     @Override
@@ -103,22 +110,22 @@ public final class AlpsProtocol {
 
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
-      return AlpsProtocol.internal_static_AlpsPacket_descriptor;
+        return AlpsProtocol.internal_static_alps_AlpsPacket_descriptor;
     }
 
     @Override
     protected FieldAccessorTable
     internalGetFieldAccessorTable() {
-      return AlpsProtocol.internal_static_AlpsPacket_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      AlpsPacket.class, Builder.class);
+        return AlpsProtocol.internal_static_alps_AlpsPacket_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                        AlpsPacket.class, Builder.class);
     }
 
-    /**
-     * Protobuf enum {@code AlpsPacket.ConnectType}
+        /**
+         * Protobuf enum {@code alps.AlpsPacket.ConnectType}
      */
-    public enum ConnectType
-            implements com.google.protobuf.ProtocolMessageEnum {
+        public enum ConnectType
+                implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>CLIENT = 0;</code>
        */
@@ -163,13 +170,12 @@ public final class AlpsProtocol {
        * @return The enum associated with the given numeric wire value.
        */
       public static ConnectType forNumber(int value) {
-        switch (value) {
-          case 0:
-            return CLIENT;
-          case 1:
-            return SERVER;
-          default:
-            return null;
+          switch (value) {
+              case 0:
+                  return CLIENT;
+              case 1:
+                  return SERVER;
+              default: return null;
         }
       }
 
@@ -177,14 +183,13 @@ public final class AlpsProtocol {
       internalGetValueMap() {
         return internalValueMap;
       }
-
       private static final com.google.protobuf.Internal.EnumLiteMap<
               ConnectType> internalValueMap =
               new com.google.protobuf.Internal.EnumLiteMap<ConnectType>() {
-                public ConnectType findValueByNumber(int number) {
-                  return ConnectType.forNumber(number);
-                }
-              };
+                  public ConnectType findValueByNumber(int number) {
+                      return ConnectType.forNumber(number);
+                  }
+            };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
       getValueDescriptor() {
@@ -194,12 +199,10 @@ public final class AlpsProtocol {
         }
         return getDescriptor().getValues().get(ordinal());
       }
-
       public final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptorForType() {
         return getDescriptor();
       }
-
       public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
         return AlpsPacket.getDescriptor().getEnumTypes().get(0);
@@ -225,14 +228,14 @@ public final class AlpsProtocol {
         this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:AlpsPacket.ConnectType)
-    }
+            // @@protoc_insertion_point(enum_scope:alps.AlpsPacket.ConnectType)
+        }
 
-    /**
-     * Protobuf enum {@code AlpsPacket.Coder}
+        /**
+         * Protobuf enum {@code alps.AlpsPacket.Coder}
      */
-    public enum Coder
-            implements com.google.protobuf.ProtocolMessageEnum {
+        public enum Coder
+                implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>JDK = 0;</code>
        */
@@ -291,8 +294,8 @@ public final class AlpsProtocol {
       private static final com.google.protobuf.Internal.EnumLiteMap<
               Coder> internalValueMap =
               new com.google.protobuf.Internal.EnumLiteMap<Coder>() {
-                public Coder findValueByNumber(int number) {
-                  return Coder.forNumber(number);
+                  public Coder findValueByNumber(int number) {
+                      return Coder.forNumber(number);
               }
             };
 
@@ -333,14 +336,14 @@ public final class AlpsProtocol {
         this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:AlpsPacket.Coder)
-    }
+            // @@protoc_insertion_point(enum_scope:alps.AlpsPacket.Coder)
+        }
 
-    /**
-     * Protobuf enum {@code AlpsPacket.FrameType}
+        /**
+         * Protobuf enum {@code alps.AlpsPacket.FrameType}
      */
-    public enum FrameType
-            implements com.google.protobuf.ProtocolMessageEnum {
+        public enum FrameType
+                implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>IDLE = 0;</code>
        */
@@ -373,6 +376,14 @@ public final class AlpsProtocol {
        * <code>GATEWAY = 7;</code>
        */
       GATEWAY(7),
+            /**
+             * <pre>
+             * 模块认证帧
+             * </pre>
+             *
+             * <code>MODULE_AUTH = 8;</code>
+             */
+      MODULE_AUTH(8),
       UNRECOGNIZED(-1),
       ;
 
@@ -408,6 +419,14 @@ public final class AlpsProtocol {
        * <code>GATEWAY = 7;</code>
        */
       public static final int GATEWAY_VALUE = 7;
+            /**
+             * <pre>
+             * 模块认证帧
+             * </pre>
+             *
+             * <code>MODULE_AUTH = 8;</code>
+             */
+            public static final int MODULE_AUTH_VALUE = 8;
 
 
       public final int getNumber() {
@@ -434,18 +453,20 @@ public final class AlpsProtocol {
        */
       public static FrameType forNumber(int value) {
         switch (value) {
-          case 0: return IDLE;
-          case 1: return FORGET;
-          case 2:
-            return REQUEST;
-          case 3:
-            return RESPONSE;
-          case 4:
-            return ERROR;
-          case 5:
-            return STREAM_REQUEST;
-          case 6: return STREAM_RESPONSE;
-          case 7: return GATEWAY;
+            case 0:
+                return IDLE;
+            case 1:
+                return FORGET;
+            case 2:
+                return REQUEST;
+            case 3:
+                return RESPONSE;
+            case 4: return ERROR;
+          case 5: return STREAM_REQUEST;
+          case 6:
+              return STREAM_RESPONSE;
+            case 7: return GATEWAY;
+          case 8: return MODULE_AUTH;
           default: return null;
         }
       }
@@ -454,31 +475,28 @@ public final class AlpsProtocol {
           internalGetValueMap() {
         return internalValueMap;
       }
-
       private static final com.google.protobuf.Internal.EnumLiteMap<
               FrameType> internalValueMap =
               new com.google.protobuf.Internal.EnumLiteMap<FrameType>() {
-                public FrameType findValueByNumber(int number) {
-                return FrameType.forNumber(number);
+                  public FrameType findValueByNumber(int number) {
+                      return FrameType.forNumber(number);
               }
-              };
+            };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
-      getValueDescriptor() {
+          getValueDescriptor() {
         if (this == UNRECOGNIZED) {
           throw new IllegalStateException(
               "Can't get the descriptor of an unrecognized enum value.");
         }
         return getDescriptor().getValues().get(ordinal());
       }
-
       public final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptorForType() {
         return getDescriptor();
       }
-
       public static final com.google.protobuf.Descriptors.EnumDescriptor
-      getDescriptor() {
+          getDescriptor() {
         return AlpsPacket.getDescriptor().getEnumTypes().get(2);
       }
 
@@ -499,14 +517,14 @@ public final class AlpsProtocol {
       private final int value;
 
       private FrameType(int value) {
-        this.value = value;
+          this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:AlpsPacket.FrameType)
-    }
+            // @@protoc_insertion_point(enum_scope:alps.AlpsPacket.FrameType)
+        }
 
-    public interface AlpsDataOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:AlpsPacket.AlpsData)
+        public interface AlpsDataOrBuilder extends
+                // @@protoc_insertion_point(interface_extends:alps.AlpsPacket.AlpsData)
         com.google.protobuf.MessageOrBuilder {
 
       /**
@@ -515,13 +533,14 @@ public final class AlpsProtocol {
        */
       boolean getZip();
 
-      /**
-       * <code>.AlpsPacket.Coder dataCoder = 2;</code>
+            /**
+             * <code>.alps.AlpsPacket.Coder dataCoder = 2;</code>
        * @return The enum numeric value on the wire for dataCoder.
-       */
-      int getDataCoderValue();
-      /**
-       * <code>.AlpsPacket.Coder dataCoder = 2;</code>
+             */
+            int getDataCoderValue();
+
+            /**
+             * <code>.alps.AlpsPacket.Coder dataCoder = 2;</code>
        * @return The dataCoder.
        */
       Coder getDataCoder();
@@ -557,22 +576,23 @@ public final class AlpsProtocol {
        */
       /* nullable */
       com.google.protobuf.ByteString getDataArrayOrDefault(
-              int key,
+          int key,
           /* nullable */
 com.google.protobuf.ByteString defaultValue);
       /**
        * <code>map&lt;int32, bytes&gt; dataArray = 4;</code>
        */
       com.google.protobuf.ByteString getDataArrayOrThrow(
-          int key);
-    }
-    /**
-     * Protobuf type {@code AlpsPacket.AlpsData}
-     */
-    public static final class AlpsData extends
-            com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:AlpsPacket.AlpsData)
-            AlpsDataOrBuilder {
+              int key);
+        }
+
+        /**
+     * Protobuf type {@code alps.AlpsPacket.AlpsData}
+         */
+        public static final class AlpsData extends
+                com.google.protobuf.GeneratedMessageV3 implements
+                // @@protoc_insertion_point(message_implements:alps.AlpsPacket.AlpsData)
+        AlpsDataOrBuilder {
     private static final long serialVersionUID = 0L;
       // Use AlpsData.newBuilder() to construct.
       private AlpsData(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -592,7 +612,7 @@ com.google.protobuf.ByteString defaultValue);
 
       public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-        return AlpsProtocol.internal_static_AlpsPacket_AlpsData_descriptor;
+          return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsData_descriptor;
       }
 
       @SuppressWarnings({"rawtypes"})
@@ -602,17 +622,17 @@ com.google.protobuf.ByteString defaultValue);
         switch (number) {
           case 4:
             return internalGetDataArray();
-          default:
-            throw new RuntimeException(
-                    "Invalid map field number: " + number);
+            default:
+                throw new RuntimeException(
+                "Invalid map field number: " + number);
         }
       }
 
-      @Override
-      protected FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return AlpsProtocol.internal_static_AlpsPacket_AlpsData_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
+            @Override
+            protected FieldAccessorTable
+            internalGetFieldAccessorTable() {
+                return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsData_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
                 AlpsData.class, Builder.class);
       }
 
@@ -628,20 +648,21 @@ com.google.protobuf.ByteString defaultValue);
       }
 
       public static final int DATACODER_FIELD_NUMBER = 2;
-      private int dataCoder_ = 0;
-      /**
-       * <code>.AlpsPacket.Coder dataCoder = 2;</code>
+            private int dataCoder_ = 0;
+
+            /**
+             * <code>.alps.AlpsPacket.Coder dataCoder = 2;</code>
        * @return The enum numeric value on the wire for dataCoder.
        */
       @Override public int getDataCoderValue() {
-        return dataCoder_;
+          return dataCoder_;
       }
-      /**
-       * <code>.AlpsPacket.Coder dataCoder = 2;</code>
-       * @return The dataCoder.
+
+            /**
+             * <code>.alps.AlpsPacket.Coder dataCoder = 2;</code>
+             * @return The dataCoder.
        */
-      @Override
-      public Coder getDataCoder() {
+      @Override public Coder getDataCoder() {
         Coder result = Coder.forNumber(dataCoder_);
         return result == null ? Coder.UNRECOGNIZED : result;
       }
@@ -663,17 +684,15 @@ com.google.protobuf.ByteString defaultValue);
             Integer, com.google.protobuf.ByteString> defaultEntry =
                 com.google.protobuf.MapEntry
                         .<Integer, com.google.protobuf.ByteString>newDefaultInstance(
-                                AlpsProtocol.internal_static_AlpsPacket_AlpsData_DataArrayEntry_descriptor,
+                                AlpsProtocol.internal_static_alps_AlpsPacket_AlpsData_DataArrayEntry_descriptor,
                                 com.google.protobuf.WireFormat.FieldType.INT32,
                                 0,
                                 com.google.protobuf.WireFormat.FieldType.BYTES,
                     com.google.protobuf.ByteString.EMPTY);
       }
-
       @SuppressWarnings("serial")
       private com.google.protobuf.MapField<
               Integer, com.google.protobuf.ByteString> dataArray_;
-
       private com.google.protobuf.MapField<Integer, com.google.protobuf.ByteString>
       internalGetDataArray() {
         if (dataArray_ == null) {
@@ -717,7 +736,7 @@ com.google.protobuf.ByteString defaultValue);
       com.google.protobuf.ByteString getDataArrayOrDefault(
               int key,
               /* nullable */
-              com.google.protobuf.ByteString defaultValue) {
+com.google.protobuf.ByteString defaultValue) {
 
         java.util.Map<Integer, com.google.protobuf.ByteString> map =
             internalGetDataArray().getMap();
@@ -728,10 +747,10 @@ com.google.protobuf.ByteString defaultValue);
        */
       @Override
       public com.google.protobuf.ByteString getDataArrayOrThrow(
-              int key) {
+          int key) {
 
         java.util.Map<Integer, com.google.protobuf.ByteString> map =
-                internalGetDataArray().getMap();
+            internalGetDataArray().getMap();
         if (!map.containsKey(key)) {
           throw new IllegalArgumentException();
         }
@@ -761,10 +780,10 @@ com.google.protobuf.ByteString defaultValue);
         if (!zipDataArray_.isEmpty()) {
           output.writeBytes(3, zipDataArray_);
         }
-        com.google.protobuf.GeneratedMessageV3
-                .serializeIntegerMapTo(
-                        output,
-                        internalGetDataArray(),
+          com.google.protobuf.GeneratedMessageV3
+                  .serializeIntegerMapTo(
+            output,
+            internalGetDataArray(),
             DataArrayDefaultEntryHolder.defaultEntry,
             4);
         getUnknownFields().writeTo(output);
@@ -777,24 +796,24 @@ com.google.protobuf.ByteString defaultValue);
 
         size = 0;
         if (zip_ != false) {
-          size += com.google.protobuf.CodedOutputStream
-                  .computeBoolSize(1, zip_);
+            size += com.google.protobuf.CodedOutputStream
+            .computeBoolSize(1, zip_);
         }
         if (dataCoder_ != Coder.JDK.getNumber()) {
           size += com.google.protobuf.CodedOutputStream
             .computeEnumSize(2, dataCoder_);
         }
         if (!zipDataArray_.isEmpty()) {
-          size += com.google.protobuf.CodedOutputStream
-                  .computeBytesSize(3, zipDataArray_);
+            size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(3, zipDataArray_);
         }
         for (java.util.Map.Entry<Integer, com.google.protobuf.ByteString> entry
                 : internalGetDataArray().getMap().entrySet()) {
           com.google.protobuf.MapEntry<Integer, com.google.protobuf.ByteString>
                   dataArray__ = DataArrayDefaultEntryHolder.defaultEntry.newBuilderForType()
-                  .setKey(entry.getKey())
-              .setValue(entry.getValue())
-                  .build();
+              .setKey(entry.getKey())
+                  .setValue(entry.getValue())
+              .build();
           size += com.google.protobuf.CodedOutputStream
               .computeMessageSize(4, dataArray__);
         }
@@ -847,82 +866,80 @@ com.google.protobuf.ByteString defaultValue);
         return hash;
       }
 
-      public static AlpsData parseFrom(
-              java.nio.ByteBuffer data)
+            public static AlpsData parseFrom(
+          java.nio.ByteBuffer data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
-      }
+            }
 
-      public static AlpsData parseFrom(
-              java.nio.ByteBuffer data,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsData parseFrom(
+                    java.nio.ByteBuffer data,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+            }
+
+            public static AlpsData parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+            }
+
+            public static AlpsData parseFrom(
+                    com.google.protobuf.ByteString data,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
-      public static AlpsData parseFrom(
-              com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data);
-      }
-
-      public static AlpsData parseFrom(
-              com.google.protobuf.ByteString data,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data, extensionRegistry);
-      }
-
       public static AlpsData parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
 
-      public static AlpsData parseFrom(
-              byte[] data,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsData parseFrom(
+                    byte[] data,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static AlpsData parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseWithIOException(PARSER, input);
+          return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
       }
 
-      public static AlpsData parseFrom(
-              java.io.InputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsData parseFrom(
+                    java.io.InputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseWithIOException(PARSER, input, extensionRegistry);
+                return com.google.protobuf.GeneratedMessageV3
+                        .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
       public static AlpsData parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseDelimitedWithIOException(PARSER, input);
+          return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
       }
 
-      public static AlpsData parseDelimitedFrom(
-              java.io.InputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsData parseDelimitedFrom(
+                    java.io.InputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-      }
+                return com.google.protobuf.GeneratedMessageV3
+                        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+            }
 
-      public static AlpsData parseFrom(
-              com.google.protobuf.CodedInputStream input)
+            public static AlpsData parseFrom(
+          com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseWithIOException(PARSER, input);
-      }
+                return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+            }
 
-      public static AlpsData parseFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsData parseFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
@@ -946,18 +963,19 @@ com.google.protobuf.ByteString defaultValue);
       protected Builder newBuilderForType(
           BuilderParent parent) {
         Builder builder = new Builder(parent);
-        return builder;
+          return builder;
       }
-      /**
-       * Protobuf type {@code AlpsPacket.AlpsData}
-       */
-      public static final class Builder extends
-              com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-              // @@protoc_insertion_point(builder_implements:AlpsPacket.AlpsData)
+
+            /**
+       * Protobuf type {@code alps.AlpsPacket.AlpsData}
+             */
+            public static final class Builder extends
+                    com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+                    // @@protoc_insertion_point(builder_implements:alps.AlpsPacket.AlpsData)
           AlpsDataOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-          return AlpsProtocol.internal_static_AlpsPacket_AlpsData_descriptor;
+            return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsData_descriptor;
         }
 
         @SuppressWarnings({"rawtypes"})
@@ -977,17 +995,17 @@ com.google.protobuf.ByteString defaultValue);
           switch (number) {
             case 4:
               return internalGetMutableDataArray();
-            default:
-              throw new RuntimeException(
-                      "Invalid map field number: " + number);
+              default:
+                  throw new RuntimeException(
+                  "Invalid map field number: " + number);
           }
         }
 
-        @Override
-        protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-          return AlpsProtocol.internal_static_AlpsPacket_AlpsData_fieldAccessorTable
-                  .ensureFieldAccessorsInitialized(
+                @Override
+                protected FieldAccessorTable
+                internalGetFieldAccessorTable() {
+                    return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsData_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
                   AlpsData.class, Builder.class);
         }
 
@@ -1015,7 +1033,7 @@ com.google.protobuf.ByteString defaultValue);
         @Override
         public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-          return AlpsProtocol.internal_static_AlpsPacket_AlpsData_descriptor;
+            return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsData_descriptor;
         }
 
         @Override
@@ -1034,10 +1052,8 @@ com.google.protobuf.ByteString defaultValue);
 
         @Override
         public AlpsData buildPartial() {
-          AlpsData result = new AlpsData(this);
-          if (bitField0_ != 0) {
-            buildPartial0(result);
-          }
+            AlpsData result = new AlpsData(this);
+          if (bitField0_ != 0) { buildPartial0(result); }
           onBuilt();
           return result;
         }
@@ -1064,39 +1080,36 @@ com.google.protobuf.ByteString defaultValue);
           return super.clone();
         }
 
-        @Override
-        public Builder setField(
-                com.google.protobuf.Descriptors.FieldDescriptor field,
+                @Override
+                public Builder setField(
+                        com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return super.setField(field, value);
         }
-
         @Override
         public Builder clearField(
             com.google.protobuf.Descriptors.FieldDescriptor field) {
           return super.clearField(field);
         }
-
         @Override
         public Builder clearOneof(
             com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return super.clearOneof(oneof);
         }
 
-        @Override
-        public Builder setRepeatedField(
-                com.google.protobuf.Descriptors.FieldDescriptor field,
+                @Override
+                public Builder setRepeatedField(
+                        com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, Object value) {
           return super.setRepeatedField(field, index, value);
         }
 
-        @Override
-        public Builder addRepeatedField(
-                com.google.protobuf.Descriptors.FieldDescriptor field,
+                @Override
+                public Builder addRepeatedField(
+                        com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return super.addRepeatedField(field, value);
         }
-
         @Override
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof AlpsData) {
@@ -1131,11 +1144,11 @@ com.google.protobuf.ByteString defaultValue);
           return true;
         }
 
-        @Override
-        public Builder mergeFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
+                @Override
+                public Builder mergeFrom(
+                        com.google.protobuf.CodedInputStream input,
+                        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
           if (extensionRegistry == null) {
             throw new NullPointerException();
           }
@@ -1220,27 +1233,30 @@ com.google.protobuf.ByteString defaultValue);
           return this;
         }
 
-        private int dataCoder_ = 0;
-        /**
-         * <code>.AlpsPacket.Coder dataCoder = 2;</code>
+                private int dataCoder_ = 0;
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder dataCoder = 2;</code>
          * @return The enum numeric value on the wire for dataCoder.
          */
         @Override public int getDataCoderValue() {
-          return dataCoder_;
+            return dataCoder_;
         }
-        /**
-         * <code>.AlpsPacket.Coder dataCoder = 2;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder dataCoder = 2;</code>
          * @param value The enum numeric value on the wire for dataCoder to set.
          * @return This builder for chaining.
          */
         public Builder setDataCoderValue(int value) {
           dataCoder_ = value;
           bitField0_ |= 0x00000002;
-          onChanged();
-          return this;
+            onChanged();
+            return this;
         }
-        /**
-         * <code>.AlpsPacket.Coder dataCoder = 2;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder dataCoder = 2;</code>
          * @return The dataCoder.
          */
         @Override
@@ -1248,8 +1264,9 @@ com.google.protobuf.ByteString defaultValue);
           Coder result = Coder.forNumber(dataCoder_);
           return result == null ? Coder.UNRECOGNIZED : result;
         }
-        /**
-         * <code>.AlpsPacket.Coder dataCoder = 2;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder dataCoder = 2;</code>
          * @param value The dataCoder to set.
          * @return This builder for chaining.
          */
@@ -1259,11 +1276,12 @@ com.google.protobuf.ByteString defaultValue);
           }
           bitField0_ |= 0x00000002;
           dataCoder_ = value.getNumber();
-          onChanged();
-          return this;
+            onChanged();
+            return this;
         }
-        /**
-         * <code>.AlpsPacket.Coder dataCoder = 2;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder dataCoder = 2;</code>
          * @return This builder for chaining.
          */
         public Builder clearDataCoder() {
@@ -1305,9 +1323,8 @@ com.google.protobuf.ByteString defaultValue);
           return this;
         }
 
-        private com.google.protobuf.MapField<
-                Integer, com.google.protobuf.ByteString> dataArray_;
-
+                private com.google.protobuf.MapField<
+                        Integer, com.google.protobuf.ByteString> dataArray_;
         private com.google.protobuf.MapField<Integer, com.google.protobuf.ByteString>
             internalGetDataArray() {
           if (dataArray_ == null) {
@@ -1316,7 +1333,6 @@ com.google.protobuf.ByteString defaultValue);
           }
           return dataArray_;
         }
-
         private com.google.protobuf.MapField<Integer, com.google.protobuf.ByteString>
             internalGetMutableDataArray() {
           if (dataArray_ == null) {
@@ -1365,7 +1381,7 @@ com.google.protobuf.ByteString defaultValue);
         com.google.protobuf.ByteString getDataArrayOrDefault(
                 int key,
                 /* nullable */
-                com.google.protobuf.ByteString defaultValue) {
+com.google.protobuf.ByteString defaultValue) {
 
           java.util.Map<Integer, com.google.protobuf.ByteString> map =
               internalGetDataArray().getMap();
@@ -1376,10 +1392,10 @@ com.google.protobuf.ByteString defaultValue);
          */
         @Override
         public com.google.protobuf.ByteString getDataArrayOrThrow(
-                int key) {
+            int key) {
 
           java.util.Map<Integer, com.google.protobuf.ByteString> map =
-                  internalGetDataArray().getMap();
+              internalGetDataArray().getMap();
           if (!map.containsKey(key)) {
             throw new IllegalArgumentException();
           }
@@ -1395,7 +1411,7 @@ com.google.protobuf.ByteString defaultValue);
          * <code>map&lt;int32, bytes&gt; dataArray = 4;</code>
          */
         public Builder removeDataArray(
-                int key) {
+            int key) {
 
           internalGetMutableDataArray().getMutableMap()
               .remove(key);
@@ -1417,8 +1433,7 @@ com.google.protobuf.ByteString defaultValue);
                 int key,
                 com.google.protobuf.ByteString value) {
 
-          if (value == null) { throw new NullPointerException("map value");
-          }
+            if (value == null) { throw new NullPointerException("map value"); }
           internalGetMutableDataArray().getMutableMap()
               .put(key, value);
           bitField0_ |= 0x00000008;
@@ -1429,12 +1444,11 @@ com.google.protobuf.ByteString defaultValue);
          */
         public Builder putAllDataArray(
             java.util.Map<Integer, com.google.protobuf.ByteString> values) {
-          internalGetMutableDataArray().getMutableMap()
-                  .putAll(values);
+            internalGetMutableDataArray().getMutableMap()
+              .putAll(values);
           bitField0_ |= 0x00000008;
           return this;
         }
-
         @Override
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1444,16 +1458,15 @@ com.google.protobuf.ByteString defaultValue);
         @Override
         public final Builder mergeUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
-          return super.mergeUnknownFields(unknownFields);
+            return super.mergeUnknownFields(unknownFields);
         }
 
 
-        // @@protoc_insertion_point(builder_scope:AlpsPacket.AlpsData)
-      }
+                // @@protoc_insertion_point(builder_scope:alps.AlpsPacket.AlpsData)
+            }
 
-      // @@protoc_insertion_point(class_scope:AlpsPacket.AlpsData)
+            // @@protoc_insertion_point(class_scope:alps.AlpsPacket.AlpsData)
       private static final AlpsData DEFAULT_INSTANCE;
-
       static {
         DEFAULT_INSTANCE = new AlpsData();
       }
@@ -1464,10 +1477,10 @@ com.google.protobuf.ByteString defaultValue);
 
       private static final com.google.protobuf.Parser<AlpsData>
           PARSER = new com.google.protobuf.AbstractParser<AlpsData>() {
-        @Override
-        public AlpsData parsePartialFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          @Override
+          public AlpsData parsePartialFrom(
+                  com.google.protobuf.CodedInputStream input,
+                  com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
           Builder builder = newBuilder();
           try {
@@ -1498,10 +1511,10 @@ com.google.protobuf.ByteString defaultValue);
         return DEFAULT_INSTANCE;
       }
 
-    }
+        }
 
-    public interface AlpsMetadataOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:AlpsPacket.AlpsMetadata)
+        public interface AlpsMetadataOrBuilder extends
+                // @@protoc_insertion_point(interface_extends:alps.AlpsPacket.AlpsMetadata)
         com.google.protobuf.MessageOrBuilder {
 
       /**
@@ -1522,24 +1535,26 @@ com.google.protobuf.ByteString defaultValue);
        */
       long getVerifyToken();
 
-      /**
-       * <code>.AlpsPacket.FrameType frameType = 4;</code>
+            /**
+             * <code>.alps.AlpsPacket.FrameType frameType = 4;</code>
        * @return The enum numeric value on the wire for frameType.
-       */
-      int getFrameTypeValue();
-      /**
-       * <code>.AlpsPacket.FrameType frameType = 4;</code>
-       * @return The frameType.
-       */
-      FrameType getFrameType();
+             */
+            int getFrameTypeValue();
 
-      /**
-       * <code>.AlpsPacket.Coder containerCoder = 5;</code>
+            /**
+             * <code>.alps.AlpsPacket.FrameType frameType = 4;</code>
+       * @return The frameType.
+             */
+            FrameType getFrameType();
+
+            /**
+             * <code>.alps.AlpsPacket.Coder containerCoder = 5;</code>
        * @return The enum numeric value on the wire for containerCoder.
-       */
-      int getContainerCoderValue();
-      /**
-       * <code>.AlpsPacket.Coder containerCoder = 5;</code>
+             */
+            int getContainerCoderValue();
+
+            /**
+             * <code>.alps.AlpsPacket.Coder containerCoder = 5;</code>
        * @return The containerCoder.
        */
       Coder getContainerCoder();
@@ -1581,22 +1596,23 @@ com.google.protobuf.ByteString defaultValue);
        */
       /* nullable */
       com.google.protobuf.ByteString getContainerOrDefault(
-              String key,
+          String key,
           /* nullable */
 com.google.protobuf.ByteString defaultValue);
       /**
        * <code>map&lt;string, bytes&gt; container = 8;</code>
        */
       com.google.protobuf.ByteString getContainerOrThrow(
-          String key);
-    }
-    /**
-     * Protobuf type {@code AlpsPacket.AlpsMetadata}
-     */
-    public static final class AlpsMetadata extends
-            com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:AlpsPacket.AlpsMetadata)
-            AlpsMetadataOrBuilder {
+              String key);
+        }
+
+        /**
+     * Protobuf type {@code alps.AlpsPacket.AlpsMetadata}
+         */
+        public static final class AlpsMetadata extends
+                com.google.protobuf.GeneratedMessageV3 implements
+                // @@protoc_insertion_point(message_implements:alps.AlpsPacket.AlpsMetadata)
+        AlpsMetadataOrBuilder {
     private static final long serialVersionUID = 0L;
       // Use AlpsMetadata.newBuilder() to construct.
       private AlpsMetadata(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -1618,7 +1634,7 @@ com.google.protobuf.ByteString defaultValue);
 
       public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-        return AlpsProtocol.internal_static_AlpsPacket_AlpsMetadata_descriptor;
+          return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsMetadata_descriptor;
       }
 
       @SuppressWarnings({"rawtypes"})
@@ -1628,17 +1644,17 @@ com.google.protobuf.ByteString defaultValue);
         switch (number) {
           case 8:
             return internalGetContainer();
-          default:
-            throw new RuntimeException(
-                    "Invalid map field number: " + number);
+            default:
+                throw new RuntimeException(
+                "Invalid map field number: " + number);
         }
       }
 
-      @Override
-      protected FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return AlpsProtocol.internal_static_AlpsPacket_AlpsMetadata_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
+            @Override
+            protected FieldAccessorTable
+            internalGetFieldAccessorTable() {
+                return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsMetadata_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
                 AlpsMetadata.class, Builder.class);
       }
 
@@ -1676,39 +1692,41 @@ com.google.protobuf.ByteString defaultValue);
       }
 
       public static final int FRAMETYPE_FIELD_NUMBER = 4;
-      private int frameType_ = 0;
-      /**
-       * <code>.AlpsPacket.FrameType frameType = 4;</code>
+            private int frameType_ = 0;
+
+            /**
+             * <code>.alps.AlpsPacket.FrameType frameType = 4;</code>
        * @return The enum numeric value on the wire for frameType.
        */
       @Override public int getFrameTypeValue() {
-        return frameType_;
+          return frameType_;
       }
-      /**
-       * <code>.AlpsPacket.FrameType frameType = 4;</code>
-       * @return The frameType.
-       */
-      @Override
-      public FrameType getFrameType() {
+
+            /**
+             * <code>.alps.AlpsPacket.FrameType frameType = 4;</code>
+             * @return The frameType.
+             */
+      @Override public FrameType getFrameType() {
         FrameType result = FrameType.forNumber(frameType_);
         return result == null ? FrameType.UNRECOGNIZED : result;
       }
 
       public static final int CONTAINERCODER_FIELD_NUMBER = 5;
-      private int containerCoder_ = 0;
-      /**
-       * <code>.AlpsPacket.Coder containerCoder = 5;</code>
+            private int containerCoder_ = 0;
+
+            /**
+             * <code>.alps.AlpsPacket.Coder containerCoder = 5;</code>
        * @return The enum numeric value on the wire for containerCoder.
        */
       @Override public int getContainerCoderValue() {
-        return containerCoder_;
+          return containerCoder_;
       }
-      /**
-       * <code>.AlpsPacket.Coder containerCoder = 5;</code>
-       * @return The containerCoder.
-       */
-      @Override
-      public Coder getContainerCoder() {
+
+            /**
+             * <code>.alps.AlpsPacket.Coder containerCoder = 5;</code>
+             * @return The containerCoder.
+             */
+      @Override public Coder getContainerCoder() {
         Coder result = Coder.forNumber(containerCoder_);
         return result == null ? Coder.UNRECOGNIZED : result;
       }
@@ -1741,17 +1759,15 @@ com.google.protobuf.ByteString defaultValue);
             String, com.google.protobuf.ByteString> defaultEntry =
                 com.google.protobuf.MapEntry
                         .<String, com.google.protobuf.ByteString>newDefaultInstance(
-                                AlpsProtocol.internal_static_AlpsPacket_AlpsMetadata_ContainerEntry_descriptor,
+                                AlpsProtocol.internal_static_alps_AlpsPacket_AlpsMetadata_ContainerEntry_descriptor,
                                 com.google.protobuf.WireFormat.FieldType.STRING,
                                 "",
                                 com.google.protobuf.WireFormat.FieldType.BYTES,
                     com.google.protobuf.ByteString.EMPTY);
       }
-
       @SuppressWarnings("serial")
       private com.google.protobuf.MapField<
               String, com.google.protobuf.ByteString> container_;
-
       private com.google.protobuf.MapField<String, com.google.protobuf.ByteString>
       internalGetContainer() {
         if (container_ == null) {
@@ -1768,7 +1784,7 @@ com.google.protobuf.ByteString defaultValue);
        */
       @Override
       public boolean containsContainer(
-              String key) {
+          String key) {
         if (key == null) { throw new NullPointerException("map key"); }
         return internalGetContainer().getMap().containsKey(key);
       }
@@ -1796,9 +1812,7 @@ com.google.protobuf.ByteString defaultValue);
               String key,
               /* nullable */
               com.google.protobuf.ByteString defaultValue) {
-        if (key == null) {
-          throw new NullPointerException("map key");
-        }
+          if (key == null) { throw new NullPointerException("map key"); }
         java.util.Map<String, com.google.protobuf.ByteString> map =
             internalGetContainer().getMap();
         return map.containsKey(key) ? map.get(key) : defaultValue;
@@ -1809,11 +1823,9 @@ com.google.protobuf.ByteString defaultValue);
       @Override
       public com.google.protobuf.ByteString getContainerOrThrow(
               String key) {
-        if (key == null) {
-          throw new NullPointerException("map key");
-        }
-        java.util.Map<String, com.google.protobuf.ByteString> map =
-                internalGetContainer().getMap();
+          if (key == null) { throw new NullPointerException("map key"); }
+          java.util.Map<String, com.google.protobuf.ByteString> map =
+            internalGetContainer().getMap();
         if (!map.containsKey(key)) {
           throw new IllegalArgumentException();
         }
@@ -1855,10 +1867,10 @@ com.google.protobuf.ByteString defaultValue);
         if (!zipContainer_.isEmpty()) {
           output.writeBytes(7, zipContainer_);
         }
-        com.google.protobuf.GeneratedMessageV3
-                .serializeStringMapTo(
-                        output,
-                        internalGetContainer(),
+          com.google.protobuf.GeneratedMessageV3
+                  .serializeStringMapTo(
+            output,
+            internalGetContainer(),
             ContainerDefaultEntryHolder.defaultEntry,
             8);
         getUnknownFields().writeTo(output);
@@ -1879,12 +1891,12 @@ com.google.protobuf.ByteString defaultValue);
             .computeInt32Size(2, version_);
         }
         if (verifyToken_ != 0L) {
-          size += com.google.protobuf.CodedOutputStream
-                  .computeInt64Size(3, verifyToken_);
+            size += com.google.protobuf.CodedOutputStream
+            .computeInt64Size(3, verifyToken_);
         }
         if (frameType_ != FrameType.IDLE.getNumber()) {
-          size += com.google.protobuf.CodedOutputStream
-                  .computeEnumSize(4, frameType_);
+            size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(4, frameType_);
         }
         if (containerCoder_ != Coder.JDK.getNumber()) {
           size += com.google.protobuf.CodedOutputStream
@@ -1895,16 +1907,16 @@ com.google.protobuf.ByteString defaultValue);
             .computeBytesSize(6, frame_);
         }
         if (!zipContainer_.isEmpty()) {
-          size += com.google.protobuf.CodedOutputStream
-                  .computeBytesSize(7, zipContainer_);
+            size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(7, zipContainer_);
         }
         for (java.util.Map.Entry<String, com.google.protobuf.ByteString> entry
                 : internalGetContainer().getMap().entrySet()) {
           com.google.protobuf.MapEntry<String, com.google.protobuf.ByteString>
                   container__ = ContainerDefaultEntryHolder.defaultEntry.newBuilderForType()
-                  .setKey(entry.getKey())
-              .setValue(entry.getValue())
-                  .build();
+              .setKey(entry.getKey())
+                  .setValue(entry.getValue())
+              .build();
           size += com.google.protobuf.CodedOutputStream
               .computeMessageSize(8, container__);
         }
@@ -1923,16 +1935,16 @@ com.google.protobuf.ByteString defaultValue);
         }
         AlpsMetadata other = (AlpsMetadata) obj;
 
-        if (getZip()
-                != other.getZip()) return false;
-        if (getVersion()
-                != other.getVersion()) return false;
+          if (getZip()
+                  != other.getZip()) return false;
+          if (getVersion()
+            != other.getVersion()) return false;
         if (getVerifyToken()
             != other.getVerifyToken()) return false;
         if (frameType_ != other.frameType_) return false;
         if (containerCoder_ != other.containerCoder_) return false;
-        if (!getFrame()
-                .equals(other.getFrame())) return false;
+          if (!getFrame()
+            .equals(other.getFrame())) return false;
         if (!getZipContainer()
             .equals(other.getZipContainer())) return false;
         if (!internalGetContainer().equals(
@@ -1973,82 +1985,80 @@ com.google.protobuf.ByteString defaultValue);
         return hash;
       }
 
-      public static AlpsMetadata parseFrom(
-              java.nio.ByteBuffer data)
+            public static AlpsMetadata parseFrom(
+          java.nio.ByteBuffer data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
-      }
+            }
 
-      public static AlpsMetadata parseFrom(
-              java.nio.ByteBuffer data,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsMetadata parseFrom(
+                    java.nio.ByteBuffer data,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+            }
+
+            public static AlpsMetadata parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+            }
+
+            public static AlpsMetadata parseFrom(
+                    com.google.protobuf.ByteString data,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
-      public static AlpsMetadata parseFrom(
-              com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data);
-      }
-
-      public static AlpsMetadata parseFrom(
-              com.google.protobuf.ByteString data,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return PARSER.parseFrom(data, extensionRegistry);
-      }
-
       public static AlpsMetadata parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
 
-      public static AlpsMetadata parseFrom(
-              byte[] data,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsMetadata parseFrom(
+                    byte[] data,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-
       public static AlpsMetadata parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseWithIOException(PARSER, input);
+          return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
       }
 
-      public static AlpsMetadata parseFrom(
-              java.io.InputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsMetadata parseFrom(
+                    java.io.InputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseWithIOException(PARSER, input, extensionRegistry);
+                return com.google.protobuf.GeneratedMessageV3
+                        .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
       public static AlpsMetadata parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseDelimitedWithIOException(PARSER, input);
+          return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
       }
 
-      public static AlpsMetadata parseDelimitedFrom(
-              java.io.InputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsMetadata parseDelimitedFrom(
+                    java.io.InputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-      }
+                return com.google.protobuf.GeneratedMessageV3
+                        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+            }
 
-      public static AlpsMetadata parseFrom(
-              com.google.protobuf.CodedInputStream input)
+            public static AlpsMetadata parseFrom(
+          com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return com.google.protobuf.GeneratedMessageV3
-                .parseWithIOException(PARSER, input);
-      }
+                return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+            }
 
-      public static AlpsMetadata parseFrom(
-              com.google.protobuf.CodedInputStream input,
-              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            public static AlpsMetadata parseFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
@@ -2072,18 +2082,19 @@ com.google.protobuf.ByteString defaultValue);
       protected Builder newBuilderForType(
           BuilderParent parent) {
         Builder builder = new Builder(parent);
-        return builder;
+          return builder;
       }
-      /**
-       * Protobuf type {@code AlpsPacket.AlpsMetadata}
-       */
-      public static final class Builder extends
-              com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-              // @@protoc_insertion_point(builder_implements:AlpsPacket.AlpsMetadata)
+
+            /**
+             * Protobuf type {@code alps.AlpsPacket.AlpsMetadata}
+             */
+            public static final class Builder extends
+                    com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+                    // @@protoc_insertion_point(builder_implements:alps.AlpsPacket.AlpsMetadata)
           AlpsMetadataOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-          return AlpsProtocol.internal_static_AlpsPacket_AlpsMetadata_descriptor;
+            return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsMetadata_descriptor;
         }
 
         @SuppressWarnings({"rawtypes"})
@@ -2103,17 +2114,17 @@ com.google.protobuf.ByteString defaultValue);
           switch (number) {
             case 8:
               return internalGetMutableContainer();
-            default:
-              throw new RuntimeException(
-                      "Invalid map field number: " + number);
+              default:
+                  throw new RuntimeException(
+                  "Invalid map field number: " + number);
           }
         }
 
-        @Override
-        protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-          return AlpsProtocol.internal_static_AlpsPacket_AlpsMetadata_fieldAccessorTable
-                  .ensureFieldAccessorsInitialized(
+                @Override
+                protected FieldAccessorTable
+                internalGetFieldAccessorTable() {
+                    return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsMetadata_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
                   AlpsMetadata.class, Builder.class);
         }
 
@@ -2145,7 +2156,7 @@ com.google.protobuf.ByteString defaultValue);
         @Override
         public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-          return AlpsProtocol.internal_static_AlpsPacket_AlpsMetadata_descriptor;
+            return AlpsProtocol.internal_static_alps_AlpsPacket_AlpsMetadata_descriptor;
         }
 
         @Override
@@ -2164,10 +2175,8 @@ com.google.protobuf.ByteString defaultValue);
 
         @Override
         public AlpsMetadata buildPartial() {
-          AlpsMetadata result = new AlpsMetadata(this);
-          if (bitField0_ != 0) {
-            buildPartial0(result);
-          }
+            AlpsMetadata result = new AlpsMetadata(this);
+          if (bitField0_ != 0) { buildPartial0(result); }
           onBuilt();
           return result;
         }
@@ -2206,39 +2215,36 @@ com.google.protobuf.ByteString defaultValue);
           return super.clone();
         }
 
-        @Override
-        public Builder setField(
-                com.google.protobuf.Descriptors.FieldDescriptor field,
+                @Override
+                public Builder setField(
+                        com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return super.setField(field, value);
         }
-
         @Override
         public Builder clearField(
             com.google.protobuf.Descriptors.FieldDescriptor field) {
           return super.clearField(field);
         }
-
         @Override
         public Builder clearOneof(
             com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return super.clearOneof(oneof);
         }
 
-        @Override
-        public Builder setRepeatedField(
-                com.google.protobuf.Descriptors.FieldDescriptor field,
+                @Override
+                public Builder setRepeatedField(
+                        com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, Object value) {
           return super.setRepeatedField(field, index, value);
         }
 
-        @Override
-        public Builder addRepeatedField(
-                com.google.protobuf.Descriptors.FieldDescriptor field,
+                @Override
+                public Builder addRepeatedField(
+                        com.google.protobuf.Descriptors.FieldDescriptor field,
             Object value) {
           return super.addRepeatedField(field, value);
         }
-
         @Override
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof AlpsMetadata) {
@@ -2285,11 +2291,11 @@ com.google.protobuf.ByteString defaultValue);
           return true;
         }
 
-        @Override
-        public Builder mergeFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
+                @Override
+                public Builder mergeFrom(
+                        com.google.protobuf.CodedInputStream input,
+                        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
           if (extensionRegistry == null) {
             throw new NullPointerException();
           }
@@ -2458,27 +2464,30 @@ com.google.protobuf.ByteString defaultValue);
           return this;
         }
 
-        private int frameType_ = 0;
-        /**
-         * <code>.AlpsPacket.FrameType frameType = 4;</code>
+                private int frameType_ = 0;
+
+                /**
+                 * <code>.alps.AlpsPacket.FrameType frameType = 4;</code>
          * @return The enum numeric value on the wire for frameType.
          */
         @Override public int getFrameTypeValue() {
-          return frameType_;
+            return frameType_;
         }
-        /**
-         * <code>.AlpsPacket.FrameType frameType = 4;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.FrameType frameType = 4;</code>
          * @param value The enum numeric value on the wire for frameType to set.
          * @return This builder for chaining.
          */
         public Builder setFrameTypeValue(int value) {
           frameType_ = value;
           bitField0_ |= 0x00000008;
-          onChanged();
-          return this;
+            onChanged();
+            return this;
         }
-        /**
-         * <code>.AlpsPacket.FrameType frameType = 4;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.FrameType frameType = 4;</code>
          * @return The frameType.
          */
         @Override
@@ -2486,8 +2495,9 @@ com.google.protobuf.ByteString defaultValue);
           FrameType result = FrameType.forNumber(frameType_);
           return result == null ? FrameType.UNRECOGNIZED : result;
         }
-        /**
-         * <code>.AlpsPacket.FrameType frameType = 4;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.FrameType frameType = 4;</code>
          * @param value The frameType to set.
          * @return This builder for chaining.
          */
@@ -2497,11 +2507,12 @@ com.google.protobuf.ByteString defaultValue);
           }
           bitField0_ |= 0x00000008;
           frameType_ = value.getNumber();
-          onChanged();
-          return this;
+            onChanged();
+            return this;
         }
-        /**
-         * <code>.AlpsPacket.FrameType frameType = 4;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.FrameType frameType = 4;</code>
          * @return This builder for chaining.
          */
         public Builder clearFrameType() {
@@ -2511,27 +2522,30 @@ com.google.protobuf.ByteString defaultValue);
           return this;
         }
 
-        private int containerCoder_ = 0;
-        /**
-         * <code>.AlpsPacket.Coder containerCoder = 5;</code>
+                private int containerCoder_ = 0;
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder containerCoder = 5;</code>
          * @return The enum numeric value on the wire for containerCoder.
          */
         @Override public int getContainerCoderValue() {
-          return containerCoder_;
+            return containerCoder_;
         }
-        /**
-         * <code>.AlpsPacket.Coder containerCoder = 5;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder containerCoder = 5;</code>
          * @param value The enum numeric value on the wire for containerCoder to set.
          * @return This builder for chaining.
          */
         public Builder setContainerCoderValue(int value) {
           containerCoder_ = value;
           bitField0_ |= 0x00000010;
-          onChanged();
-          return this;
+            onChanged();
+            return this;
         }
-        /**
-         * <code>.AlpsPacket.Coder containerCoder = 5;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder containerCoder = 5;</code>
          * @return The containerCoder.
          */
         @Override
@@ -2539,8 +2553,9 @@ com.google.protobuf.ByteString defaultValue);
           Coder result = Coder.forNumber(containerCoder_);
           return result == null ? Coder.UNRECOGNIZED : result;
         }
-        /**
-         * <code>.AlpsPacket.Coder containerCoder = 5;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder containerCoder = 5;</code>
          * @param value The containerCoder to set.
          * @return This builder for chaining.
          */
@@ -2550,11 +2565,12 @@ com.google.protobuf.ByteString defaultValue);
           }
           bitField0_ |= 0x00000010;
           containerCoder_ = value.getNumber();
-          onChanged();
-          return this;
+            onChanged();
+            return this;
         }
-        /**
-         * <code>.AlpsPacket.Coder containerCoder = 5;</code>
+
+                /**
+                 * <code>.alps.AlpsPacket.Coder containerCoder = 5;</code>
          * @return This builder for chaining.
          */
         public Builder clearContainerCoder() {
@@ -2628,9 +2644,8 @@ com.google.protobuf.ByteString defaultValue);
           return this;
         }
 
-        private com.google.protobuf.MapField<
-                String, com.google.protobuf.ByteString> container_;
-
+                private com.google.protobuf.MapField<
+                        String, com.google.protobuf.ByteString> container_;
         private com.google.protobuf.MapField<String, com.google.protobuf.ByteString>
             internalGetContainer() {
           if (container_ == null) {
@@ -2639,7 +2654,6 @@ com.google.protobuf.ByteString defaultValue);
           }
           return container_;
         }
-
         private com.google.protobuf.MapField<String, com.google.protobuf.ByteString>
             internalGetMutableContainer() {
           if (container_ == null) {
@@ -2661,7 +2675,7 @@ com.google.protobuf.ByteString defaultValue);
          */
         @Override
         public boolean containsContainer(
-                String key) {
+            String key) {
           if (key == null) { throw new NullPointerException("map key"); }
           return internalGetContainer().getMap().containsKey(key);
         }
@@ -2689,9 +2703,7 @@ com.google.protobuf.ByteString defaultValue);
                 String key,
                 /* nullable */
                 com.google.protobuf.ByteString defaultValue) {
-          if (key == null) {
-            throw new NullPointerException("map key");
-          }
+            if (key == null) { throw new NullPointerException("map key"); }
           java.util.Map<String, com.google.protobuf.ByteString> map =
               internalGetContainer().getMap();
           return map.containsKey(key) ? map.get(key) : defaultValue;
@@ -2702,11 +2714,9 @@ com.google.protobuf.ByteString defaultValue);
         @Override
         public com.google.protobuf.ByteString getContainerOrThrow(
                 String key) {
-          if (key == null) {
-            throw new NullPointerException("map key");
-          }
-          java.util.Map<String, com.google.protobuf.ByteString> map =
-                  internalGetContainer().getMap();
+            if (key == null) { throw new NullPointerException("map key"); }
+            java.util.Map<String, com.google.protobuf.ByteString> map =
+              internalGetContainer().getMap();
           if (!map.containsKey(key)) {
             throw new IllegalArgumentException();
           }
@@ -2722,9 +2732,8 @@ com.google.protobuf.ByteString defaultValue);
          * <code>map&lt;string, bytes&gt; container = 8;</code>
          */
         public Builder removeContainer(
-            String key) {
-          if (key == null) { throw new NullPointerException("map key");
-          }
+                String key) {
+            if (key == null) { throw new NullPointerException("map key"); }
           internalGetMutableContainer().getMutableMap()
               .remove(key);
           return this;
@@ -2744,11 +2753,10 @@ com.google.protobuf.ByteString defaultValue);
         public Builder putContainer(
                 String key,
                 com.google.protobuf.ByteString value) {
-          if (key == null) {
-            throw new NullPointerException("map key");
-          }
-          if (value == null) { throw new NullPointerException("map value");
-          }
+            if (key == null) {
+                throw new NullPointerException("map key");
+            }
+            if (value == null) { throw new NullPointerException("map value"); }
           internalGetMutableContainer().getMutableMap()
               .put(key, value);
           bitField0_ |= 0x00000080;
@@ -2759,12 +2767,11 @@ com.google.protobuf.ByteString defaultValue);
          */
         public Builder putAllContainer(
             java.util.Map<String, com.google.protobuf.ByteString> values) {
-          internalGetMutableContainer().getMutableMap()
-                  .putAll(values);
+            internalGetMutableContainer().getMutableMap()
+              .putAll(values);
           bitField0_ |= 0x00000080;
           return this;
         }
-
         @Override
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2774,16 +2781,15 @@ com.google.protobuf.ByteString defaultValue);
         @Override
         public final Builder mergeUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
-          return super.mergeUnknownFields(unknownFields);
+            return super.mergeUnknownFields(unknownFields);
         }
 
 
-        // @@protoc_insertion_point(builder_scope:AlpsPacket.AlpsMetadata)
-      }
+                // @@protoc_insertion_point(builder_scope:alps.AlpsPacket.AlpsMetadata)
+            }
 
-      // @@protoc_insertion_point(class_scope:AlpsPacket.AlpsMetadata)
+            // @@protoc_insertion_point(class_scope:alps.AlpsPacket.AlpsMetadata)
       private static final AlpsMetadata DEFAULT_INSTANCE;
-
       static {
         DEFAULT_INSTANCE = new AlpsMetadata();
       }
@@ -2794,10 +2800,10 @@ com.google.protobuf.ByteString defaultValue);
 
       private static final com.google.protobuf.Parser<AlpsMetadata>
           PARSER = new com.google.protobuf.AbstractParser<AlpsMetadata>() {
-        @Override
-        public AlpsMetadata parsePartialFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          @Override
+          public AlpsMetadata parsePartialFrom(
+                  com.google.protobuf.CodedInputStream input,
+                  com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
           Builder builder = newBuilder();
           try {
@@ -2832,25 +2838,21 @@ com.google.protobuf.ByteString defaultValue);
 
     private int bitField0_;
     public static final int CONNECTTYPE_FIELD_NUMBER = 1;
-    private int connectType_ = 0;
+        private int connectType_ = 0;
 
-    /**
-     * <code>.AlpsPacket.ConnectType connectType = 1;</code>
-     *
+        /**
+         * <code>.alps.AlpsPacket.ConnectType connectType = 1;</code>
      * @return The enum numeric value on the wire for connectType.
      */
-    @Override
-    public int getConnectTypeValue() {
-      return connectType_;
+    @Override public int getConnectTypeValue() {
+        return connectType_;
     }
 
-    /**
-     * <code>.AlpsPacket.ConnectType connectType = 1;</code>
-     *
-     * @return The connectType.
-     */
-    @Override
-    public ConnectType getConnectType() {
+        /**
+         * <code>.alps.AlpsPacket.ConnectType connectType = 1;</code>
+         * @return The connectType.
+         */
+    @Override public ConnectType getConnectType() {
       ConnectType result = ConnectType.forNumber(connectType_);
       return result == null ? ConnectType.UNRECOGNIZED : result;
     }
@@ -2866,29 +2868,59 @@ com.google.protobuf.ByteString defaultValue);
       return magic_;
     }
 
-    public static final int MODULE_FIELD_NUMBER = 3;
-    private int module_ = 0;
+        public static final int MODULE_FIELD_NUMBER = 3;
+        @SuppressWarnings("serial")
+        private volatile Object module_ = "";
     /**
-     * <code>int32 module = 3;</code>
+     * <code>string module = 3;</code>
      * @return The module.
      */
     @Override
-    public int getModule() {
-      return module_;
+    public String getModule() {
+        Object ref = module_;
+        if (ref instanceof String) {
+            return (String) ref;
+        } else {
+            com.google.protobuf.ByteString bs =
+                    (com.google.protobuf.ByteString) ref;
+            String s = bs.toStringUtf8();
+            module_ = s;
+            return s;
+        }
+    }
+
+        /**
+         * <code>string module = 3;</code>
+         *
+         * @return The bytes for module.
+         */
+        @Override
+        public com.google.protobuf.ByteString
+        getModuleBytes() {
+            Object ref = module_;
+            if (ref instanceof String) {
+                com.google.protobuf.ByteString b =
+                        com.google.protobuf.ByteString.copyFromUtf8(
+                                (String) ref);
+                module_ = b;
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int METADATA_FIELD_NUMBER = 4;
-    private AlpsMetadata metadata_;
+        private AlpsMetadata metadata_;
     /**
-     * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+     * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
      * @return Whether the metadata field is set.
      */
     @Override
     public boolean hasMetadata() {
-      return ((bitField0_ & 0x00000001) != 0);
+        return ((bitField0_ & 0x00000001) != 0);
     }
     /**
-     * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+     * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
      * @return The metadata.
      */
     @Override
@@ -2896,33 +2928,33 @@ com.google.protobuf.ByteString defaultValue);
       return metadata_ == null ? AlpsMetadata.getDefaultInstance() : metadata_;
     }
     /**
-     * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+     * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
      */
     @Override
     public AlpsMetadataOrBuilder getMetadataOrBuilder() {
       return metadata_ == null ? AlpsMetadata.getDefaultInstance() : metadata_;
     }
 
-    public static final int DATA_FIELD_NUMBER = 5;
-    private AlpsData data_;
+        public static final int DATA_FIELD_NUMBER = 5;
+        private AlpsData data_;
     /**
-     * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+     * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
      * @return Whether the data field is set.
      */
     @Override
     public boolean hasData() {
-      return ((bitField0_ & 0x00000002) != 0);
+        return ((bitField0_ & 0x00000002) != 0);
     }
     /**
-     * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+     * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
      * @return The data.
      */
     @Override
     public AlpsData getData() {
-      return data_ == null ? AlpsData.getDefaultInstance() : data_;
+        return data_ == null ? AlpsData.getDefaultInstance() : data_;
     }
     /**
-     * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+     * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
      */
     @Override
     public AlpsDataOrBuilder getDataOrBuilder() {
@@ -2940,17 +2972,17 @@ com.google.protobuf.ByteString defaultValue);
       return true;
     }
 
-    @Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+        @Override
+        public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
       if (connectType_ != ConnectType.CLIENT.getNumber()) {
         output.writeEnum(1, connectType_);
       }
-      if (magic_ != 0) {
-        output.writeInt32(2, magic_);
-      }
-      if (module_ != 0) {
-        output.writeInt32(3, module_);
+            if (magic_ != 0) {
+                output.writeInt32(2, magic_);
+            }
+            if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(module_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, module_);
       }
       if (((bitField0_ & 0x00000001) != 0)) {
         output.writeMessage(4, getMetadata());
@@ -2968,34 +3000,33 @@ com.google.protobuf.ByteString defaultValue);
 
       size = 0;
       if (connectType_ != ConnectType.CLIENT.getNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeEnumSize(1, connectType_);
+          size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, connectType_);
       }
-      if (magic_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeInt32Size(2, magic_);
-      }
-      if (module_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, module_);
+        if (magic_ != 0) {
+            size += com.google.protobuf.CodedOutputStream
+                    .computeInt32Size(2, magic_);
+        }
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(module_)) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, module_);
       }
       if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, getMetadata());
       }
       if (((bitField0_ & 0x00000002) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-                .computeMessageSize(5, getData());
+          size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, getData());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
+        @Override
+        public boolean equals(final Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof AlpsPacket)) {
         return super.equals(obj);
@@ -3003,19 +3034,19 @@ com.google.protobuf.ByteString defaultValue);
       AlpsPacket other = (AlpsPacket) obj;
 
       if (connectType_ != other.connectType_) return false;
-      if (getMagic()
-          != other.getMagic()) return false;
-      if (getModule()
-              != other.getModule()) return false;
+            if (getMagic()
+                    != other.getMagic()) return false;
+      if (!getModule()
+          .equals(other.getModule())) return false;
       if (hasMetadata() != other.hasMetadata()) return false;
       if (hasMetadata()) {
         if (!getMetadata()
             .equals(other.getMetadata())) return false;
       }
       if (hasData() != other.hasData()) return false;
-      if (hasData()) {
+            if (hasData()) {
         if (!getData()
-                .equals(other.getData())) return false;
+            .equals(other.getData())) return false;
       }
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
@@ -3031,9 +3062,9 @@ com.google.protobuf.ByteString defaultValue);
       hash = (37 * hash) + CONNECTTYPE_FIELD_NUMBER;
       hash = (53 * hash) + connectType_;
       hash = (37 * hash) + MAGIC_FIELD_NUMBER;
-      hash = (53 * hash) + getMagic();
-      hash = (37 * hash) + MODULE_FIELD_NUMBER;
-      hash = (53 * hash) + getModule();
+        hash = (53 * hash) + getMagic();
+        hash = (37 * hash) + MODULE_FIELD_NUMBER;
+      hash = (53 * hash) + getModule().hashCode();
       if (hasMetadata()) {
         hash = (37 * hash) + METADATA_FIELD_NUMBER;
         hash = (53 * hash) + getMetadata().hashCode();
@@ -3047,90 +3078,87 @@ com.google.protobuf.ByteString defaultValue);
       return hash;
     }
 
-    public static AlpsPacket parseFrom(
-        java.nio.ByteBuffer data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
+        public static AlpsPacket parseFrom(
+                java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
 
-    public static AlpsPacket parseFrom(
-            java.nio.ByteBuffer data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        public static AlpsPacket parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static AlpsPacket parseFrom(
-        com.google.protobuf.ByteString data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
+        public static AlpsPacket parseFrom(
+                com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
 
-    public static AlpsPacket parseFrom(
-            com.google.protobuf.ByteString data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        public static AlpsPacket parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static AlpsPacket parseFrom(byte[] data)
-            throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
+        }
 
-    public static AlpsPacket parseFrom(
-            byte[] data,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        public static AlpsPacket parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static AlpsPacket parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static AlpsPacket parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
-    }
+        }
 
+        public static AlpsPacket parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
     public static AlpsPacket parseFrom(
-            java.io.InputStream input,
+        java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public static AlpsPacket parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input);
-    }
-
-    public static AlpsPacket parseDelimitedFrom(
-            java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public static AlpsPacket parseFrom(
-        com.google.protobuf.CodedInputStream input)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-              .parseWithIOException(PARSER, input);
-    }
-
-    public static AlpsPacket parseFrom(
-            com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+        return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @Override
-    public Builder newBuilderForType() {
-      return newBuilder();
+        public static AlpsPacket parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static AlpsPacket parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static AlpsPacket parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
 
+        public static AlpsPacket parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+              .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+    @Override
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -3138,35 +3166,34 @@ com.google.protobuf.ByteString defaultValue);
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
 
-    @Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-              ? new Builder() : new Builder().mergeFrom(this);
+        @Override
+        public Builder toBuilder() {
+            return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @Override
     protected Builder newBuilderForType(
         BuilderParent parent) {
-      Builder builder = new Builder(parent);
+        Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
-     * Protobuf type {@code AlpsPacket}
+     * Protobuf type {@code alps.AlpsPacket}
      */
     public static final class Builder extends
             com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:AlpsPacket)
-            AlpsPacketOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-        return AlpsProtocol.internal_static_AlpsPacket_descriptor;
-      }
+            // @@protoc_insertion_point(builder_implements:alps.AlpsPacket)
+        AlpsPacketOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+        return AlpsProtocol.internal_static_alps_AlpsPacket_descriptor;
+        }
 
-      @Override
-      protected FieldAccessorTable
-      internalGetFieldAccessorTable() {
-        return AlpsProtocol.internal_static_AlpsPacket_fieldAccessorTable
+        @Override
+        protected FieldAccessorTable
+        internalGetFieldAccessorTable() {
+        return AlpsProtocol.internal_static_alps_AlpsPacket_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 AlpsPacket.class, Builder.class);
       }
@@ -3191,10 +3218,10 @@ com.google.protobuf.ByteString defaultValue);
       @Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
+          bitField0_ = 0;
         connectType_ = 0;
         magic_ = 0;
-        module_ = 0;
+        module_ = "";
         metadata_ = null;
         if (metadataBuilder_ != null) {
           metadataBuilder_.dispose();
@@ -3208,10 +3235,10 @@ com.google.protobuf.ByteString defaultValue);
         return this;
       }
 
-      @Override
-      public com.google.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
-        return AlpsProtocol.internal_static_AlpsPacket_descriptor;
+        @Override
+        public com.google.protobuf.Descriptors.Descriptor
+        getDescriptorForType() {
+        return AlpsProtocol.internal_static_alps_AlpsPacket_descriptor;
       }
 
       @Override
@@ -3249,15 +3276,15 @@ com.google.protobuf.ByteString defaultValue);
         }
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000008) != 0)) {
-          result.metadata_ = metadataBuilder_ == null
-                  ? metadata_
-                  : metadataBuilder_.build();
+            result.metadata_ = metadataBuilder_ == null
+              ? metadata_
+              : metadataBuilder_.build();
           to_bitField0_ |= 0x00000001;
         }
         if (((from_bitField0_ & 0x00000010) != 0)) {
-          result.data_ = dataBuilder_ == null
+            result.data_ = dataBuilder_ == null
               ? data_
-                  : dataBuilder_.build();
+              : dataBuilder_.build();
           to_bitField0_ |= 0x00000002;
         }
         result.bitField0_ |= to_bitField0_;
@@ -3267,7 +3294,6 @@ com.google.protobuf.ByteString defaultValue);
       public Builder clone() {
         return super.clone();
       }
-
       @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
@@ -3284,25 +3310,22 @@ com.google.protobuf.ByteString defaultValue);
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-
       @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return super.setRepeatedField(field, index, value);
       }
-
       @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return super.addRepeatedField(field, value);
       }
-
       @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof AlpsPacket) {
-          return mergeFrom((AlpsPacket) other);
+          if (other instanceof AlpsPacket) {
+          return mergeFrom((AlpsPacket)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -3314,11 +3337,13 @@ com.google.protobuf.ByteString defaultValue);
         if (other.connectType_ != 0) {
           setConnectTypeValue(other.getConnectTypeValue());
         }
-        if (other.getMagic() != 0) {
-          setMagic(other.getMagic());
-        }
-        if (other.getModule() != 0) {
-          setModule(other.getModule());
+          if (other.getMagic() != 0) {
+              setMagic(other.getMagic());
+          }
+          if (!other.getModule().isEmpty()) {
+              module_ = other.module_;
+          bitField0_ |= 0x00000004;
+          onChanged();
         }
         if (other.hasMetadata()) {
           mergeMetadata(other.getMetadata());
@@ -3333,12 +3358,12 @@ com.google.protobuf.ByteString defaultValue);
 
       @Override
       public final boolean isInitialized() {
-        return true;
+          return true;
       }
 
-      @Override
-      public Builder mergeFrom(
-              com.google.protobuf.CodedInputStream input,
+        @Override
+        public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         if (extensionRegistry == null) {
@@ -3359,24 +3384,24 @@ com.google.protobuf.ByteString defaultValue);
               } // case 8
               case 16: {
                 magic_ = input.readInt32();
-                bitField0_ |= 0x00000002;
-                break;
+                  bitField0_ |= 0x00000002;
+                  break;
               } // case 16
-              case 24: {
-                module_ = input.readInt32();
-                bitField0_ |= 0x00000004;
+              case 26: {
+                module_ = input.readStringRequireUtf8();
+                  bitField0_ |= 0x00000004;
                 break;
-              } // case 24
-              case 34: {
-                input.readMessage(
-                        getMetadataFieldBuilder().getBuilder(),
-                        extensionRegistry);
+              } // case 26
+                case 34: {
+                    input.readMessage(
+                            getMetadataFieldBuilder().getBuilder(),
+                    extensionRegistry);
                 bitField0_ |= 0x00000008;
                 break;
-              } // case 34
-              case 42: {
-                input.readMessage(
-                        getDataFieldBuilder().getBuilder(),
+                } // case 34
+                case 42: {
+                    input.readMessage(
+                    getDataFieldBuilder().getBuilder(),
                     extensionRegistry);
                 bitField0_ |= 0x00000010;
                 break;
@@ -3395,49 +3420,41 @@ com.google.protobuf.ByteString defaultValue);
           onChanged();
         } // finally
         return this;
-      }
+        }
 
-      private int bitField0_;
+        private int bitField0_;
 
-      private int connectType_ = 0;
-
+        private int connectType_ = 0;
       /**
-       * <code>.AlpsPacket.ConnectType connectType = 1;</code>
-       *
+       * <code>.alps.AlpsPacket.ConnectType connectType = 1;</code>
        * @return The enum numeric value on the wire for connectType.
        */
       @Override
       public int getConnectTypeValue() {
-        return connectType_;
+          return connectType_;
       }
-
       /**
-       * <code>.AlpsPacket.ConnectType connectType = 1;</code>
-       *
+       * <code>.alps.AlpsPacket.ConnectType connectType = 1;</code>
        * @param value The enum numeric value on the wire for connectType to set.
        * @return This builder for chaining.
        */
       public Builder setConnectTypeValue(int value) {
         connectType_ = value;
         bitField0_ |= 0x00000001;
-        onChanged();
-        return this;
+          onChanged();
+          return this;
       }
-
       /**
-       * <code>.AlpsPacket.ConnectType connectType = 1;</code>
-       *
+       * <code>.alps.AlpsPacket.ConnectType connectType = 1;</code>
        * @return The connectType.
        */
       @Override
       public ConnectType getConnectType() {
         ConnectType result = ConnectType.forNumber(connectType_);
-        return result == null ? ConnectType.UNRECOGNIZED : result;
+          return result == null ? ConnectType.UNRECOGNIZED : result;
       }
-
       /**
-       * <code>.AlpsPacket.ConnectType connectType = 1;</code>
-       *
+       * <code>.alps.AlpsPacket.ConnectType connectType = 1;</code>
        * @param value The connectType to set.
        * @return This builder for chaining.
        */
@@ -3447,13 +3464,11 @@ com.google.protobuf.ByteString defaultValue);
         }
         bitField0_ |= 0x00000001;
         connectType_ = value.getNumber();
-        onChanged();
-        return this;
+          onChanged();
+          return this;
       }
-
       /**
-       * <code>.AlpsPacket.ConnectType connectType = 1;</code>
-       *
+       * <code>.alps.AlpsPacket.ConnectType connectType = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearConnectType() {
@@ -3472,7 +3487,6 @@ com.google.protobuf.ByteString defaultValue);
       public int getMagic() {
         return magic_;
       }
-
       /**
        * <code>int32 magic = 2;</code>
        * @param value The magic to set.
@@ -3485,63 +3499,106 @@ com.google.protobuf.ByteString defaultValue);
         onChanged();
         return this;
       }
-
       /**
        * <code>int32 magic = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearMagic() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        magic_ = 0;
-        onChanged();
-        return this;
+          magic_ = 0;
+          onChanged();
+          return this;
       }
 
-      private int module_ ;
+        private Object module_ = "";
       /**
-       * <code>int32 module = 3;</code>
+       * <code>string module = 3;</code>
        * @return The module.
        */
-      @Override
-      public int getModule() {
-        return module_;
+      public String getModule() {
+          Object ref = module_;
+          if (!(ref instanceof String)) {
+              com.google.protobuf.ByteString bs =
+                      (com.google.protobuf.ByteString) ref;
+              String s = bs.toStringUtf8();
+              module_ = s;
+              return s;
+          } else {
+              return (String) ref;
+          }
       }
 
+        /**
+         * <code>string module = 3;</code>
+         *
+         * @return The bytes for module.
+         */
+        public com.google.protobuf.ByteString
+        getModuleBytes() {
+            Object ref = module_;
+            if (ref instanceof String) {
+                com.google.protobuf.ByteString b =
+                        com.google.protobuf.ByteString.copyFromUtf8(
+                                (String) ref);
+                module_ = b;
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+        }
+      }
       /**
-       * <code>int32 module = 3;</code>
+       * <code>string module = 3;</code>
        * @param value The module to set.
        * @return This builder for chaining.
        */
-      public Builder setModule(int value) {
+      public Builder setModule(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
+          module_ = value;
+          bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string module = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearModule() {
+          module_ = getDefaultInstance().getModule();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+          return this;
+      }
 
+        /**
+         * <code>string module = 3;</code>
+         *
+         * @param value The bytes for module to set.
+         * @return This builder for chaining.
+         */
+        public Builder setModuleBytes(
+                com.google.protobuf.ByteString value) {
+            if (value == null) {
+                throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
         module_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
-      /**
-       * <code>int32 module = 3;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearModule() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        module_ = 0;
-        onChanged();
-        return this;
-      }
 
       private AlpsMetadata metadata_;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          AlpsMetadata, AlpsMetadata.Builder, AlpsMetadataOrBuilder> metadataBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<
+                AlpsMetadata, AlpsMetadata.Builder, AlpsMetadataOrBuilder> metadataBuilder_;
       /**
-       * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
        * @return Whether the metadata field is set.
        */
       public boolean hasMetadata() {
         return ((bitField0_ & 0x00000008) != 0);
       }
       /**
-       * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
        * @return The metadata.
        */
       public AlpsMetadata getMetadata() {
@@ -3552,7 +3609,7 @@ com.google.protobuf.ByteString defaultValue);
         }
       }
       /**
-       * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
        */
       public Builder setMetadata(AlpsMetadata value) {
         if (metadataBuilder_ == null) {
@@ -3561,14 +3618,14 @@ com.google.protobuf.ByteString defaultValue);
           }
           metadata_ = value;
         } else {
-          metadataBuilder_.setMessage(value);
+            metadataBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
        */
       public Builder setMetadata(
           AlpsMetadata.Builder builderForValue) {
@@ -3577,68 +3634,65 @@ com.google.protobuf.ByteString defaultValue);
         } else {
           metadataBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
-
       /**
-       * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
        */
       public Builder mergeMetadata(AlpsMetadata value) {
-        if (metadataBuilder_ == null) {
+          if (metadataBuilder_ == null) {
           if (((bitField0_ & 0x00000008) != 0) &&
-                  metadata_ != null &&
-                  metadata_ != AlpsMetadata.getDefaultInstance()) {
+            metadata_ != null &&
+            metadata_ != AlpsMetadata.getDefaultInstance()) {
             getMetadataBuilder().mergeFrom(value);
           } else {
             metadata_ = value;
           }
         } else {
           metadataBuilder_.mergeFrom(value);
-        }
-        if (metadata_ != null) {
-          bitField0_ |= 0x00000008;
+          }
+          if (metadata_ != null) {
+              bitField0_ |= 0x00000008;
           onChanged();
         }
         return this;
       }
       /**
-       * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
        */
       public Builder clearMetadata() {
         bitField0_ = (bitField0_ & ~0x00000008);
         metadata_ = null;
         if (metadataBuilder_ != null) {
-          metadataBuilder_.dispose();
-          metadataBuilder_ = null;
+            metadataBuilder_.dispose();
+            metadataBuilder_ = null;
         }
         onChanged();
         return this;
       }
-
       /**
-       * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
        */
       public AlpsMetadata.Builder getMetadataBuilder() {
-        bitField0_ |= 0x00000008;
-        onChanged();
+          bitField0_ |= 0x00000008;
+          onChanged();
         return getMetadataFieldBuilder().getBuilder();
       }
-
       /**
-       * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
        */
       public AlpsMetadataOrBuilder getMetadataOrBuilder() {
-        if (metadataBuilder_ != null) {
-          return metadataBuilder_.getMessageOrBuilder();
-        } else {
-          return metadata_ == null ?
-                  AlpsMetadata.getDefaultInstance() : metadata_;
+          if (metadataBuilder_ != null) {
+              return metadataBuilder_.getMessageOrBuilder();
+          } else {
+              return metadata_ == null ?
+                      AlpsMetadata.getDefaultInstance() : metadata_;
         }
       }
       /**
-       * <code>.AlpsPacket.AlpsMetadata metadata = 4;</code>
+       * <code>.alps.AlpsPacket.AlpsMetadata metadata = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           AlpsMetadata, AlpsMetadata.Builder, AlpsMetadataOrBuilder>
@@ -3651,32 +3705,32 @@ com.google.protobuf.ByteString defaultValue);
                   isClean());
           metadata_ = null;
         }
-        return metadataBuilder_;
+          return metadataBuilder_;
       }
 
-      private AlpsData data_;
-      private com.google.protobuf.SingleFieldBuilderV3<
-              AlpsData, AlpsData.Builder, AlpsDataOrBuilder> dataBuilder_;
+        private AlpsData data_;
+        private com.google.protobuf.SingleFieldBuilderV3<
+          AlpsData, AlpsData.Builder, AlpsDataOrBuilder> dataBuilder_;
       /**
-       * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
        * @return Whether the data field is set.
        */
       public boolean hasData() {
         return ((bitField0_ & 0x00000010) != 0);
       }
       /**
-       * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
        * @return The data.
        */
       public AlpsData getData() {
         if (dataBuilder_ == null) {
-          return data_ == null ? AlpsData.getDefaultInstance() : data_;
+            return data_ == null ? AlpsData.getDefaultInstance() : data_;
         } else {
           return dataBuilder_.getMessage();
         }
       }
       /**
-       * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
        */
       public Builder setData(AlpsData value) {
         if (dataBuilder_ == null) {
@@ -3685,33 +3739,34 @@ com.google.protobuf.ByteString defaultValue);
           }
           data_ = value;
         } else {
-          dataBuilder_.setMessage(value);
+            dataBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000010;
         onChanged();
-        return this;
+          return this;
       }
-      /**
-       * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+
+        /**
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
        */
       public Builder setData(
-              AlpsData.Builder builderForValue) {
+          AlpsData.Builder builderForValue) {
         if (dataBuilder_ == null) {
           data_ = builderForValue.build();
         } else {
-          dataBuilder_.setMessage(builderForValue.build());
+            dataBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
        */
       public Builder mergeData(AlpsData value) {
         if (dataBuilder_ == null) {
           if (((bitField0_ & 0x00000010) != 0) &&
-                  data_ != null &&
+            data_ != null &&
             data_ != AlpsData.getDefaultInstance()) {
             getDataBuilder().mergeFrom(value);
           } else {
@@ -3720,55 +3775,53 @@ com.google.protobuf.ByteString defaultValue);
         } else {
           dataBuilder_.mergeFrom(value);
         }
-        if (data_ != null) {
-          bitField0_ |= 0x00000010;
+          if (data_ != null) {
+              bitField0_ |= 0x00000010;
           onChanged();
         }
         return this;
       }
       /**
-       * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
        */
       public Builder clearData() {
         bitField0_ = (bitField0_ & ~0x00000010);
         data_ = null;
         if (dataBuilder_ != null) {
-          dataBuilder_.dispose();
-          dataBuilder_ = null;
+            dataBuilder_.dispose();
+            dataBuilder_ = null;
         }
         onChanged();
         return this;
       }
-
       /**
-       * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
        */
       public AlpsData.Builder getDataBuilder() {
-        bitField0_ |= 0x00000010;
-        onChanged();
+          bitField0_ |= 0x00000010;
+          onChanged();
         return getDataFieldBuilder().getBuilder();
       }
-
       /**
-       * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
        */
       public AlpsDataOrBuilder getDataOrBuilder() {
         if (dataBuilder_ != null) {
           return dataBuilder_.getMessageOrBuilder();
         } else {
-          return data_ == null ?
+            return data_ == null ?
               AlpsData.getDefaultInstance() : data_;
         }
       }
       /**
-       * <code>optional .AlpsPacket.AlpsData data = 5;</code>
+       * <code>optional .alps.AlpsPacket.AlpsData data = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           AlpsData, AlpsData.Builder, AlpsDataOrBuilder>
-          getDataFieldBuilder() {
-        if (dataBuilder_ == null) {
+      getDataFieldBuilder() {
+          if (dataBuilder_ == null) {
           dataBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                  AlpsData, AlpsData.Builder, AlpsDataOrBuilder>(
+              AlpsData, AlpsData.Builder, AlpsDataOrBuilder>(
                   getData(),
                   getParentForChildren(),
                   isClean());
@@ -3776,35 +3829,34 @@ com.google.protobuf.ByteString defaultValue);
         }
         return dataBuilder_;
       }
-
       @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
+          return super.setUnknownFields(unknownFields);
       }
 
       @Override
       public final Builder mergeUnknownFields(
               final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
+          return super.mergeUnknownFields(unknownFields);
       }
 
 
-      // @@protoc_insertion_point(builder_scope:AlpsPacket)
+      // @@protoc_insertion_point(builder_scope:alps.AlpsPacket)
     }
 
-    // @@protoc_insertion_point(class_scope:AlpsPacket)
+    // @@protoc_insertion_point(class_scope:alps.AlpsPacket)
     private static final AlpsPacket DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new AlpsPacket();
     }
 
-    public static AlpsPacket getDefaultInstance() {
-      return DEFAULT_INSTANCE;
+        public static AlpsPacket getDefaultInstance() {
+            return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<AlpsPacket>
-            PARSER = new com.google.protobuf.AbstractParser<AlpsPacket>() {
+        PARSER = new com.google.protobuf.AbstractParser<AlpsPacket>() {
       @Override
       public AlpsPacket parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
@@ -3819,7 +3871,7 @@ com.google.protobuf.ByteString defaultValue);
           throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
         } catch (java.io.IOException e) {
           throw new com.google.protobuf.InvalidProtocolBufferException(e)
-                  .setUnfinishedMessage(builder.buildPartial());
+              .setUnfinishedMessage(builder.buildPartial());
         }
         return builder.buildPartial();
       }
@@ -3836,105 +3888,107 @@ com.google.protobuf.ByteString defaultValue);
 
     @Override
     public AlpsPacket getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
+        return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_AlpsPacket_descriptor;
+          internal_static_alps_AlpsPacket_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_AlpsPacket_fieldAccessorTable;
+          internal_static_alps_AlpsPacket_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_AlpsPacket_AlpsData_descriptor;
+          internal_static_alps_AlpsPacket_AlpsData_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_AlpsPacket_AlpsData_fieldAccessorTable;
+          internal_static_alps_AlpsPacket_AlpsData_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_AlpsPacket_AlpsData_DataArrayEntry_descriptor;
-  private static final 
+          internal_static_alps_AlpsPacket_AlpsData_DataArrayEntry_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_AlpsPacket_AlpsData_DataArrayEntry_fieldAccessorTable;
+            internal_static_alps_AlpsPacket_AlpsData_DataArrayEntry_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_AlpsPacket_AlpsMetadata_descriptor;
-  private static final 
+          internal_static_alps_AlpsPacket_AlpsMetadata_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_AlpsPacket_AlpsMetadata_fieldAccessorTable;
+            internal_static_alps_AlpsPacket_AlpsMetadata_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_AlpsPacket_AlpsMetadata_ContainerEntry_descriptor;
-  private static final 
+    internal_static_alps_AlpsPacket_AlpsMetadata_ContainerEntry_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_AlpsPacket_AlpsMetadata_ContainerEntry_fieldAccessorTable;
+            internal_static_alps_AlpsPacket_AlpsMetadata_ContainerEntry_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
-  getDescriptor() {
-    return descriptor;
-  }
+    public static com.google.protobuf.Descriptors.FileDescriptor
+      getDescriptor() {
+        return descriptor;
+    }
 
-  private static com.google.protobuf.Descriptors.FileDescriptor
-          descriptor;
+    private static com.google.protobuf.Descriptors.FileDescriptor
+            descriptor;
 
-  static {
-    String[] descriptorData = {
-            "\n\020AlpsPacket.proto\"\351\006\n\nAlpsPacket\022,\n\013con" +
-                    "nectType\030\001 \001(\0162\027.AlpsPacket.ConnectType\022" +
-                    "\r\n\005magic\030\002 \001(\005\022\016\n\006module\030\003 \001(\005\022*\n\010metada" +
-                    "ta\030\004 \001(\0132\030.AlpsPacket.AlpsMetadata\022\'\n\004da" +
-                    "ta\030\005 \001(\0132\024.AlpsPacket.AlpsDataH\000\210\001\001\032\275\001\n\010" +
-                    "AlpsData\022\013\n\003zip\030\001 \001(\010\022$\n\tdataCoder\030\002 \001(\016" +
-                    "2\021.AlpsPacket.Coder\022\024\n\014zipDataArray\030\003 \001(" +
-                    "\014\0226\n\tdataArray\030\004 \003(\0132#.AlpsPacket.AlpsDa" +
-                    "ta.DataArrayEntry\0320\n\016DataArrayEntry\022\013\n\003k" +
-                    "ey\030\001 \001(\005\022\r\n\005value\030\002 \001(\014:\0028\001\032\251\002\n\014AlpsMeta" +
-                    "data\022\013\n\003zip\030\001 \001(\010\022\017\n\007version\030\002 \001(\005\022\023\n\013ve" +
-                    "rifyToken\030\003 \001(\003\022(\n\tframeType\030\004 \001(\0162\025.Alp" +
-                    "sPacket.FrameType\022)\n\016containerCoder\030\005 \001(" +
-                    "\0162\021.AlpsPacket.Coder\022\r\n\005frame\030\006 \001(\014\022\024\n\014z" +
-                    "ipContainer\030\007 \001(\014\022:\n\tcontainer\030\010 \003(\0132\'.A" +
-                    "lpsPacket.AlpsMetadata.ContainerEntry\0320\n" +
-                    "\016ContainerEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 " +
-                    "\001(\014:\0028\001\"%\n\013ConnectType\022\n\n\006CLIENT\020\000\022\n\n\006SE" +
-                    "RVER\020\001\"\036\n\005Coder\022\007\n\003JDK\020\000\022\014\n\010PROTOBUF\020\001\"}" +
-                    "\n\tFrameType\022\010\n\004IDLE\020\000\022\n\n\006FORGET\020\001\022\013\n\007REQ" +
-      "UEST\020\002\022\014\n\010RESPONSE\020\003\022\t\n\005ERROR\020\004\022\022\n\016STREA" +
-                    "M_REQUEST\020\005\022\023\n\017STREAM_RESPONSE\020\006\022\013\n\007GATE" +
-      "WAY\020\007B\007\n\005_dataB#\n\023org.alps.core.protoB\014A" +
-                    "lpsProtocolb\006proto3"
-    };
-    descriptor = com.google.protobuf.Descriptors.FileDescriptor
-            .internalBuildGeneratedFileFrom(descriptorData,
-                    new com.google.protobuf.Descriptors.FileDescriptor[]{
-                    });
-    internal_static_AlpsPacket_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_AlpsPacket_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_AlpsPacket_descriptor,
-            new String[]{"ConnectType", "Magic", "Module", "Metadata", "Data", "Data",});
-    internal_static_AlpsPacket_AlpsData_descriptor =
-            internal_static_AlpsPacket_descriptor.getNestedTypes().get(0);
-    internal_static_AlpsPacket_AlpsData_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_AlpsPacket_AlpsData_descriptor,
-            new String[]{"Zip", "DataCoder", "ZipDataArray", "DataArray",});
-    internal_static_AlpsPacket_AlpsData_DataArrayEntry_descriptor =
-            internal_static_AlpsPacket_AlpsData_descriptor.getNestedTypes().get(0);
-    internal_static_AlpsPacket_AlpsData_DataArrayEntry_fieldAccessorTable = new
+    static {
+        String[] descriptorData = {
+                "\n\020AlpsPacket.proto\022\004alps\"\243\007\n\nAlpsPacket\022" +
+                        "1\n\013connectType\030\001 \001(\0162\034.alps.AlpsPacket.C" +
+                        "onnectType\022\r\n\005magic\030\002 \001(\005\022\016\n\006module\030\003 \001(" +
+                        "\t\022/\n\010metadata\030\004 \001(\0132\035.alps.AlpsPacket.Al" +
+                        "psMetadata\022,\n\004data\030\005 \001(\0132\031.alps.AlpsPack" +
+                        "et.AlpsDataH\000\210\001\001\032\307\001\n\010AlpsData\022\013\n\003zip\030\001 \001" +
+                        "(\010\022)\n\tdataCoder\030\002 \001(\0162\026.alps.AlpsPacket." +
+                        "Coder\022\024\n\014zipDataArray\030\003 \001(\014\022;\n\tdataArray" +
+                        "\030\004 \003(\0132(.alps.AlpsPacket.AlpsData.DataAr" +
+                        "rayEntry\0320\n\016DataArrayEntry\022\013\n\003key\030\001 \001(\005\022" +
+                        "\r\n\005value\030\002 \001(\014:\0028\001\032\270\002\n\014AlpsMetadata\022\013\n\003z" +
+                        "ip\030\001 \001(\010\022\017\n\007version\030\002 \001(\005\022\023\n\013verifyToken" +
+                        "\030\003 \001(\003\022-\n\tframeType\030\004 \001(\0162\032.alps.AlpsPac" +
+                        "ket.FrameType\022.\n\016containerCoder\030\005 \001(\0162\026." +
+                        "alps.AlpsPacket.Coder\022\r\n\005frame\030\006 \001(\014\022\024\n\014" +
+                        "zipContainer\030\007 \001(\014\022?\n\tcontainer\030\010 \003(\0132,." +
+                        "alps.AlpsPacket.AlpsMetadata.ContainerEn" +
+                        "try\0320\n\016ContainerEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005va" +
+                        "lue\030\002 \001(\014:\0028\001\"%\n\013ConnectType\022\n\n\006CLIENT\020\000" +
+                        "\022\n\n\006SERVER\020\001\"\036\n\005Coder\022\007\n\003JDK\020\000\022\014\n\010PROTOB" +
+                        "UF\020\001\"\216\001\n\tFrameType\022\010\n\004IDLE\020\000\022\n\n\006FORGET\020\001" +
+                        "\022\013\n\007REQUEST\020\002\022\014\n\010RESPONSE\020\003\022\t\n\005ERROR\020\004\022\022" +
+                        "\n\016STREAM_REQUEST\020\005\022\023\n\017STREAM_RESPONSE\020\006\022" +
+                        "\013\n\007GATEWAY\020\007\022\017\n\013MODULE_AUTH\020\010B\007\n\005_dataB#" +
+                        "\n\023org.alps.core.protoB\014AlpsProtocolb\006pro" +
+                        "to3"
+        };
+        descriptor = com.google.protobuf.Descriptors.FileDescriptor
+                .internalBuildGeneratedFileFrom(descriptorData,
+        new com.google.protobuf.Descriptors.FileDescriptor[]{
+        });
+        internal_static_alps_AlpsPacket_descriptor =
+                getDescriptor().getMessageTypes().get(0);
+        internal_static_alps_AlpsPacket_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_alps_AlpsPacket_descriptor,
+                new String[]{"ConnectType", "Magic", "Module", "Metadata", "Data", "Data",});
+        internal_static_alps_AlpsPacket_AlpsData_descriptor =
+                internal_static_alps_AlpsPacket_descriptor.getNestedTypes().get(0);
+        internal_static_alps_AlpsPacket_AlpsData_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_alps_AlpsPacket_AlpsData_descriptor,
+                new String[]{"Zip", "DataCoder", "ZipDataArray", "DataArray",});
+        internal_static_alps_AlpsPacket_AlpsData_DataArrayEntry_descriptor =
+                internal_static_alps_AlpsPacket_AlpsData_descriptor.getNestedTypes().get(0);
+        internal_static_alps_AlpsPacket_AlpsData_DataArrayEntry_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_alps_AlpsPacket_AlpsData_DataArrayEntry_descriptor,
+                new String[]{"Key", "Value",});
+        internal_static_alps_AlpsPacket_AlpsMetadata_descriptor =
+      internal_static_alps_AlpsPacket_descriptor.getNestedTypes().get(1);
+        internal_static_alps_AlpsPacket_AlpsMetadata_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_alps_AlpsPacket_AlpsMetadata_descriptor,
+                new String[]{"Zip", "Version", "VerifyToken", "FrameType", "ContainerCoder", "Frame", "ZipContainer", "Container",});
+        internal_static_alps_AlpsPacket_AlpsMetadata_ContainerEntry_descriptor =
+                internal_static_alps_AlpsPacket_AlpsMetadata_descriptor.getNestedTypes().get(0);
+        internal_static_alps_AlpsPacket_AlpsMetadata_ContainerEntry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_AlpsPacket_AlpsData_DataArrayEntry_descriptor,
-            new String[]{"Key", "Value",});
-    internal_static_AlpsPacket_AlpsMetadata_descriptor =
-            internal_static_AlpsPacket_descriptor.getNestedTypes().get(1);
-    internal_static_AlpsPacket_AlpsMetadata_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_AlpsPacket_AlpsMetadata_descriptor,
-        new String[] { "Zip", "Version", "VerifyToken", "FrameType", "ContainerCoder", "Frame", "ZipContainer", "Container",});
-    internal_static_AlpsPacket_AlpsMetadata_ContainerEntry_descriptor =
-            internal_static_AlpsPacket_AlpsMetadata_descriptor.getNestedTypes().get(0);
-    internal_static_AlpsPacket_AlpsMetadata_ContainerEntry_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_AlpsPacket_AlpsMetadata_ContainerEntry_descriptor,
+        internal_static_alps_AlpsPacket_AlpsMetadata_ContainerEntry_descriptor,
         new String[] { "Key", "Value", });
   }
 

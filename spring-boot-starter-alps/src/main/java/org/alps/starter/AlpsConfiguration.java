@@ -14,7 +14,7 @@ public class AlpsConfiguration {
                                           FrameListeners frameListeners, AlpsProperties properties) {
         AlpsConfig config = new AlpsConfig(properties.isServer(), properties.getMetadataConfig(), properties.getDataConfig(),
                 properties.getModules().stream()
-                        .map(e -> new AlpsConfig.ModuleConfig(e.getCode(), e.getVersion(), e.getVerifyToken())).toList());
+                        .map(e -> new AlpsConfig.ModuleConfig(e.getName(), e.getVersion(), e.getVerifyToken())).toList());
         return new DefaultEnhancedSessionFactory(frameCoders, dataCoderFactory, frameListeners, config);
     }
 

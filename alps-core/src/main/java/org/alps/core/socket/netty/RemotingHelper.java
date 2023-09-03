@@ -16,13 +16,13 @@ import java.util.Map;
 @Slf4j
 public class RemotingHelper {
 
-    public static final AttributeKey<Map<Short, AlpsEnhancedSession>> KEY = AttributeKey.valueOf("alps.session");
+    public static final AttributeKey<Map<String, AlpsEnhancedSession>> KEY = AttributeKey.valueOf("alps.session");
 
     public static String parseChannelRemoteAddr(final Channel channel) {
         SocketAddress remote = channel.remoteAddress();
         final String addr = remote != null ? remote.toString() : "";
 
-        if (addr.length() > 0) {
+        if (!addr.isEmpty()) {
             int index = addr.lastIndexOf("/");
             if (index >= 0) {
                 return addr.substring(index + 1);
@@ -37,7 +37,7 @@ public class RemotingHelper {
     public static void closeChannel(Channel channel) {
         final String addrRemote = RemotingHelper.parseChannelRemoteAddr(channel);
         var map = channel.attr(KEY).get();
-        if ("".equals(addrRemote)) {
+        if (addrRemote.isEmpty()) {
             channel.close();
         } else {
             channel.close().addListener((ChannelFutureListener) future -> {

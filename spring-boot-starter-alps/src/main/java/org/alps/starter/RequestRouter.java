@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 @Slf4j
-record StreamRouter(short module, int command, Object target, Method method) implements Router {
+record StreamRouter(String module, int command, Object target, Method method) implements Router {
 
     public static StreamRouter create(Object target, Method method, List<AlpsProperties.ModuleProperties> properties) {
         return Utils.create(target, method, properties, StreamRouter::new);
@@ -48,7 +48,6 @@ record StreamRouter(short module, int command, Object target, Method method) imp
                         } else {
                             var responseCommand = session.streamResponse().reqId(((StreamRequestFrame) frame).id());
                             if (!alpsExchange.getMetadata().isEmpty()) {
-                                // todo don't copy?
                                 alpsExchange.getMetadata().forEach(responseCommand::metadata);
                             }
                             responseCommand.data(d);
@@ -66,7 +65,7 @@ record StreamRouter(short module, int command, Object target, Method method) imp
     }
 }
 
-record RequestRouter(short module, int command, Object target, Method method) implements Router {
+record RequestRouter(String module, int command, Object target, Method method) implements Router {
 
     public static RequestRouter create(Object target, Method method, List<AlpsProperties.ModuleProperties> properties) {
         return Utils.create(target, method, properties, RequestRouter::new);
@@ -80,7 +79,6 @@ record RequestRouter(short module, int command, Object target, Method method) im
         var ret = descriptor.invoke(frame);
         var responseCommand = session.response().reqId(((RequestFrame) frame).id());
         if (!alpsExchange.getMetadata().isEmpty()) {
-            // todo don't copy?
             alpsExchange.getMetadata().forEach(responseCommand::metadata);
         }
         if (ret instanceof Mono<?> mono) {
@@ -102,7 +100,7 @@ record RequestRouter(short module, int command, Object target, Method method) im
     }
 }
 
-record ForgetRouter(short module, int command, Object target, Method method) implements Router {
+record ForgetRouter(String module, int command, Object target, Method method) implements Router {
 
     public static ForgetRouter create(Object target, Method method, List<AlpsProperties.ModuleProperties> properties) {
         return Utils.create(target, method, properties, ForgetRouter::new);
@@ -117,7 +115,7 @@ record ForgetRouter(short module, int command, Object target, Method method) imp
 }
 
 interface NewRouter<T> {
-    T create(short module, int command, Object target, Method method);
+    T create(String module, int command, Object target, Method method);
 }
 
 class Utils {
@@ -127,7 +125,7 @@ class Utils {
         var module = Optional.of(Objects.requireNonNull(
                         method.getDeclaringClass().getAnnotation(AlpsModule.class), "@AlpsModule为空").module())
                 .flatMap(e -> properties.stream().filter(ele -> ele.getName().equals(e)).findFirst())
-                .map(AlpsProperties.ModuleProperties::getCode)
+                .map(AlpsProperties.ModuleProperties::getName)
                 .orElseThrow(() -> new IllegalArgumentException("模块没有配置" + method.getName()));
         method.setAccessible(true);
         return router.create(module, command, target, method);

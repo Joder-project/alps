@@ -28,7 +28,6 @@ public class AlpsProperties {
     @Data
     public static class ModuleProperties {
         private String name;
-        private short code;
 
         private short version;
         private long verifyToken;

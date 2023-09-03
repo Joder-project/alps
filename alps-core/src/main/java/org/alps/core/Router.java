@@ -1,7 +1,5 @@
 package org.alps.core;
 
-import org.alps.core.proto.AlpsProtocol;
-
 /**
  * 对指令数据进行处理
  */
@@ -12,12 +10,10 @@ public interface Router {
      *
      * @return
      */
-    short module();
+    String module();
 
     /**
      * 处理指令
-     *
-     * @return
      */
     int command();
 

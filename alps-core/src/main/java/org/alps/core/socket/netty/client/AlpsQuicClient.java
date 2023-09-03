@@ -11,6 +11,7 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.incubator.codec.quic.*;
 import lombok.extern.slf4j.Slf4j;
+import org.alps.core.AlpsConfig;
 import org.alps.core.AlpsDataCoderFactory;
 import org.alps.core.EnhancedSessionFactory;
 import org.alps.core.common.AlpsSocketException;
@@ -30,7 +31,7 @@ public class AlpsQuicClient extends AbstractAlpsClient {
     private QuicStreamChannel quicStreamChannel;
 
     public AlpsQuicClient(NioEventLoopGroup eventExecutors, NettyClientConfig clientConfig, EnhancedSessionFactory sessionFactory,
-                          List<Short> supportModules, AlpsDataCoderFactory coderFactory) {
+                          List<AlpsConfig.ModuleConfig> supportModules, AlpsDataCoderFactory coderFactory) {
         super(clientConfig, sessionFactory, supportModules, coderFactory);
         this.eventExecutors = eventExecutors;
     }

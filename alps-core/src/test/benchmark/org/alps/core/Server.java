@@ -37,13 +37,13 @@ public class Server {
         var config = new AlpsConfig();
         config.getDataConfig().setEnabledZip(true);
         for (int i = 0; i < 10; i++) {
-            short module = (short) i;
-            config.getModules().add(new AlpsConfig.ModuleConfig((short) i, (short) 1, 1L));
+            var module = "" + i;
+            config.getModules().add(new AlpsConfig.ModuleConfig(module, (short) 1, 1L));
             for (int j = 0; j < 20; j++) {
                 short command = (short) j;
                 routerDispatcher.addRouter(new Router() {
                     @Override
-                    public short module() {
+                    public String module() {
                         return module;
                     }
 
@@ -108,7 +108,7 @@ public class Server {
         var server = new AlpsQuicServer(new NioEventLoopGroup(16),
                 new NioEventLoopGroup(32),
                 nettyServerConfig, quicServerConfig, enhancedSessionFactory,
-                enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(),
+                enhancedSessionFactory.config.getModules(),
                 enhancedSessionFactory.dataCoderFactory);
         server.start();
     }

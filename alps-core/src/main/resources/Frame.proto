@@ -35,6 +35,11 @@ message ErrorFrame {
   int32 code = 1;
 }
 
+message ModuleAuthFrame {
+  int32 version = 1;
+  int64 verifyToken = 2;
+}
+
 message GatewayFrame {
   bytes data = 1;
 }

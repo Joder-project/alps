@@ -5,9 +5,9 @@ import org.alps.core.proto.AlpsProtocol;
 /**
  * 数据包包装类
  */
-public record AlpsPacket(int connectType, short module, AlpsDataCoderFactory dataCoderFactory, AlpsMetadata metadata,
+public record AlpsPacket(int connectType, String module, AlpsDataCoderFactory dataCoderFactory, AlpsMetadata metadata,
                          AlpsData data, AlpsProtocol.AlpsPacket rawPacket) {
     public static final byte MAGIC_NUM = Byte.parseByte(System.getProperty("org.alps.magic", "73"));
-    public static final short ZERO_MODULE = 0;
+    public static final String ZERO_MODULE = "AlpsDefault";
 
 }

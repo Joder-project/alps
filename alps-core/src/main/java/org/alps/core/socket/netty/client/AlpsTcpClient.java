@@ -6,6 +6,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.alps.core.AlpsConfig;
 import org.alps.core.AlpsDataCoderFactory;
 import org.alps.core.EnhancedSessionFactory;
 import org.alps.core.common.AlpsSocketException;
@@ -21,7 +22,7 @@ public class AlpsTcpClient extends AbstractAlpsClient {
     private NioSocketChannel socketChannel;
 
     public AlpsTcpClient(NioEventLoopGroup eventExecutors, NettyClientConfig clientConfig, EnhancedSessionFactory sessionFactory,
-                         List<Short> supportModules, AlpsDataCoderFactory coderFactory) {
+                         List<AlpsConfig.ModuleConfig> supportModules, AlpsDataCoderFactory coderFactory) {
         super(clientConfig, sessionFactory, supportModules, coderFactory);
         this.eventExecutors = eventExecutors;
     }

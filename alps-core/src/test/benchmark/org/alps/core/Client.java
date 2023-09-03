@@ -64,17 +64,17 @@ public class Client {
             var dataCoderFactory = new AlpsDataCoderFactory();
             var frameFactory = new FrameCoders(dataCoderFactory);
             var routerDispatcher = new RouterDispatcher();
-            var listenerHandler = new FrameListeners(routerDispatcher);
+
             var config = new AlpsConfig();
             config.getDataConfig().setEnabledZip(true);
             for (int i = 0; i < 10; i++) {
-                short module = (short) (i + 1);
-                config.getModules().add(new AlpsConfig.ModuleConfig((short) i, (short) 1, 1L));
+                var module = "" + (i + 1);
+                config.getModules().add(new AlpsConfig.ModuleConfig(module, (short) 1, 1L));
                 for (int j = 0; j < 20; j++) {
                     short command = (short) (j + 1);
                     routerDispatcher.addRouter(new Router() {
                         @Override
-                        public short module() {
+                        public String module() {
                             return module;
                         }
 
@@ -104,7 +104,7 @@ public class Client {
                     });
                 }
             }
-
+            var listenerHandler = new FrameListeners(routerDispatcher);
             var nettyServerConfig = new NettyClientConfig();
             nettyServerConfig.setPort(6195);
             nettyServerConfig.setHost("127.0.0.1");
@@ -115,14 +115,14 @@ public class Client {
 //                    enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(), dataCoderFactory);
 
             this.client = new AlpsQuicClient(new NioEventLoopGroup(2), nettyServerConfig, enhancedSessionFactory,
-                    enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(), dataCoderFactory);
+                    enhancedSessionFactory.config.getModules(), dataCoderFactory);
 
 
             client.start();
 
             while (client.isNotReady()) {
             }
-            this.session = client.session((short) 1).map(e -> ((AlpsEnhancedSession) e)).get();
+            this.session = client.session("1").map(e -> ((AlpsEnhancedSession) e)).get();
         }
 
         @TearDown

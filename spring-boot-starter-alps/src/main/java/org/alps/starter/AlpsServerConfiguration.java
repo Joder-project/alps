@@ -3,6 +3,7 @@ package org.alps.starter;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
+import org.alps.core.AlpsConfig;
 import org.alps.core.AlpsDataCoderFactory;
 import org.alps.core.AlpsServer;
 import org.alps.core.EnhancedSessionFactory;
@@ -49,7 +50,14 @@ public class AlpsServerConfiguration {
         Map<ChannelOption<?>, Object> childOptionSettings = new HashMap<>();
         nettyConfig.getChildOptionSettings().forEach((k, v) -> childOptionSettings.put(ChannelOption.valueOf(k), v));
         serverConfig.setChildOptionSettings(childOptionSettings);
-        return new AlpsTcpServer(new NioEventLoopGroup(nettyConfig.getBossThread()), new NioEventLoopGroup(nettyConfig.getWorkerThread()), new NioEventLoopGroup(nettyConfig.getBizThread()), serverConfig, sessionFactory, alpsProperties.getModules().stream().map(AlpsProperties.ModuleProperties::getCode).toList(), coderFactory);
+        return new AlpsTcpServer(new NioEventLoopGroup(nettyConfig.getBossThread()),
+                new NioEventLoopGroup(nettyConfig.getWorkerThread()),
+                new NioEventLoopGroup(nettyConfig.getBizThread()), serverConfig,
+                sessionFactory,
+                alpsProperties.getModules()
+                        .stream()
+                        .map(e -> new AlpsConfig.ModuleConfig(e.getName(), e.getVersion(), e.getVerifyToken()))
+                        .toList(), coderFactory);
     }
 
     AlpsServer alpsQuicServer(AlpsServerProperties properties, AlpsProperties alpsProperties, EnhancedSessionFactory sessionFactory, AlpsDataCoderFactory coderFactory) throws CertificateException {
@@ -68,10 +76,16 @@ public class AlpsServerConfiguration {
 
         // TODO 修改
         var certificate = new SelfSignedCertificate();
-        var quicServerConfig = new QuicServerConfig(certificate.key(), null, Collections.singletonList(certificate.cert()));
+        var quicServerConfig = new QuicServerConfig(certificate.key(), null,
+                Collections.singletonList(certificate.cert()));
 
 
-        return new AlpsQuicServer(new NioEventLoopGroup(nettyConfig.getBossThread()), new NioEventLoopGroup(nettyConfig.getWorkerThread()), serverConfig, quicServerConfig, sessionFactory, alpsProperties.getModules().stream().map(AlpsProperties.ModuleProperties::getCode).toList(), coderFactory);
+        return new AlpsQuicServer(new NioEventLoopGroup(nettyConfig.getBossThread()),
+                new NioEventLoopGroup(nettyConfig.getWorkerThread()), serverConfig, quicServerConfig,
+                sessionFactory, alpsProperties.getModules()
+                .stream()
+                .map(e -> new AlpsConfig.ModuleConfig(e.getName(), e.getVersion(), e.getVerifyToken()))
+                .toList(), coderFactory);
     }
 
     @Bean

@@ -5,8 +5,10 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.AlpsClient;
+import org.alps.core.AlpsConfig;
 import org.alps.core.AlpsPacket;
 import org.alps.core.EnhancedSessionFactory;
+import org.alps.core.frame.ModuleAuthFrame;
 import org.alps.core.socket.netty.NettyAlpsSession;
 import org.alps.core.socket.netty.RemotingHelper;
 
@@ -21,9 +23,9 @@ public class AlpsClientProtocolHandler extends SimpleChannelInboundHandler<AlpsP
     private final AlpsClient client;
     private final EnhancedSessionFactory sessionFactory;
 
-    private final List<Short> supportModules;
+    private final List<AlpsConfig.ModuleConfig> supportModules;
 
-    public AlpsClientProtocolHandler(AlpsClient client, EnhancedSessionFactory sessionFactory, List<Short> supportModules) {
+    public AlpsClientProtocolHandler(AlpsClient client, EnhancedSessionFactory sessionFactory, List<AlpsConfig.ModuleConfig> supportModules) {
         this.client = client;
         this.sessionFactory = sessionFactory;
         this.supportModules = supportModules;
@@ -53,10 +55,14 @@ public class AlpsClientProtocolHandler extends SimpleChannelInboundHandler<AlpsP
             this.client.addSession(sess);
             return sess;
         });
-        for (Short module : supportModules) {
-            map.computeIfAbsent(module, key -> {
-                var sess = sessionFactory.create(new NettyAlpsSession(client, module, ctx.channel()));
+        for (var module : supportModules) {
+            map.computeIfAbsent(module.getModule(), key -> {
+                var sess = sessionFactory.create(new NettyAlpsSession(client, module.getModule(), module.getVersion(),
+                        module.getVerifyToken(), ctx.channel(), true));
                 this.client.addSession(sess);
+                // 发起认证
+                var frameBytes = ModuleAuthFrame.toBytes(module.getVersion(), module.getVerifyToken());
+                sess.moduleAuth().version(module.getVersion()).verifyToken(module.getVerifyToken()).send().subscribe();
                 return sess;
             });
         }

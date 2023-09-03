@@ -2,7 +2,7 @@ package org.alps.core;
 
 import org.alps.core.proto.AlpsProtocol;
 
-import java.net.InetAddress;
+import java.util.Optional;
 
 /**
  * 会话定义
@@ -10,17 +10,18 @@ import java.net.InetAddress;
  */
 public interface AlpsSession {
 
-    short module();
+    String module();
 
     /**
      * 自身地址
      */
-    InetAddress selfAddress();
+    Optional<String> selfAddress();
 
     /**
      * 对方地址
+     * TODO Quic Address
      */
-    InetAddress targetAddress();
+    Optional<String> targetAddress();
 
     /**
      * 发送数据包
@@ -54,5 +55,15 @@ public interface AlpsSession {
     default AlpsSession attr(String key, Object value) {
         return this;
     }
+
+    /**
+     * 是否认证
+     */
+    boolean isAuth();
+
+    /**
+     * 认证
+     */
+    void auth(int version, long verifyToken);
 
 }

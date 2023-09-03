@@ -24,8 +24,8 @@ public class AlpsConfig {
     @AllArgsConstructor
     public static class ModuleConfig {
 
-        public static final ModuleConfig ZERO = new ModuleConfig((short) 0, (short) 0, 0L);
-        private short module;
+        public static final ModuleConfig ZERO = new ModuleConfig(AlpsPacket.ZERO_MODULE, (short) 0, 0L);
+        private String module;
         private short version;
         private long verifyToken;
     }

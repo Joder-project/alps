@@ -7,8 +7,7 @@ spring:
 
 alps:
   modules:
-    - code: 1
-      name: 'User'
+    - name: 'User'
       verify-token: 1
       version: 1
   server:
@@ -26,8 +25,7 @@ spring:
 
 alps:
   modules:
-    - code: 1
-      name: 'User'
+    - name: 'User'
       verify-token: 1
       version: 1
   client:

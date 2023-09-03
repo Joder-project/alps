@@ -1,0 +1,11 @@
+syntax = "proto3";
+package alps;
+option java_package = "org.alps.core.proto";
+option java_outer_classname = "Errors";
+
+enum Code{
+  Handle_Error = 0; // 方法处理失败
+  Global_Handle_Error = 1; // 全局默认方法处理失败
+  Module_Auth_Error = 2; // 模块认证失败
+  Module_Reject_Access = 4; //模块拒绝访问
+}

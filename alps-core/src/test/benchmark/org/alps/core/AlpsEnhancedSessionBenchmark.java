@@ -6,7 +6,7 @@ import org.alps.core.frame.ResponseFrame;
 import org.alps.core.proto.AlpsProtocol;
 import org.openjdk.jmh.annotations.*;
 
-import java.net.InetAddress;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -41,16 +41,16 @@ public class AlpsEnhancedSessionBenchmark {
             var dataCoderFactory = new AlpsDataCoderFactory();
             var frameFactory = new FrameCoders(dataCoderFactory);
             var routerDispatcher = new RouterDispatcher();
-            var listenerHandler = new FrameListeners(routerDispatcher);
+
             var config = new AlpsConfig();
             for (int i = 0; i < 10; i++) {
-                short module = (short) i;
-                config.getModules().add(new AlpsConfig.ModuleConfig((short) i, (short) 1, 1L));
+                var module = "" + i;
+                config.getModules().add(new AlpsConfig.ModuleConfig(module, (short) 1, 1L));
                 for (int j = 0; j < 20; j++) {
                     short command = (short) j;
                     routerDispatcher.addRouter(new Router() {
                         @Override
-                        public short module() {
+                        public String module() {
                             return module;
                         }
 
@@ -80,7 +80,7 @@ public class AlpsEnhancedSessionBenchmark {
                     });
                 }
             }
-
+            var listenerHandler = new FrameListeners(routerDispatcher);
             this.session = new AlpsEnhancedSession(session, frameFactory, dataCoderFactory, listenerHandler, config);
         }
 
@@ -89,18 +89,18 @@ public class AlpsEnhancedSessionBenchmark {
     static final class Session implements AlpsSession {
 
         @Override
-        public short module() {
-            return 0;
+        public String module() {
+            return "";
         }
 
         @Override
-        public InetAddress selfAddress() {
-            return null;
+        public Optional<String> selfAddress() {
+            return Optional.empty();
         }
 
         @Override
-        public InetAddress targetAddress() {
-            return null;
+        public Optional<String> targetAddress() {
+            return Optional.empty();
         }
 
         @Override
@@ -131,6 +131,16 @@ public class AlpsEnhancedSessionBenchmark {
         @Override
         public AlpsSession attr(String key, Object value) {
             return this;
+        }
+
+        @Override
+        public boolean isAuth() {
+            return false;
+        }
+
+        @Override
+        public void auth(int version, long verifyToken) {
+
         }
     }
 }

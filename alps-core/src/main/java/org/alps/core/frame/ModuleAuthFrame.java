@@ -9,7 +9,9 @@ import org.alps.core.proto.IFrame;
 
 import java.util.Optional;
 
-public record IdleFrame(
+public record ModuleAuthFrame(
+        int version,
+        long verifyToken,
         AlpsMetadata metadata,
         AlpsProtocol.AlpsPacket packet
 ) implements Frame {
@@ -19,8 +21,8 @@ public record IdleFrame(
         return Optional.ofNullable(packet);
     }
 
-    public static byte[] toIdleBytes() {
-        return new IdleFrame(null, null).toBytes();
+    public static byte[] toBytes(int version, long verifyToken) {
+        return new ModuleAuthFrame(version, verifyToken, null, null).toBytes();
     }
 
     @Override
@@ -30,7 +32,9 @@ public record IdleFrame(
 
     @Override
     public byte[] toBytes() {
-        return IFrame.IdleFrame.newBuilder()
+        return IFrame.ModuleAuthFrame.newBuilder()
+                .setVersion(version)
+                .setVerifyToken(verifyToken)
                 .build()
                 .toByteArray();
     }
@@ -39,13 +43,13 @@ public record IdleFrame(
 
         @Override
         public Class<? extends Frame> target() {
-            return IdleFrame.class;
+            return ModuleAuthFrame.class;
         }
 
         @Override
         public Frame decode(AlpsMetadata metadata, AlpsData data, AlpsProtocol.AlpsPacket rawPacket) throws Exception {
-            var idleFrame = IFrame.IdleFrame.parseFrom(metadata.frame());
-            return new IdleFrame(metadata, rawPacket);
+            var frame = IFrame.ModuleAuthFrame.parseFrom(metadata.frame());
+            return new ModuleAuthFrame(frame.getVersion(), frame.getVerifyToken(), metadata, rawPacket);
         }
 
     }

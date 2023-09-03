@@ -10,6 +10,6 @@ public class IdleFrameListener implements FrameListener {
 
     @Override
     public void listen(AlpsSession session, Frame frame) {
-        log.debug("Received idle frame. Address: {}", session.targetAddress().getHostAddress());
+        log.debug("Received idle frame. Address: {}", session.targetAddress().orElse(""));
     }
 }
