@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+package alps;
 option java_package = "org.alps.core.proto";
 option java_outer_classname = "IFrame";
 

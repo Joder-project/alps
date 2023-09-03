@@ -53,15 +53,4 @@ public class AlpsConfig {
             this.code = (byte) code;
         }
     }
-
-    // TODO 暂不支持
-    @Data
-    public static class SSL {
-        private boolean enabled = false;
-        private SSLType type;
-    }
-
-    public enum SSLType {
-        RSA_DC
-    }
 }
