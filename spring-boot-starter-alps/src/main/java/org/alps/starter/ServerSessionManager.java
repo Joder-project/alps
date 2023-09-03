@@ -10,7 +10,7 @@ public class ServerSessionManager {
     private final AlpsServer server;
 
 
-    public ServerSessionManager(AlpsServer server, AlpsProperties properties) {
+    public ServerSessionManager(AlpsServer server) {
         this.server = server;
     }
 

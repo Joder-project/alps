@@ -60,7 +60,7 @@ public class AlpsClientConfiguration {
     }
 
     @Bean
-    ClientSessionManager clientSessionManager(AlpsClient client, AlpsProperties properties) {
-        return new ClientSessionManager(client, properties);
+    ClientSessionManager clientSessionManager(AlpsClient client) {
+        return new ClientSessionManager(client);
     }
 }

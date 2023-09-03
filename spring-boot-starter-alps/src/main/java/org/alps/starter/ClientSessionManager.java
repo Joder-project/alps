@@ -9,7 +9,7 @@ public class ClientSessionManager {
     private final AlpsClient client;
 
 
-    public ClientSessionManager(AlpsClient client, AlpsProperties properties) {
+    public ClientSessionManager(AlpsClient client) {
         this.client = client;
     }
 

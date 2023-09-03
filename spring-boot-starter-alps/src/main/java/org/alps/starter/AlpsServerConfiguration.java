@@ -89,7 +89,7 @@ public class AlpsServerConfiguration {
     }
 
     @Bean
-    ServerSessionManager serverSessionManager(AlpsServer server, AlpsProperties properties) {
-        return new ServerSessionManager(server, properties);
+    ServerSessionManager serverSessionManager(AlpsServer server) {
+        return new ServerSessionManager(server);
     }
 }
