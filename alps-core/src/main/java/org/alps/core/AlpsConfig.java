@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AlpsConfig {
 
-    private boolean server;
+    private int socketType;
     private MetaDataConfig metaDataConfig = new MetaDataConfig();
     private DataConfig dataConfig = new DataConfig();
 

@@ -259,7 +259,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                                 .frame(frameBytes)
                                 .build();
                         var data = dataBuilder.build();
-                        var protocol = session.frameCoders.encode(config.isServer(), session.module(),
+                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
                                 new ForgetFrame(command, metadata, data, null));
                         session.send(protocol);
                     })
@@ -298,7 +298,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                                 .frame(frameBytes)
                                 .build();
                         var data = dataBuilder.build();
-                        var protocol = session.frameCoders.encode(config.isServer(), session.module(),
+                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
                                 new ForgetFrame(command, metadata, data, null));
                         AlpsUtils.broadcast(sessions, protocol);
                     }).publishOn(ioScheduler)
@@ -337,7 +337,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                                 .build();
                         var data = dataBuilder.build();
                         var requestFrame = new RequestFrame(command, id, metadata, data, null);
-                        var protocol = session.frameCoders.encode(config.isServer(), session.module(), requestFrame);
+                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
                         var responseResult = new ResponseResult(session, requestFrame);
                         listener.set((session, frame) -> responseResult.receive(((ResponseFrame) frame)));
                         session.frameListeners.addFrameListener(ResponseFrame.class,
@@ -417,7 +417,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                                 .frameType(FrameCoders.DefaultFrame.MODULE_AUTH.frameType)
                                 .frame(frameBytes)
                                 .build();
-                        var protocol = session.frameCoders.encode(config.isServer(), session.module(),
+                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
                                 new ModuleAuthFrame(version, verifyToken, metadata, null));
                         session.send(protocol);
                     }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error))
@@ -437,7 +437,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                                 .frameType(FrameCoders.DefaultFrame.IDLE.frameType)
                                 .frame(frameBytes)
                                 .build();
-                        var protocol = session.frameCoders.encode(config.isServer(), session.module(),
+                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
                                 new IdleFrame(metadata, null));
                         session.send(protocol);
                     }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error))
@@ -476,7 +476,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(config.isServer(), AlpsPacket.ZERO_MODULE,
+                var protocol = session.frameCoders.encode(config.getSocketType(), AlpsPacket.ZERO_MODULE,
                         new ErrorFrame(code, metadata, data, null));
                 session.send(protocol);
             }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error)).then();
@@ -516,7 +516,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         .frame(frameBytes)
                         .build();
                 var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(config.isServer(), session.module(),
+                var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
                         new ResponseFrame(reqId, metadata, data, null));
                 session.send(protocol);
             }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error)).then();
@@ -582,7 +582,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                                 .build();
                         var data = dataBuilder.build();
                         var requestFrame = new StreamRequestFrame(id, command, metadata, data, null);
-                        var protocol = session.frameCoders.encode(config.isServer(), session.module(), requestFrame);
+                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
                         // 注册监听
                         listener.set((session, frame) -> {
                             var streamResponseFrame = (StreamResponseFrame) frame;
@@ -651,7 +651,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                                 .frame(frameBytes)
                                 .build();
                         var data = dataBuilder.build();
-                        var protocol = session.frameCoders.encode(config.isServer(), session.module(),
+                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
                                 new StreamResponseFrame(reqId, finish, metadata, data, null));
                         session.send(protocol);
                     }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error))

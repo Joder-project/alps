@@ -11,12 +11,12 @@ public interface FrameCoder {
 
     Frame decode(AlpsMetadata metadata, AlpsData data, AlpsProtocol.AlpsPacket rawPacket) throws Exception;
 
-    default AlpsPacket encode(boolean server, AlpsDataCoderFactory dataCoderFactory, Frame frame) {
-        return encode(server, AlpsPacket.ZERO_MODULE, dataCoderFactory, frame);
+    default AlpsPacket encode(int socketType, AlpsDataCoderFactory dataCoderFactory, Frame frame) {
+        return encode(socketType, AlpsPacket.ZERO_MODULE, dataCoderFactory, frame);
     }
 
-    default AlpsPacket encode(boolean server, String module, AlpsDataCoderFactory dataCoderFactory, Frame frame) {
-        return new AlpsPacket(server ? AlpsProtocol.AlpsPacket.ConnectType.SERVER_VALUE : AlpsProtocol.AlpsPacket.ConnectType.CLIENT_VALUE,
+    default AlpsPacket encode(int socketType, String module, AlpsDataCoderFactory dataCoderFactory, Frame frame) {
+        return new AlpsPacket(socketType,
                 module, dataCoderFactory, frame.metadata(), frame.data(), frame.rawPacket().orElse(null));
     }
 

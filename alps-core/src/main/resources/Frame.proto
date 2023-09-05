@@ -43,3 +43,11 @@ message ModuleAuthFrame {
 message GatewayFrame {
   bytes data = 1;
 }
+
+message RoutingFrame {
+  bytes data = 1;
+}
+
+message CustomFrame {
+  bytes data = 1;
+}

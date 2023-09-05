@@ -36,9 +36,9 @@ public class FrameCoders {
         throw new AlpsException(String.format("不存在解码器(code=%d)", frameType));
     }
 
-    public AlpsPacket encode(boolean server, String module, Frame frame) {
+    public AlpsPacket encode(int socketType, String module, Frame frame) {
         Objects.requireNonNull(frame, "frame不能为空");
-        return getFrameType(frame).encode(server, module, dataCoderFactory, frame);
+        return getFrameType(frame).encode(socketType, module, dataCoderFactory, frame);
     }
 
     FrameCoder getFrameType(Frame frame) {
@@ -78,6 +78,9 @@ public class FrameCoders {
         STREAM_REQUEST(StreamRequestFrame.class, (byte) FrameType.STREAM_REQUEST_VALUE, new StreamRequestFrame.Coder()),
         STREAM_RESPONSE(StreamResponseFrame.class, (byte) FrameType.STREAM_RESPONSE_VALUE, new StreamResponseFrame.Coder()),
         MODULE_AUTH(ModuleAuthFrame.class, (byte) FrameType.MODULE_AUTH_VALUE, new ModuleAuthFrame.Coder()),
+        ROUTING(RoutingFrame.class, (byte) FrameType.ROUTING_VALUE, new RoutingFrame.Coder()),
+        GATEWAY(GatewayFrame.class, (byte) FrameType.GATEWAY_T_VALUE, new GatewayFrame.Coder()),
+        CUSTOM(CustomFrame.class, (byte) FrameType.CUSTOM_VALUE, new CustomFrame.Coder()),
         ;
 
 

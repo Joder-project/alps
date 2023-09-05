@@ -4,206 +4,205 @@
 package org.alps.core.proto;
 
 public final class Errors {
-    private Errors() {
-    }
+  private Errors() {
+  }
 
-    public static void registerAllExtensions(
-            com.google.protobuf.ExtensionRegistryLite registry) {
-    }
+  public static void registerAllExtensions(
+          com.google.protobuf.ExtensionRegistryLite registry) {
+  }
 
-    public static void registerAllExtensions(
-            com.google.protobuf.ExtensionRegistry registry) {
-        registerAllExtensions(
-                (com.google.protobuf.ExtensionRegistryLite) registry);
+  public static void registerAllExtensions(
+          com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions(
+            (com.google.protobuf.ExtensionRegistryLite) registry);
+  }
+
+  /**
+   * Protobuf enum {@code alps.Code}
+   */
+  public enum Code
+          implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <pre>
+     * 方法处理失败
+     * </pre>
+     *
+     * <code>Handle_Error = 0;</code>
+     */
+    Handle_Error(0),
+    /**
+     * <pre>
+     * 全局默认方法处理失败
+     * </pre>
+     *
+     * <code>Global_Handle_Error = 1;</code>
+     */
+    Global_Handle_Error(1),
+    /**
+     * <pre>
+     * 模块认证失败
+     * </pre>
+     *
+     * <code>Module_Auth_Error = 2;</code>
+     */
+    Module_Auth_Error(2),
+    /**
+     * <pre>
+     *模块拒绝访问
+     * </pre>
+     *
+     * <code>Module_Reject_Access = 4;</code>
+     */
+    Module_Reject_Access(4),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <pre>
+     * 方法处理失败
+     * </pre>
+     *
+     * <code>Handle_Error = 0;</code>
+     */
+    public static final int Handle_Error_VALUE = 0;
+    /**
+     * <pre>
+     * 全局默认方法处理失败
+     * </pre>
+     *
+     * <code>Global_Handle_Error = 1;</code>
+     */
+    public static final int Global_Handle_Error_VALUE = 1;
+    /**
+     * <pre>
+     * 模块认证失败
+     * </pre>
+     *
+     * <code>Module_Auth_Error = 2;</code>
+     */
+    public static final int Module_Auth_Error_VALUE = 2;
+    /**
+     * <pre>
+     * 模块拒绝访问
+     * </pre>
+     *
+     * <code>Module_Reject_Access = 4;</code>
+     */
+    public static final int Module_Reject_Access_VALUE = 4;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalArgumentException(
+                "Can't get the number of an unknown enum value.");
+      }
+      return value;
     }
 
     /**
-     * Protobuf enum {@code alps.Code}
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
      */
-    public enum Code
-            implements com.google.protobuf.ProtocolMessageEnum {
-        /**
-         * <pre>
-         * 方法处理失败
-         * </pre>
-         *
-         * <code>Handle_Error = 0;</code>
-         */
-        Handle_Error(0),
-        /**
-         * <pre>
-         * 全局默认方法处理失败
-         * </pre>
-         *
-         * <code>Global_Handle_Error = 1;</code>
-         */
-        Global_Handle_Error(1),
-        /**
-         * <pre>
-         * 模块认证失败
-         * </pre>
-         *
-         * <code>Module_Auth_Error = 2;</code>
-         */
-        Module_Auth_Error(2),
-        /**
-         * <pre>
-         * 模块拒绝访问
-         * </pre>
-         *
-         * <code>Module_Reject_Access = 4;</code>
-         */
-        Module_Reject_Access(4),
-        UNRECOGNIZED(-1),
-        ;
-
-        /**
-         * <pre>
-         * 方法处理失败
-         * </pre>
-         *
-         * <code>Handle_Error = 0;</code>
-         */
-        public static final int Handle_Error_VALUE = 0;
-        /**
-         * <pre>
-         * 全局默认方法处理失败
-         * </pre>
-         *
-         * <code>Global_Handle_Error = 1;</code>
-         */
-        public static final int Global_Handle_Error_VALUE = 1;
-        /**
-         * <pre>
-         * 模块认证失败
-         * </pre>
-         *
-         * <code>Module_Auth_Error = 2;</code>
-         */
-        public static final int Module_Auth_Error_VALUE = 2;
-        /**
-         * <pre>
-         * 模块拒绝访问
-         * </pre>
-         *
-         * <code>Module_Reject_Access = 4;</code>
-         */
-        public static final int Module_Reject_Access_VALUE = 4;
-
-
-        public final int getNumber() {
-            if (this == UNRECOGNIZED) {
-                throw new IllegalArgumentException(
-                        "Can't get the number of an unknown enum value.");
-            }
-            return value;
-        }
-
-        /**
-         * @param value The numeric wire value of the corresponding enum entry.
-         * @return The enum associated with the given numeric wire value.
-         * @deprecated Use {@link #forNumber(int)} instead.
-         */
-        @Deprecated
-        public static Code valueOf(int value) {
-            return forNumber(value);
-        }
-
-        /**
-         * @param value The numeric wire value of the corresponding enum entry.
-         * @return The enum associated with the given numeric wire value.
-         */
-        public static Code forNumber(int value) {
-            switch (value) {
-                case 0:
-                    return Handle_Error;
-                case 1:
-                    return Global_Handle_Error;
-                case 2:
-                    return Module_Auth_Error;
-                case 4:
-                    return Module_Reject_Access;
-                default:
-                    return null;
-            }
-        }
-
-        public static com.google.protobuf.Internal.EnumLiteMap<Code>
-        internalGetValueMap() {
-            return internalValueMap;
-        }
-
-        private static final com.google.protobuf.Internal.EnumLiteMap<
-                Code> internalValueMap =
-                new com.google.protobuf.Internal.EnumLiteMap<Code>() {
-                    public Code findValueByNumber(int number) {
-                        return Code.forNumber(number);
-                    }
-                };
-
-        public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
-            if (this == UNRECOGNIZED) {
-                throw new IllegalStateException(
-                        "Can't get the descriptor of an unrecognized enum value.");
-            }
-            return getDescriptor().getValues().get(ordinal());
-        }
-
-        public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
-            return getDescriptor();
-        }
-
-        public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
-            return Errors.getDescriptor().getEnumTypes().get(0);
-        }
-
-        private static final Code[] VALUES = values();
-
-        public static Code valueOf(
-                com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-            if (desc.getType() != getDescriptor()) {
-                throw new IllegalArgumentException(
-                        "EnumValueDescriptor is not for this type.");
-            }
-            if (desc.getIndex() == -1) {
-                return UNRECOGNIZED;
-            }
-            return VALUES[desc.getIndex()];
-        }
-
-        private final int value;
-
-        private Code(int value) {
-            this.value = value;
-        }
-
-        // @@protoc_insertion_point(enum_scope:alps.Code)
+    @Deprecated
+    public static Code valueOf(int value) {
+      return forNumber(value);
     }
 
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static Code forNumber(int value) {
+      switch (value) {
+        case 0:
+          return Handle_Error;
+        case 1:
+          return Global_Handle_Error;
+        case 2:
+          return Module_Auth_Error;
+        case 4:
+          return Module_Reject_Access;
+        default: return null;
+      }
+    }
 
-    public static com.google.protobuf.Descriptors.FileDescriptor
+    public static com.google.protobuf.Internal.EnumLiteMap<Code>
+    internalGetValueMap() {
+      return internalValueMap;
+    }
+
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+            Code> internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Code>() {
+              public Code findValueByNumber(int number) {
+                return Code.forNumber(number);
+            }
+            };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+    getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalStateException(
+                "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+    getDescriptorForType() {
+      return getDescriptor();
+    }
+
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
     getDescriptor() {
-        return descriptor;
+      return Errors.getDescriptor().getEnumTypes().get(0);
     }
 
-    private static com.google.protobuf.Descriptors.FileDescriptor
-            descriptor;
+    private static final Code[] VALUES = values();
 
-    static {
-        String[] descriptorData = {
-                "\n\014Errors.proto\022\004alps*b\n\004Code\022\020\n\014Handle_E" +
-                        "rror\020\000\022\027\n\023Global_Handle_Error\020\001\022\025\n\021Modul" +
-                        "e_Auth_Error\020\002\022\030\n\024Module_Reject_Access\020\004" +
-                        "B\035\n\023org.alps.core.protoB\006Errorsb\006proto3"
-        };
-        descriptor = com.google.protobuf.Descriptors.FileDescriptor
-                .internalBuildGeneratedFileFrom(descriptorData,
-                        new com.google.protobuf.Descriptors.FileDescriptor[]{
-                        });
+    public static Code valueOf(
+            com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new IllegalArgumentException(
+                "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
     }
 
-    // @@protoc_insertion_point(outer_class_scope)
+    private final int value;
+
+    private Code(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:alps.Code)
+  }
+
+
+  public static com.google.protobuf.Descriptors.FileDescriptor
+  getDescriptor() {
+    return descriptor;
+  }
+
+  private static com.google.protobuf.Descriptors.FileDescriptor
+          descriptor;
+
+  static {
+    String[] descriptorData = {
+            "\n\014Errors.proto\022\004alps*b\n\004Code\022\020\n\014Handle_E" +
+                    "rror\020\000\022\027\n\023Global_Handle_Error\020\001\022\025\n\021Modul" +
+                    "e_Auth_Error\020\002\022\030\n\024Module_Reject_Access\020\004" +
+                    "B\035\n\023org.alps.core.protoB\006Errorsb\006proto3"
+    };
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
+            .internalBuildGeneratedFileFrom(descriptorData,
+                    new com.google.protobuf.Descriptors.FileDescriptor[] {
+        });
+  }
+
+  // @@protoc_insertion_point(outer_class_scope)
 }

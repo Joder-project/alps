@@ -18,7 +18,7 @@ public class AlpsProperties {
     /**
      * 是否是服务端
      */
-    private boolean server = false;
+    private int socketType = 0;
 
     private List<ModuleProperties> modules = new ArrayList<>();
 
