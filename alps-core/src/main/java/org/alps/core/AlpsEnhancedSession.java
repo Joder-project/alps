@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -345,7 +344,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                         );
                         session.send(protocol);
                         return responseResult;
-                    }).publishOn(ioScheduler).flatMap(responseResult -> Mono.fromFuture(responseResult.result))
+                    }).publishOn(ioScheduler).flatMap(responseResult -> responseResult.result.asMono())
                     .timeout(Duration.ofSeconds(5L))
                     .map(Response::new)
                     .mapNotNull(e -> e.data(clazz).orElse(null))
@@ -527,20 +526,20 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         final AlpsSession session;
         final RequestFrame requestFrame;
-        final CompletableFuture<ResponseFrame> result;
+        final Sinks.One<ResponseFrame> result;
 
         public ResponseResult(AlpsSession session, RequestFrame requestFrame) {
             this.session = session;
             this.requestFrame = requestFrame;
-            result = new CompletableFuture<>();
+            result = Sinks.one();
         }
 
-        public CompletableFuture<ResponseFrame> result() {
+        public Sinks.One<ResponseFrame> result() {
             return result;
         }
 
         void receive(ResponseFrame frame) {
-            result.complete(frame);
+            result.tryEmitValue(frame);
         }
 
         boolean isResult(AlpsSession session, Frame frame) {
