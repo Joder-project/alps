@@ -5,17 +5,25 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(AlpsProperties.class)
 public class AlpsConfiguration {
 
     @Bean
     EnhancedSessionFactory sessionFactory(FrameCoders frameCoders, AlpsDataCoderFactory dataCoderFactory,
-                                          FrameListeners frameListeners, AlpsProperties properties) {
+                                          FrameListeners frameListeners, SessionListeners sessionListeners,
+                                          AlpsProperties properties) {
         AlpsConfig config = new AlpsConfig(properties.getSocketType(), properties.getMetadataConfig(), properties.getDataConfig(),
                 properties.getModules().stream()
                         .map(e -> new AlpsConfig.ModuleConfig(e.getName(), e.getVersion(), e.getVerifyToken())).toList());
-        return new DefaultEnhancedSessionFactory(frameCoders, dataCoderFactory, frameListeners, config);
+        return new DefaultEnhancedSessionFactory(frameCoders, dataCoderFactory, frameListeners, sessionListeners, config);
+    }
+
+    @Bean
+    SessionListeners sessionListeners(List<SessionListener> sessionListeners) {
+        return new SessionListeners(sessionListeners);
     }
 
     @Bean

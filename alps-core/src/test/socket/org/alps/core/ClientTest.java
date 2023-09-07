@@ -4,6 +4,7 @@ import com.google.protobuf.Int32Value;
 import lombok.extern.slf4j.Slf4j;
 import org.alps.core.socket.netty.client.AlpsTcpClient;
 
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -48,7 +49,7 @@ public class ClientTest {
 
         @Override
         public AlpsEnhancedSession create(AlpsSession session) {
-            return new AlpsEnhancedSession(session, frameCoders, dataCoderFactory, frameListeners, config);
+            return new AlpsEnhancedSession(session, frameCoders, dataCoderFactory, frameListeners, new SessionListeners(Collections.emptyList()), config);
         }
     }
 

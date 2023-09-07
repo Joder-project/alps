@@ -6,6 +6,7 @@ import org.alps.core.frame.ResponseFrame;
 import org.alps.core.proto.AlpsProtocol;
 import org.openjdk.jmh.annotations.*;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -81,7 +82,7 @@ public class AlpsEnhancedSessionBenchmark {
                 }
             }
             var listenerHandler = new FrameListeners(routerDispatcher);
-            this.session = new AlpsEnhancedSession(session, frameFactory, dataCoderFactory, listenerHandler, config);
+            this.session = new AlpsEnhancedSession(session, frameFactory, dataCoderFactory, listenerHandler, new SessionListeners(Collections.emptyList()), config);
         }
 
     }

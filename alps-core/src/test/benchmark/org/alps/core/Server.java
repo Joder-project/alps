@@ -129,7 +129,7 @@ public class Server {
 
         @Override
         public AlpsEnhancedSession create(AlpsSession session) {
-            return new AlpsEnhancedSession(session, frameCoders, dataCoderFactory, frameListeners, config);
+            return new AlpsEnhancedSession(session, frameCoders, dataCoderFactory, frameListeners, new SessionListeners(Collections.emptyList()), config);
         }
     }
 }

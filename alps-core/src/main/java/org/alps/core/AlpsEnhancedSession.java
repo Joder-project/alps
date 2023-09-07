@@ -26,6 +26,8 @@ public class AlpsEnhancedSession implements AlpsSession {
     private final AlpsDataCoderFactory dataCoderFactory;
     private final FrameListeners frameListeners;
 
+    private final SessionListeners sessionListeners;
+
     final AlpsConfig config;
     private final AtomicInteger idGenerator = new AtomicInteger(1);
 
@@ -42,12 +44,14 @@ public class AlpsEnhancedSession implements AlpsSession {
     });
 
     public AlpsEnhancedSession(AlpsSession session, FrameCoders frameCoders, AlpsDataCoderFactory dataCoderFactory,
-                               FrameListeners frameListeners, AlpsConfig config) {
+                               FrameListeners frameListeners, SessionListeners sessionListeners, AlpsConfig config) {
         this.session = session;
         this.frameCoders = frameCoders;
         this.dataCoderFactory = dataCoderFactory;
         this.frameListeners = frameListeners;
+        this.sessionListeners = sessionListeners;
         this.config = config;
+        sessionListeners.connect(this);
     }
 
 
@@ -161,7 +165,10 @@ public class AlpsEnhancedSession implements AlpsSession {
 
     @Override
     public void close() {
-        session.close();
+        if (!session.isClose()) {
+            session.close();
+            sessionListeners.disconnect(this);
+        }
     }
 
     @Override

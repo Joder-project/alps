@@ -11,6 +11,7 @@ import org.alps.core.socket.netty.client.AlpsQuicClient;
 import org.alps.core.socket.netty.client.NettyClientConfig;
 import org.openjdk.jmh.annotations.TearDown;
 
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -109,7 +110,7 @@ public class Client {
             nettyServerConfig.setPort(6195);
             nettyServerConfig.setHost("127.0.0.1");
 
-            var enhancedSessionFactory = new DefaultEnhancedSessionFactory(frameFactory, dataCoderFactory, listenerHandler, config);
+            var enhancedSessionFactory = new DefaultEnhancedSessionFactory(frameFactory, dataCoderFactory, listenerHandler, new SessionListeners(Collections.emptyList()), config);
 
 //            this.client = new AlpsTcpClient(new NioEventLoopGroup(2), nettyServerConfig, enhancedSessionFactory,
 //                    enhancedSessionFactory.config.getModules().stream().map(AlpsConfig.ModuleConfig::getModule).toList(), dataCoderFactory);

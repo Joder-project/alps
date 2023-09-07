@@ -63,6 +63,9 @@ public class NettyAlpsSession implements AlpsSession {
 
     @Override
     public Optional<String> selfAddress() {
+        if (socketChannel == null) {
+            return Optional.empty();
+        }
         if (socketChannel.localAddress() instanceof QuicStreamAddress quicStreamAddress) {
             return Optional.of(quicStreamAddress.streamId() + "");
         }
@@ -73,6 +76,9 @@ public class NettyAlpsSession implements AlpsSession {
 
     @Override
     public Optional<String> targetAddress() {
+        if (socketChannel == null) {
+            return Optional.empty();
+        }
         if (socketChannel.remoteAddress() instanceof QuicStreamAddress quicStreamAddress) {
             return Optional.of(quicStreamAddress.streamId() + "");
         }
