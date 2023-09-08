@@ -43,7 +43,7 @@ public class ClientTest {
             this.config.getDataConfig().setEnabledZip(true);
             this.config.getMetaDataConfig().setEnabledZip(true);
             this.config.getModules().add(new AlpsConfig.ModuleConfig("1", (short) 1, 1L));
-            this.frameCoders = new FrameCoders(dataCoderFactory);
+            this.frameCoders = new FrameCoders();
             this.frameListeners = new FrameListeners(routerDispatcher);
         }
 

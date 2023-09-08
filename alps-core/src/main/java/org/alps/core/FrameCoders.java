@@ -20,10 +20,8 @@ public class FrameCoders {
     ).collect(Collectors.toUnmodifiableMap(e -> e.frameType, e -> e.coder));
     private final Map<Byte, FrameCoder> customCoder = new HashMap<>(16);
 
-    private final AlpsDataCoderFactory dataCoderFactory;
+    public FrameCoders() {
 
-    public FrameCoders(AlpsDataCoderFactory dataCoderFactory) {
-        this.dataCoderFactory = dataCoderFactory;
     }
 
     public Frame decode(AlpsPacket protocol) throws Exception {
@@ -38,7 +36,7 @@ public class FrameCoders {
 
     public AlpsPacket encode(int socketType, String module, Frame frame) {
         Objects.requireNonNull(frame, "frame不能为空");
-        return getFrameType(frame).encode(socketType, module, dataCoderFactory, frame);
+        return getFrameType(frame).encode(socketType, module, frame);
     }
 
     FrameCoder getFrameType(Frame frame) {

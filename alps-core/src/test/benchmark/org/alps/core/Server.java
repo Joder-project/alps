@@ -124,7 +124,7 @@ public class Server {
             this.dataCoderFactory = new AlpsDataCoderFactory();
             this.frameListeners = new FrameListeners(routerDispatcher);
             this.config = config;
-            this.frameCoders = new FrameCoders(dataCoderFactory);
+            this.frameCoders = new FrameCoders();
         }
 
         @Override

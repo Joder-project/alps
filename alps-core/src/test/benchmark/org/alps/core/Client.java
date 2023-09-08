@@ -9,6 +9,7 @@ import org.alps.core.frame.ResponseFrame;
 import org.alps.core.socket.netty.client.AbstractAlpsClient;
 import org.alps.core.socket.netty.client.AlpsQuicClient;
 import org.alps.core.socket.netty.client.NettyClientConfig;
+import org.alps.core.support.AlpsMetadataBuilder;
 import org.openjdk.jmh.annotations.TearDown;
 
 import java.util.Collections;
@@ -63,7 +64,7 @@ public class Client {
 
         public SessionState() {
             var dataCoderFactory = new AlpsDataCoderFactory();
-            var frameFactory = new FrameCoders(dataCoderFactory);
+            var frameFactory = new FrameCoders();
             var routerDispatcher = new RouterDispatcher();
 
             var config = new AlpsConfig();

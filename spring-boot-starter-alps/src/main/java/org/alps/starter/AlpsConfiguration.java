@@ -37,8 +37,8 @@ public class AlpsConfiguration {
     }
 
     @Bean
-    FrameCoders frameCoders(AlpsDataCoderFactory dataCoderFactory) {
-        return new FrameCoders(dataCoderFactory);
+    FrameCoders frameCoders() {
+        return new FrameCoders();
     }
 
     @Bean

@@ -4,6 +4,7 @@ import org.alps.core.frame.ForgetFrame;
 import org.alps.core.frame.RequestFrame;
 import org.alps.core.frame.ResponseFrame;
 import org.alps.core.proto.AlpsProtocol;
+import org.alps.core.support.AlpsMetadataBuilder;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.Collections;
@@ -40,7 +41,7 @@ public class AlpsEnhancedSessionBenchmark {
         public void setup() {
             var session = new Session();
             var dataCoderFactory = new AlpsDataCoderFactory();
-            var frameFactory = new FrameCoders(dataCoderFactory);
+            var frameFactory = new FrameCoders();
             var routerDispatcher = new RouterDispatcher();
 
             var config = new AlpsConfig();

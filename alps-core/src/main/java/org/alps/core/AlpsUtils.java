@@ -5,6 +5,7 @@ import org.alps.core.common.AlpsPacketUtils;
 import org.alps.core.proto.AlpsProtocol;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Slf4j
 public class AlpsUtils {
@@ -20,8 +21,9 @@ public class AlpsUtils {
      * @param packet   数据
      */
     public static void broadcast(Collection<? extends AlpsSession> sessions, AlpsPacket packet) {
-        if (packet.metadata().frameType() != AlpsProtocol.AlpsPacket.FrameType.FORGET_VALUE) {
-            throw new UnsupportedOperationException("不支持非FNF的广播请求");
+        if (!Objects.equals(packet.module(), AlpsPacket.ZERO_MODULE) &&
+                packet.metadata().frameType() != AlpsProtocol.AlpsPacket.FrameType.FORGET_VALUE) {
+            throw new UnsupportedOperationException("不支持非FNF的和非默认模块广播请求");
         }
         try {
             var newPacket = AlpsPacketUtils.encode(packet);
