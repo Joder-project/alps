@@ -9,7 +9,6 @@
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
     <artifactId>alps-core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>alps-core</name>
     <description>alps-core</description>
     <properties>
@@ -17,13 +16,11 @@
         <jmh.version>1.36</jmh.version>
     </properties>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/io.projectreactor/reactor-core -->
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
-            <version>3.5.9</version>
+            <scope>provided</scope>
         </dependency>
-
 
         <dependency>
             <groupId>io.netty.incubator</groupId>
@@ -42,6 +39,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
+            <scope>provided</scope>
             <version>4.1.89.Final</version>
         </dependency>
 
@@ -59,12 +57,14 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
+            <scope>provided</scope>
         </dependency>
 
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
             <optional>true</optional>
         </dependency>
 

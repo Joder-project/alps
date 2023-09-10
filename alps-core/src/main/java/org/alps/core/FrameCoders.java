@@ -16,7 +16,8 @@ import static org.alps.core.FrameCoders.DefaultFrame.*;
 public class FrameCoders {
 
     private final Map<Byte, FrameCoder> defaultCoders = Stream.of(
-            IDLE, FORGET, REQUEST, RESPONSE, ERROR, STREAM_REQUEST, STREAM_RESPONSE, MODULE_AUTH
+            IDLE, FORGET, REQUEST, RESPONSE, ERROR, STREAM_REQUEST, STREAM_RESPONSE, MODULE_AUTH,
+            ROUTING, GATEWAY, CUSTOM
     ).collect(Collectors.toUnmodifiableMap(e -> e.frameType, e -> e.coder));
     private final Map<Byte, FrameCoder> customCoder = new HashMap<>(16);
 

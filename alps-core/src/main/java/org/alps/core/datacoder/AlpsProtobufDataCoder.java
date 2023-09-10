@@ -5,10 +5,12 @@ import org.alps.core.AlpsDataCoder;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.StampedLock;
 
 public class AlpsProtobufDataCoder implements AlpsDataCoder {
 
     private final ConcurrentMap<Class<?>, MessageLite> cache = new ConcurrentHashMap<>();
+    private final StampedLock stampedLock = new StampedLock();
 
     public AlpsProtobufDataCoder() {
 
@@ -35,13 +37,16 @@ public class AlpsProtobufDataCoder implements AlpsDataCoder {
 
     MessageLite getDefaultValue(Class<?> clazz) throws Exception {
         if (!cache.containsKey(clazz)) {
-            synchronized (this) {
+            var writeLock = stampedLock.writeLock();
+            try {
                 if (!cache.containsKey(clazz)) {
                     var constructor = clazz.getDeclaredConstructor();
                     constructor.setAccessible(true);
                     MessageLite prototype = (MessageLite) constructor.newInstance();
                     cache.put(clazz, prototype);
                 }
+            } finally {
+                stampedLock.unlockWrite(writeLock);
             }
         }
         return cache.get(clazz);
