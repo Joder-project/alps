@@ -31,7 +31,6 @@ public class AlpsServerProperties {
     public static class TcpServerConfig {
         private int bossThread = 1;
         private int workerThread = Runtime.getRuntime().availableProcessors();
-        private int bizThread = Runtime.getRuntime().availableProcessors();
 
         private Map<String, ?> optionSettings = new HashMap<>();
         private Map<String, ?> childOptionSettings = new HashMap<>();

@@ -21,18 +21,16 @@ public class AlpsTcpServer extends AbstractAlpsServer {
 
     private final EventLoopGroup bossGroup;
     private final EventLoopGroup workerGroup;
-    private final EventLoopGroup defaultGroup;
 
     private ServerBootstrap bootstrap;
     private ChannelFuture serverFeature;
 
-    public AlpsTcpServer(EventLoopGroup bossGroup, EventLoopGroup workerGroup, EventLoopGroup defaultGroup,
+    public AlpsTcpServer(EventLoopGroup bossGroup, EventLoopGroup workerGroup,
                          NettyServerConfig serverConfig, EnhancedSessionFactory sessionFactory,
                          List<String> supportModules, AlpsDataCoderFactory coderFactory) {
         super(serverConfig, coderFactory, defaultGroup, sessionFactory, supportModules);
         this.bossGroup = bossGroup;
         this.workerGroup = workerGroup;
-        this.defaultGroup = defaultGroup;
     }
 
     @Override
@@ -74,7 +72,6 @@ public class AlpsTcpServer extends AbstractAlpsServer {
         return CompletableFuture.runAsync(() -> {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
-            defaultGroup.shutdownGracefully();
             //对关闭通道进行监听
             try {
                 this.serverFeature.channel().closeFuture().sync();

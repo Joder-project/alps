@@ -29,10 +29,10 @@ public class AlpsQuicServer extends AbstractAlpsServer {
     private Bootstrap bootstrap;
     private ChannelFuture serverFeature;
 
-    public AlpsQuicServer(EventLoopGroup bossGroup, EventLoopGroup defaultGroup, NettyServerConfig serverConfig,
+    public AlpsQuicServer(EventLoopGroup bossGroup, NettyServerConfig serverConfig,
                           QuicServerConfig quicServerConfig, EnhancedSessionFactory sessionFactory,
                           List<String> supportModules, AlpsDataCoderFactory coderFactory) {
-        super(serverConfig, coderFactory, defaultGroup, sessionFactory, supportModules);
+        super(serverConfig, coderFactory, sessionFactory, supportModules);
         this.bossGroup = bossGroup;
         this.serverConfig = serverConfig;
         this.quicServerConfig = quicServerConfig;
@@ -90,7 +90,6 @@ public class AlpsQuicServer extends AbstractAlpsServer {
     public CompletableFuture<Void> close() {
         return CompletableFuture.runAsync(() -> {
             bossGroup.shutdownGracefully();
-            defaultGroup.shutdownGracefully();
             //对关闭通道进行监听
             try {
                 this.serverFeature.channel().closeFuture().sync();

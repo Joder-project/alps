@@ -81,22 +81,10 @@ record RequestRouter(String module, int command, Object target, Method method) i
         if (!alpsExchange.getMetadata().isEmpty()) {
             alpsExchange.getMetadata().forEach(responseCommand::metadata);
         }
-        if (ret instanceof Mono<?> mono) {
-            mono.flatMap(d -> {
-                responseCommand.data(d);
-                return responseCommand.send();
-            }).subscribe();
-        } else if (ret instanceof Flux<?> flux) {
-            flux.collectList().flatMap(d -> {
-                responseCommand.data(d);
-                return responseCommand.send();
-            }).subscribe();
-        } else {
-            if (ret != null) {
-                responseCommand.data(ret);
-            }
-            responseCommand.send().subscribe();
+        if (ret != null) {
+            responseCommand.data(ret);
         }
+        responseCommand.send();
     }
 }
 

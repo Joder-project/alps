@@ -27,7 +27,7 @@ public class ClientBenchmark {
     public void forget(SessionState state) throws ExecutionException, InterruptedException {
         state.session.forget(1)
                 .data(StringValue.of("1234".repeat(1024)))
-                .send().block();
+                .send();
     }
 
     @Benchmark
@@ -35,9 +35,7 @@ public class ClientBenchmark {
     public void request(SessionState state) throws ExecutionException, InterruptedException {
         var ret = state.session.request(1)
                 .data(StringValue.of("1234".repeat(1024)))
-                .send(StringValue.class)
-                .map(StringValue::getValue)
-                .block();
+                .send(StringValue.class);
 //        log.info("{}", ret.getValue());
     }
 

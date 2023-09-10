@@ -1,6 +1,7 @@
 package org.alps.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.alps.core.common.AlpsException;
 import org.alps.core.frame.*;
 import org.alps.core.proto.AlpsProtocol;
 import org.alps.core.support.AlpsDataBuilder;
@@ -11,11 +12,12 @@ import reactor.core.publisher.Sinks;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -96,12 +98,12 @@ public class AlpsEnhancedSession implements AlpsSession {
 
     @Override
     public void send(AlpsPacket protocol) {
-        session.send(protocol);
+        Thread.startVirtualThread(() -> session.send(protocol));
     }
 
     @Override
     public void send(AlpsProtocol.AlpsPacket protocol) {
-        session.send(protocol);
+        Thread.startVirtualThread(() -> session.send(protocol));
     }
 
     @Override
@@ -238,21 +240,23 @@ public class AlpsEnhancedSession implements AlpsSession {
             return this;
         }
 
-        public Mono<Void> send() {
-            return Mono.fromRunnable(() -> {
-                        var frameBytes = ForgetFrame.toBytes(command);
-                        var metadata = metadataBuilder
-                                .frameType(FrameCoders.DefaultFrame.FORGET.frameType)
-                                .frame(frameBytes)
-                                .build();
-                        var data = dataBuilder.build();
-                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                                new ForgetFrame(command, metadata, data, null));
-                        session.send(protocol);
-                    })
-                    .publishOn(ioScheduler)
-                    .doOnError(error -> log.error("Error sending", error))
-                    .then();
+        public void send() {
+            Thread.startVirtualThread(() -> {
+                try {
+                    var frameBytes = ForgetFrame.toBytes(command);
+                    var metadata = metadataBuilder
+                            .frameType(FrameCoders.DefaultFrame.FORGET.frameType)
+                            .frame(frameBytes)
+                            .build();
+                    var data = dataBuilder.build();
+                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
+                            new ForgetFrame(command, metadata, data, null));
+                    session.send(protocol);
+                } catch (Exception ex) {
+                    log.error("Error sending", ex);
+                    throw new AlpsException(ex);
+                }
+            });
         }
     }
 
@@ -277,20 +281,23 @@ public class AlpsEnhancedSession implements AlpsSession {
             return this;
         }
 
-        public Mono<Void> send() {
-            return Mono.fromRunnable(() -> {
-                        var frameBytes = ForgetFrame.toBytes(command);
-                        var metadata = metadataBuilder
-                                .frameType(FrameCoders.DefaultFrame.FORGET.frameType)
-                                .frame(frameBytes)
-                                .build();
-                        var data = dataBuilder.build();
-                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                                new ForgetFrame(command, metadata, data, null));
-                        AlpsUtils.broadcast(sessions, protocol);
-                    }).publishOn(ioScheduler)
-                    .doOnError(error -> log.error("Error sending", error))
-                    .then();
+        public void send() {
+            Thread.startVirtualThread(() -> {
+                try {
+                    var frameBytes = ForgetFrame.toBytes(command);
+                    var metadata = metadataBuilder
+                            .frameType(FrameCoders.DefaultFrame.FORGET.frameType)
+                            .frame(frameBytes)
+                            .build();
+                    var data = dataBuilder.build();
+                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
+                            new ForgetFrame(command, metadata, data, null));
+                    AlpsUtils.broadcast(sessions, protocol);
+                } catch (Exception ex) {
+                    log.error("Error sending", ex);
+                    throw new AlpsException(ex);
+                }
+            });
         }
     }
 
@@ -313,36 +320,48 @@ public class AlpsEnhancedSession implements AlpsSession {
             return this;
         }
 
-        public <T> Mono<T> send(Class<T> clazz) {
-            AtomicReference<FrameListener> listener = new AtomicReference<>(null);
-            return Mono.fromCallable(() -> {
-                        var id = session.nextId();
-                        var frameBytes = RequestFrame.toBytes(command, id);
-                        var metadata = metadataBuilder
-                                .frameType(FrameCoders.DefaultFrame.REQUEST.frameType)
-                                .frame(frameBytes)
-                                .build();
-                        var data = dataBuilder.build();
-                        var requestFrame = new RequestFrame(command, id, metadata, data, null);
-                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
-                        var responseResult = new ResponseResult(session, requestFrame);
-                        listener.set((session, frame) -> responseResult.receive(((ResponseFrame) frame)));
-                        session.frameListeners.addFrameListener(ResponseFrame.class,
-                                listener.get(), responseResult::isResult
-                        );
-                        session.send(protocol);
-                        return responseResult;
-                    }).publishOn(ioScheduler).flatMap(responseResult -> responseResult.result.asMono())
-                    .timeout(Duration.ofSeconds(5L))
-                    .map(Response::new)
-                    .mapNotNull(e -> e.data(clazz).orElse(null))
-                    .doFinally(signalType -> {
-                        if (listener.get() != null) {
-                            // 移除
-                            session.frameListeners.removeFrameListener(ResponseFrame.class, listener.get());
-                        }
-                    })
-                    .doOnError(error -> log.error("Error sending", error));
+        public <T> T send(Class<T> clazz) {
+            AtomicReference<T> result = new AtomicReference<>();
+            CountDownLatch latch = new CountDownLatch(1);
+            Thread.startVirtualThread(() -> {
+                FrameListener listener = null;
+                try {
+                    var id = session.nextId();
+                    var frameBytes = RequestFrame.toBytes(command, id);
+                    var metadata = metadataBuilder
+                            .frameType(FrameCoders.DefaultFrame.REQUEST.frameType)
+                            .frame(frameBytes)
+                            .build();
+                    var data = dataBuilder.build();
+                    var requestFrame = new RequestFrame(command, id, metadata, data, null);
+                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
+                    var responseResult = new ResponseResult(session, requestFrame);
+                    listener = (session, frame) -> responseResult.receive(((ResponseFrame) frame));
+                    session.frameListeners.addFrameListener(ResponseFrame.class,
+                            listener, responseResult::isResult
+                    );
+                    session.send(protocol);
+
+                    responseResult.countDownLatch.await(5L, TimeUnit.SECONDS);
+                    var response = new Response(responseResult.result().orElseThrow());
+                    result.set(response.data(clazz).orElse(null));
+                } catch (InterruptedException e) {
+                    log.error("Error sending", e);
+                    throw new AlpsException(e);
+                } finally {
+                    if (listener != null) {
+                        session.frameListeners.removeFrameListener(ResponseFrame.class, listener);
+                    }
+                    latch.countDown();
+                }
+            });
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                log.error("Error sending", e);
+                throw new AlpsException(e);
+            }
+            return result.get();
         }
     }
 
@@ -383,18 +402,22 @@ public class AlpsEnhancedSession implements AlpsSession {
             super(session, ioScheduler);
         }
 
-        public Mono<Void> send() {
-            return Mono.fromRunnable(() -> {
-                        var frameBytes = IdleFrame.toIdleBytes();
-                        var metadata = metadataBuilder
-                                .frameType(FrameCoders.DefaultFrame.IDLE.frameType)
-                                .frame(frameBytes)
-                                .build();
-                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                                new IdleFrame(metadata, null));
-                        session.send(protocol);
-                    }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error))
-                    .then();
+        public void send() {
+            Thread.startVirtualThread(() -> {
+                try {
+                    var frameBytes = IdleFrame.toIdleBytes();
+                    var metadata = metadataBuilder
+                            .frameType(FrameCoders.DefaultFrame.IDLE.frameType)
+                            .frame(frameBytes)
+                            .build();
+                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
+                            new IdleFrame(metadata, null));
+                    session.send(protocol);
+                } catch (Exception ex) {
+                    log.error("Error sending", ex);
+                    throw new AlpsException(ex);
+                }
+            });
         }
     }
 
@@ -421,18 +444,23 @@ public class AlpsEnhancedSession implements AlpsSession {
             return this;
         }
 
-        public Mono<Void> send() {
-            return Mono.fromRunnable(() -> {
-                var frameBytes = ErrorFrame.toBytes(code);
-                var metadata = metadataBuilder
-                        .frameType(FrameCoders.DefaultFrame.ERROR.frameType)
-                        .frame(frameBytes)
-                        .build();
-                var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(config.getSocketType(), AlpsPacket.ZERO_MODULE,
-                        new ErrorFrame(code, metadata, data, null));
-                session.send(protocol);
-            }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error)).then();
+        public void send() {
+            Thread.startVirtualThread(() -> {
+                try {
+                    var frameBytes = ErrorFrame.toBytes(code);
+                    var metadata = metadataBuilder
+                            .frameType(FrameCoders.DefaultFrame.ERROR.frameType)
+                            .frame(frameBytes)
+                            .build();
+                    var data = dataBuilder.build();
+                    var protocol = session.frameCoders.encode(config.getSocketType(), AlpsPacket.ZERO_MODULE,
+                            new ErrorFrame(code, metadata, data, null));
+                    session.send(protocol);
+                } catch (Exception ex) {
+                    log.error("Error sending", ex);
+                    throw new AlpsException(ex);
+                }
+            });
         }
     }
 
@@ -461,18 +489,22 @@ public class AlpsEnhancedSession implements AlpsSession {
             return this;
         }
 
-        public Mono<Void> send() {
-            return Mono.fromRunnable(() -> {
-                var frameBytes = ResponseFrame.toBytes(reqId);
-                var metadata = metadataBuilder
-                        .frameType(FrameCoders.DefaultFrame.RESPONSE.frameType)
-                        .frame(frameBytes)
-                        .build();
-                var data = dataBuilder.build();
-                var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                        new ResponseFrame(reqId, metadata, data, null));
-                session.send(protocol);
-            }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error)).then();
+        public void send() {
+            Thread.startVirtualThread(() -> {
+                try {
+                    var frameBytes = ResponseFrame.toBytes(reqId);
+                    var metadata = metadataBuilder
+                            .frameType(FrameCoders.DefaultFrame.RESPONSE.frameType)
+                            .frame(frameBytes)
+                            .build();
+                    var data = dataBuilder.build();
+                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
+                            new ResponseFrame(reqId, metadata, data, null));
+                } catch (Exception ex) {
+                    log.error("Error sending", ex);
+                    throw new AlpsException(ex);
+                }
+            });
         }
     }
 
@@ -480,20 +512,23 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         final AlpsSession session;
         final RequestFrame requestFrame;
-        final Sinks.One<ResponseFrame> result;
+        final CountDownLatch countDownLatch;
+        final AtomicReference<ResponseFrame> result;
 
         public ResponseResult(AlpsSession session, RequestFrame requestFrame) {
             this.session = session;
             this.requestFrame = requestFrame;
-            result = Sinks.one();
+            this.countDownLatch = new CountDownLatch(1);
+            result = new AtomicReference<>(null);
         }
 
-        public Sinks.One<ResponseFrame> result() {
-            return result;
+        public Optional<ResponseFrame> result() {
+            return Optional.ofNullable(result.get());
         }
 
         void receive(ResponseFrame frame) {
-            result.tryEmitValue(frame);
+            this.result.set(frame);
+            this.countDownLatch.countDown();
         }
 
         boolean isResult(AlpsSession session, Frame frame) {

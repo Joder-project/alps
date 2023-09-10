@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.alps.core.AlpsPacket;
 import org.alps.core.AlpsServer;
 import org.alps.core.EnhancedSessionFactory;
+import org.alps.core.common.AlpsException;
 import org.alps.core.socket.netty.NettyAlpsSession;
 import org.alps.core.socket.netty.RemotingHelper;
 
@@ -89,17 +90,23 @@ public class AlpsServerProtocolHandler extends SimpleChannelInboundHandler<AlpsP
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, AlpsPacket msg) throws Exception {
-        var map = ctx.channel().attr(RemotingHelper.KEY).get();
-        if (map == null) {
-            map = new ConcurrentHashMap<>();
-            ctx.channel().attr(RemotingHelper.KEY).set(map);
-        }
-        var session = map.computeIfAbsent(msg.module(),
-                key -> {
-                    var sess = sessionFactory.create(new NettyAlpsSession(server, msg.module(), ctx.channel()));
-                    this.server.addSession(sess);
-                    return sess;
-                });
-        session.receive(msg);
+        Thread.startVirtualThread(() -> {
+            var map = ctx.channel().attr(RemotingHelper.KEY).get();
+            if (map == null) {
+                map = new ConcurrentHashMap<>();
+                ctx.channel().attr(RemotingHelper.KEY).set(map);
+            }
+            var session = map.computeIfAbsent(msg.module(),
+                    key -> {
+                        var sess = sessionFactory.create(new NettyAlpsSession(server, msg.module(), ctx.channel()));
+                        this.server.addSession(sess);
+                        return sess;
+                    });
+            try {
+                session.receive(msg);
+            } catch (Exception e) {
+                throw new AlpsException(e);
+            }
+        });
     }
 }

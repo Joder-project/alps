@@ -10,7 +10,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
@@ -30,14 +29,15 @@ class MyController {
 
 
     @Command(command = 1, type = Command.Type.REQUEST_RESPONSE)
-    public Mono<StringValue> hello(StringValue message, AlpsExchange exchange) {
-        return exchange.session().forget(2).data(StringValue.of("I am Server")).send()
-                .thenReturn(StringValue.of("hello, " + message));
+    public StringValue hello(StringValue message, AlpsExchange exchange) {
+        exchange.session().forget(2).data(StringValue.of("I am Server")).send();
+
+        return StringValue.of("hello, " + message);
     }
 
     @Command(command = 3, type = Command.Type.FORGET)
     public void helloForget(StringValue message, AlpsExchange exchange) {
-        exchange.session().forget(2).data(StringValue.of("I am Server")).send().subscribe();
+        exchange.session().forget(2).data(StringValue.of("I am Server")).send();
     }
 
     @Command(command = 5, type = Command.Type.STREAM)

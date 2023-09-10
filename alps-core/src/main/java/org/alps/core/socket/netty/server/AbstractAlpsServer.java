@@ -1,6 +1,9 @@
 package org.alps.core.socket.netty.server;
 
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -22,7 +25,6 @@ public abstract class AbstractAlpsServer implements AlpsServer {
 
     final NettyServerConfig serverConfig;
     final AlpsDataCoderFactory coderFactory;
-    final EventLoopGroup defaultGroup;
     final SocketConnectionHandle socketConnectionHandle;
     final AlpsMessageEncoder encoder;
     final AlpsServerProtocolHandler protocolHandler;
@@ -31,11 +33,10 @@ public abstract class AbstractAlpsServer implements AlpsServer {
     final List<String> supportModules;
 
     protected AbstractAlpsServer(NettyServerConfig serverConfig, AlpsDataCoderFactory coderFactory,
-                                 EventLoopGroup defaultGroup, EnhancedSessionFactory sessionFactory,
+                                 EnhancedSessionFactory sessionFactory,
                                  List<String> supportModules) {
         this.serverConfig = serverConfig;
         this.coderFactory = coderFactory;
-        this.defaultGroup = defaultGroup;
         this.socketConnectionHandle = new SocketConnectionHandle();
         this.encoder = new AlpsMessageEncoder();
         this.protocolHandler = new AlpsServerProtocolHandler(this, sessionFactory, supportModules);
@@ -58,10 +59,10 @@ public abstract class AbstractAlpsServer implements AlpsServer {
                     timeout.getWriterIdleTime(),
                     timeout.getAllIdleTime(),
                     TimeUnit.MILLISECONDS));
-            socketChannel.pipeline().addLast(defaultGroup, socketConnectionHandle);
+            socketChannel.pipeline().addLast(socketConnectionHandle);
         }
         //给pipeline管道设置处理器
-        socketChannel.pipeline().addLast(defaultGroup, "server-handler", protocolHandler);
+        socketChannel.pipeline().addLast("server-handler", protocolHandler);
     }
 
     @Override

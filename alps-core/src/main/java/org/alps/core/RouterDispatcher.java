@@ -57,30 +57,32 @@ public class RouterDispatcher {
                 return;
             }
         }
-        var module = session.module();
-        int command = frame.command();
-        if (routes.containsKey(module)) {
-            var routerMap = routes.get(module);
-            if (routerMap.containsKey(command)) {
-                var router = routerMap.get(command);
+        Thread.startVirtualThread(() -> {
+            var module = session.module();
+            int command = frame.command();
+            if (routes.containsKey(module)) {
+                var routerMap = routes.get(module);
+                if (routerMap.containsKey(command)) {
+                    var router = routerMap.get(command);
+                    try {
+                        router.handle(session, frame);
+                        return;
+                    } catch (Exception e) {
+                        log.info("Handle exception", e);
+                        // TODO 定义默认
+                        session.error().code(Errors.Code.Handle_Error_VALUE).data().send().subscribe();
+                    }
+                }
+            }
+            for (UnknownRouter unknownRouter : unknownRouters) {
                 try {
-                    router.handle(session, frame);
-                    return;
+                    unknownRouter.handle(session, module, frame);
                 } catch (Exception e) {
                     log.info("Handle exception", e);
                     // TODO 定义默认
-                    session.error().code(Errors.Code.Handle_Error_VALUE).data().send().subscribe();
+                    session.error().code(Errors.Code.Global_Handle_Error_VALUE).data().send().subscribe();
                 }
             }
-        }
-        for (UnknownRouter unknownRouter : unknownRouters) {
-            try {
-                unknownRouter.handle(session, module, frame);
-            } catch (Exception e) {
-                log.info("Handle exception", e);
-                // TODO 定义默认
-                session.error().code(Errors.Code.Global_Handle_Error_VALUE).data().send().subscribe();
-            }
-        }
+        });
     }
 }

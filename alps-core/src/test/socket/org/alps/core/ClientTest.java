@@ -21,11 +21,9 @@ public class ClientTest {
 
         }
         var session = client.get().session("1").map(e -> ((AlpsEnhancedSession) e)).orElseThrow();
-        session.forget(1).data(1).send().subscribe();
+        session.forget(1).data(1).send();
         var ret = session.request(2).data(1)
-                .send(Int32Value.class)
-                .map(Int32Value::getValue)
-                .block();
+                .send(Int32Value.class);
         log.info("receive: {}", ret);
 
     }

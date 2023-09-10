@@ -25,7 +25,6 @@ public class ServerTest {
         var enhancedSessionFactory = new ClientTest.DefaultEnhancedSessionFactory(routerDispatcher);
         var server = new AlpsTcpServer(new NioEventLoopGroup(1),
                 new NioEventLoopGroup(12),
-                new NioEventLoopGroup(12),
                 nettyServerConfig, enhancedSessionFactory,
                 enhancedSessionFactory.config.getModules(), enhancedSessionFactory.dataCoderFactory);
         server.start();
