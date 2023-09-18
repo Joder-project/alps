@@ -1,5 +1,6 @@
 package org.alps.core.socket.netty;
 
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.incubator.codec.quic.QuicStreamAddress;
 import io.netty.util.AttributeKey;
@@ -79,6 +80,11 @@ public class NettyAlpsSession implements AlpsSession {
     @Override
     public void send(AlpsProtocol.AlpsPacket protocol) {
         socketChannel.writeAndFlush(protocol);
+    }
+
+    @Override
+    public void send(byte[] data) {
+        socketChannel.writeAndFlush(Unpooled.wrappedBuffer(data));
     }
 
     @Override

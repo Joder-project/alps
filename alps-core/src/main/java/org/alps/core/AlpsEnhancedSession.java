@@ -104,6 +104,11 @@ public class AlpsEnhancedSession implements AlpsSession {
         session.send(protocol);
     }
 
+    @Override
+    public void send(byte[] data) {
+        session.send(data);
+    }
+
     void receive(Frame frame) {
         this.frameListeners.receiveFrame(this, frame);
     }

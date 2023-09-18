@@ -32,6 +32,8 @@ public interface AlpsSession {
 
     void send(AlpsProtocol.AlpsPacket protocol);
 
+    void send(byte[] data);
+
     void close();
 
     boolean isClose();

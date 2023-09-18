@@ -115,6 +115,11 @@ public class AlpsEnhancedSessionBenchmark {
         }
 
         @Override
+        public void send(byte[] data) {
+
+        }
+
+        @Override
         public void close() {
 
         }
