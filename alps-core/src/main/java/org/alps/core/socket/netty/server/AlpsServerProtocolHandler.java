@@ -4,7 +4,6 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.alps.core.AlpsConfig;
 import org.alps.core.AlpsPacket;
 import org.alps.core.AlpsServer;
 import org.alps.core.EnhancedSessionFactory;
@@ -20,9 +19,9 @@ public class AlpsServerProtocolHandler extends SimpleChannelInboundHandler<AlpsP
 
     private final AlpsServer server;
     private final EnhancedSessionFactory sessionFactory;
-    private final List<AlpsConfig.ModuleConfig> supportModules;
+    private final List<String> supportModules;
 
-    public AlpsServerProtocolHandler(AlpsServer server, EnhancedSessionFactory sessionFactory, List<AlpsConfig.ModuleConfig> supportModules) {
+    public AlpsServerProtocolHandler(AlpsServer server, EnhancedSessionFactory sessionFactory, List<String> supportModules) {
         this.server = server;
         this.sessionFactory = sessionFactory;
         this.supportModules = supportModules;
@@ -66,10 +65,9 @@ public class AlpsServerProtocolHandler extends SimpleChannelInboundHandler<AlpsP
                     return sess;
                 });
         for (var module : supportModules) {
-            map.computeIfAbsent(module.getModule(),
+            map.computeIfAbsent(module,
                     key -> {
-                        var sess = sessionFactory.create(new NettyAlpsSession(server, module.getModule(), module.getVersion(),
-                                module.getVerifyToken(), ctx.channel()));
+                        var sess = sessionFactory.create(new NettyAlpsSession(server, module, ctx.channel()));
                         this.server.addSession(sess);
                         return sess;
                     });

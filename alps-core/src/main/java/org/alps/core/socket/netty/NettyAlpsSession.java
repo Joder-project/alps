@@ -6,7 +6,6 @@ import io.netty.util.AttributeKey;
 import org.alps.core.AlpsPacket;
 import org.alps.core.AlpsSession;
 import org.alps.core.AlpsSocket;
-import org.alps.core.common.AlpsAuthException;
 import org.alps.core.proto.AlpsProtocol;
 
 import java.net.InetAddress;
@@ -19,29 +18,14 @@ public class NettyAlpsSession implements AlpsSession {
     private final Channel socketChannel;
 
     private final String module;
-    private final int version;
-
-    private final long verifyToken;
 
     private volatile boolean closeState;
-    private volatile boolean auth;
 
     public NettyAlpsSession(AlpsSocket socket, String module, Channel socketChannel) {
-        this(socket, module, -1, 0L, socketChannel, true);
-    }
-
-    public NettyAlpsSession(AlpsSocket socket, String module, int version, long verifyToken, Channel socketChannel) {
-        this(socket, module, version, verifyToken, socketChannel, false);
-    }
-
-    public NettyAlpsSession(AlpsSocket socket, String module, int version, long verifyToken, Channel socketChannel, boolean auth) {
         this.socket = socket;
         this.socketChannel = socketChannel;
         this.module = module;
-        this.version = version;
-        this.verifyToken = verifyToken;
         this.closeState = false;
-        this.auth = auth;
     }
 
     @Override
@@ -89,16 +73,12 @@ public class NettyAlpsSession implements AlpsSession {
 
     @Override
     public void send(AlpsPacket msg) {
-        if (isAuth()) {
-            socketChannel.writeAndFlush(msg);
-        }
+        socketChannel.writeAndFlush(msg);
     }
 
     @Override
     public void send(AlpsProtocol.AlpsPacket protocol) {
-        if (isAuth()) {
-            socketChannel.writeAndFlush(protocol);
-        }
+        socketChannel.writeAndFlush(protocol);
     }
 
     @Override
@@ -113,22 +93,5 @@ public class NettyAlpsSession implements AlpsSession {
     @Override
     public boolean isClose() {
         return closeState;
-    }
-
-    @Override
-    public boolean isAuth() {
-        return auth || this.version <= 0;
-    }
-
-    @Override
-    public void auth(int version, long verifyToken) {
-        if (isAuth()) {
-            return;
-        }
-        if (version == this.version && verifyToken == this.verifyToken) {
-            this.auth = true;
-            return;
-        }
-        throw new AlpsAuthException("认证失败");
     }
 }

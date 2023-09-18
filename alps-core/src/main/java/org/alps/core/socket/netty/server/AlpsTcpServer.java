@@ -8,7 +8,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
-import org.alps.core.AlpsConfig;
 import org.alps.core.AlpsDataCoderFactory;
 import org.alps.core.EnhancedSessionFactory;
 import org.alps.core.common.AlpsException;
@@ -29,7 +28,7 @@ public class AlpsTcpServer extends AbstractAlpsServer {
 
     public AlpsTcpServer(EventLoopGroup bossGroup, EventLoopGroup workerGroup, EventLoopGroup defaultGroup,
                          NettyServerConfig serverConfig, EnhancedSessionFactory sessionFactory,
-                         List<AlpsConfig.ModuleConfig> supportModules, AlpsDataCoderFactory coderFactory) {
+                         List<String> supportModules, AlpsDataCoderFactory coderFactory) {
         super(serverConfig, coderFactory, defaultGroup, sessionFactory, supportModules);
         this.bossGroup = bossGroup;
         this.workerGroup = workerGroup;

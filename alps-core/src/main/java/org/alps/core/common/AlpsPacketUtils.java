@@ -26,8 +26,6 @@ public class AlpsPacketUtils {
     static AlpsProtocol.AlpsPacket.AlpsMetadata buildMetadata(AlpsMetadata metadata) throws Exception {
         var builder = AlpsProtocol.AlpsPacket.AlpsMetadata.newBuilder()
                 .setZip(metadata.isZip())
-                .setVersion(metadata.version())
-                .setVerifyToken(metadata.verifyToken())
                 .setFrameTypeValue(metadata.frameType())
                 .setContainerCoderValue(metadata.containerCoder())
                 .setFrame(ByteString.copyFrom(metadata.frame()));

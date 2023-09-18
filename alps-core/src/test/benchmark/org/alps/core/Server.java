@@ -38,7 +38,7 @@ public class Server {
         config.getDataConfig().setEnabledZip(true);
         for (int i = 0; i < 10; i++) {
             var module = "" + i;
-            config.getModules().add(new AlpsConfig.ModuleConfig(module, (short) 1, 1L));
+            config.getModules().add(module);
             for (int j = 0; j < 20; j++) {
                 short command = (short) j;
                 routerDispatcher.addRouter(new Router() {

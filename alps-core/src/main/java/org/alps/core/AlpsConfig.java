@@ -17,18 +17,7 @@ public class AlpsConfig {
     private MetaDataConfig metaDataConfig = new MetaDataConfig();
     private DataConfig dataConfig = new DataConfig();
 
-    private List<ModuleConfig> modules = new ArrayList<>();
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ModuleConfig {
-
-        public static final ModuleConfig ZERO = new ModuleConfig(AlpsPacket.ZERO_MODULE, (short) 0, 0L);
-        private String module;
-        private short version;
-        private long verifyToken;
-    }
+    private List<String> modules = new ArrayList<>();
 
     @Data
     public static class MetaDataConfig {
@@ -42,11 +31,11 @@ public class AlpsConfig {
         private CoderType coder = CoderType.PROTOBUF;
     }
 
+    @Getter
     public enum CoderType {
         JDK(0), PROTOBUF(1),
         ;
 
-        @Getter
         final byte code;
 
         CoderType(int code) {

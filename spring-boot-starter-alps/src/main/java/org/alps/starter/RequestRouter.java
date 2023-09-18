@@ -27,7 +27,7 @@ import java.util.function.Function;
 @Slf4j
 record StreamRouter(String module, int command, Object target, Method method) implements Router {
 
-    public static StreamRouter create(Object target, Method method, List<AlpsProperties.ModuleProperties> properties) {
+    public static StreamRouter create(Object target, Method method, List<String> properties) {
         return Utils.create(target, method, properties, StreamRouter::new);
     }
 
@@ -67,7 +67,7 @@ record StreamRouter(String module, int command, Object target, Method method) im
 
 record RequestRouter(String module, int command, Object target, Method method) implements Router {
 
-    public static RequestRouter create(Object target, Method method, List<AlpsProperties.ModuleProperties> properties) {
+    public static RequestRouter create(Object target, Method method, List<String> properties) {
         return Utils.create(target, method, properties, RequestRouter::new);
     }
 
@@ -102,7 +102,7 @@ record RequestRouter(String module, int command, Object target, Method method) i
 
 record ForgetRouter(String module, int command, Object target, Method method) implements Router {
 
-    public static ForgetRouter create(Object target, Method method, List<AlpsProperties.ModuleProperties> properties) {
+    public static ForgetRouter create(Object target, Method method, List<String> properties) {
         return Utils.create(target, method, properties, ForgetRouter::new);
     }
 
@@ -119,13 +119,12 @@ interface NewRouter<T> {
 }
 
 class Utils {
-    static <T> T create(Object target, Method method, List<AlpsProperties.ModuleProperties> properties, NewRouter<T> router) {
+    static <T> T create(Object target, Method method, List<String> properties, NewRouter<T> router) {
         var annotation = Objects.requireNonNull(method.getAnnotation(Command.class), "@Command为空");
         var command = annotation.command();
         var module = Optional.of(Objects.requireNonNull(
                         method.getDeclaringClass().getAnnotation(AlpsModule.class), "@AlpsModule为空").module())
-                .flatMap(e -> properties.stream().filter(ele -> ele.getName().equals(e)).findFirst())
-                .map(AlpsProperties.ModuleProperties::getName)
+                .flatMap(e -> properties.stream().filter(ele -> ele.equals(e)).findFirst())
                 .orElseThrow(() -> new IllegalArgumentException("模块没有配置" + method.getName()));
         method.setAccessible(true);
         return router.create(module, command, target, method);

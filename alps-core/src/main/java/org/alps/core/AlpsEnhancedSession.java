@@ -14,7 +14,6 @@ import reactor.core.scheduler.Schedulers;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -66,16 +65,6 @@ public class AlpsEnhancedSession implements AlpsSession {
     public AlpsEnhancedSession attr(String key, Object value) {
         session.attr(key, value);
         return this;
-    }
-
-    @Override
-    public boolean isAuth() {
-        return session.isAuth();
-    }
-
-    @Override
-    public void auth(int version, long verifyToken) {
-        session.auth(version, verifyToken);
     }
 
     /**
@@ -144,11 +133,6 @@ public class AlpsEnhancedSession implements AlpsSession {
         return new IdleCommand(this, ioScheduler);
     }
 
-
-    public ModuleAuthCommand moduleAuth() {
-        return new ModuleAuthCommand(this, ioScheduler);
-    }
-
     public ErrorCommand error() {
         return new ErrorCommand(this, ioScheduler);
     }
@@ -196,18 +180,8 @@ public class AlpsEnhancedSession implements AlpsSession {
             this.config = session.config;
 
             var code = config.getDataConfig().getCoder().getCode();
-            AlpsConfig.ModuleConfig moduleConfig;
-            if (Objects.equals(session.module(), AlpsPacket.ZERO_MODULE)) {
-                moduleConfig = AlpsConfig.ModuleConfig.ZERO;
-            } else {
-                moduleConfig = config.getModules().stream()
-                        .filter(e -> Objects.equals(e.getModule(), session.module()))
-                        .findFirst().orElseThrow();
-            }
 
             this.metadataBuilder = new AlpsMetadataBuilder().isZip(config.getMetaDataConfig().isEnabledZip())
-                    .verifyToken(moduleConfig.getVerifyToken())
-                    .version(moduleConfig.getVersion())
                     .containerCoder(code)
                     .coder(session.dataCoderFactory.getCoder(code));
 
@@ -396,40 +370,6 @@ public class AlpsEnhancedSession implements AlpsSession {
         @SuppressWarnings("unchecked")
         public <T> Optional<T> metadata(String key, Class<T> clazz) {
             return frame.metadata().getValue(key, clazz).map(e -> (T) e);
-        }
-    }
-
-    public static class ModuleAuthCommand extends BaseCommand {
-
-        int version;
-        long verifyToken;
-
-        public ModuleAuthCommand(AlpsEnhancedSession session, Scheduler ioScheduler) {
-            super(session, ioScheduler);
-        }
-
-        public ModuleAuthCommand version(int version) {
-            this.version = version;
-            return this;
-        }
-
-        public ModuleAuthCommand verifyToken(long verifyToken) {
-            this.verifyToken = verifyToken;
-            return this;
-        }
-
-        public Mono<Void> send() {
-            return Mono.fromRunnable(() -> {
-                        var frameBytes = ModuleAuthFrame.toBytes(version, verifyToken);
-                        var metadata = metadataBuilder
-                                .frameType(FrameCoders.DefaultFrame.MODULE_AUTH.frameType)
-                                .frame(frameBytes)
-                                .build();
-                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                                new ModuleAuthFrame(version, verifyToken, metadata, null));
-                        session.send(protocol);
-                    }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error))
-                    .then();
         }
     }
 

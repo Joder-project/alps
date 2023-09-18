@@ -24,7 +24,7 @@ public class SessionListeners {
         }
     }
 
-    void disconnect(AlpsSession session){
+    void disconnect(AlpsSession session) {
         for (SessionListener sessionListener : sessionListeners) {
             try {
                 sessionListener.disconnect(session);

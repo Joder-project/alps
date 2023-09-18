@@ -57,7 +57,7 @@ public class ClientBenchmark {
             config.getDataConfig().setEnabledZip(true);
             for (int i = 0; i < 10; i++) {
                 var module = "" + (i + 1);
-                config.getModules().add(new AlpsConfig.ModuleConfig(module, (short) 1, 1L));
+                config.getModules().add(module);
                 for (int j = 0; j < 20; j++) {
                     short command = (short) (j + 1);
                     routerDispatcher.addRouter(new Router() {
@@ -79,8 +79,6 @@ public class ClientBenchmark {
                                 var metadata = requestFrame.metadata();
                                 session.receive(new ResponseFrame(requestFrame.id(),
                                         new AlpsMetadataBuilder().isZip(metadata.isZip())
-                                                .verifyToken(metadata.verifyToken())
-                                                .version(metadata.version())
                                                 .containerCoder(metadata.containerCoder())
                                                 .coder(metadata.coder())
                                                 .frameType(FrameCoders.DefaultFrame.RESPONSE.frameType)

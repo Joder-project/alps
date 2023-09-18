@@ -44,7 +44,7 @@ public record ErrorFrame(
         public Frame decode(AlpsMetadata metadata, AlpsData data, AlpsProtocol.AlpsPacket rawPacket) throws Exception {
             var frame = metadata.frame();
             var errorFrame = IFrame.ErrorFrame.parseFrom(metadata.frame());
-            return new ErrorFrame(((short) errorFrame.getCode()), metadata, data,rawPacket);
+            return new ErrorFrame(((short) errorFrame.getCode()), metadata, data, rawPacket);
         }
 
     }

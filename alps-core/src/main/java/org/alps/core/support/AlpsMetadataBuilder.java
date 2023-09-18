@@ -12,8 +12,6 @@ import java.util.Objects;
 public class AlpsMetadataBuilder {
 
     private boolean isZip;
-    private short version;
-    private long verifyToken;
     private byte frameType;
     private byte[] frame;
     private byte containerCoder;
@@ -22,16 +20,6 @@ public class AlpsMetadataBuilder {
 
     public AlpsMetadataBuilder isZip(boolean isZip) {
         this.isZip = isZip;
-        return this;
-    }
-
-    public AlpsMetadataBuilder version(short version) {
-        this.version = version;
-        return this;
-    }
-
-    public AlpsMetadataBuilder verifyToken(long verifyToken) {
-        this.verifyToken = verifyToken;
         return this;
     }
 
@@ -64,6 +52,6 @@ public class AlpsMetadataBuilder {
         Objects.requireNonNull(coder, "coder不能为空");
         var map = new HashMap<String, InnerValue>(metadata.size());
         metadata.forEach((k, v) -> map.put(k, new InnerValue(coder, v)));
-        return new AlpsMetadata(isZip, version, verifyToken, frameType, frame, containerCoder, Collections.unmodifiableMap(map), coder);
+        return new AlpsMetadata(isZip, frameType, frame, containerCoder, Collections.unmodifiableMap(map), coder);
     }
 }

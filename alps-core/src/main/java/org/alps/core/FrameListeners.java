@@ -5,7 +5,6 @@ import org.alps.core.frame.*;
 import org.alps.core.listener.CommandFrameListener;
 import org.alps.core.listener.ErrorFrameListener;
 import org.alps.core.listener.IdleFrameListener;
-import org.alps.core.listener.ModuleAuthFrameListener;
 
 import java.util.Map;
 import java.util.Objects;
@@ -25,7 +24,6 @@ public class FrameListeners {
         Map<Class<? extends Frame>, FrameListener> map = Map.of(
                 IdleFrame.class, new IdleFrameListener(),
                 ErrorFrame.class, new ErrorFrameListener(),
-                ModuleAuthFrame.class, new ModuleAuthFrameListener(),
                 ForgetFrame.class, commandFrameListener,
                 RequestFrame.class, commandFrameListener,
                 StreamRequestFrame.class, commandFrameListener

@@ -30,8 +30,6 @@ public class AlpsMessageDecoder extends MessageToMessageDecoder<AlpsProtocol.Alp
 
     AlpsMetadata buildMetadata(AlpsProtocol.AlpsPacket.AlpsMetadata metadata) throws Exception {
         boolean isZip = metadata.getZip();
-        short version = (short) metadata.getVersion();
-        long verifyToken = metadata.getVerifyToken();
         byte frameType = (byte) metadata.getFrameTypeValue();
         byte[] frame = metadata.getFrame().toByteArray();
         byte containerCoder = (byte) metadata.getContainerCoderValue();
@@ -45,7 +43,7 @@ public class AlpsMessageDecoder extends MessageToMessageDecoder<AlpsProtocol.Alp
             container = Collections.unmodifiableMap(map);
         }
 
-        return new AlpsMetadata(isZip, version, verifyToken, frameType, frame, containerCoder, container, coder);
+        return new AlpsMetadata(isZip, frameType, frame, containerCoder, container, coder);
     }
 
     AlpsData buildData(AlpsProtocol.AlpsPacket.AlpsData data) throws Exception {

@@ -5,7 +5,6 @@ import io.netty.channel.*;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.incubator.codec.quic.*;
 import lombok.extern.slf4j.Slf4j;
-import org.alps.core.AlpsConfig;
 import org.alps.core.AlpsDataCoderFactory;
 import org.alps.core.EnhancedSessionFactory;
 import org.alps.core.common.AlpsException;
@@ -32,7 +31,7 @@ public class AlpsQuicServer extends AbstractAlpsServer {
 
     public AlpsQuicServer(EventLoopGroup bossGroup, EventLoopGroup defaultGroup, NettyServerConfig serverConfig,
                           QuicServerConfig quicServerConfig, EnhancedSessionFactory sessionFactory,
-                          List<AlpsConfig.ModuleConfig> supportModules, AlpsDataCoderFactory coderFactory) {
+                          List<String> supportModules, AlpsDataCoderFactory coderFactory) {
         super(serverConfig, coderFactory, defaultGroup, sessionFactory, supportModules);
         this.bossGroup = bossGroup;
         this.serverConfig = serverConfig;

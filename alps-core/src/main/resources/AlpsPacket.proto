@@ -19,8 +19,6 @@ message AlpsPacket {
 
   message AlpsMetadata {
     bool zip = 1;
-    int32 version = 2;
-    int64 verifyToken = 3;
     FrameType frameType = 4;
     Coder containerCoder = 5;
     bytes frame = 6;
@@ -48,7 +46,6 @@ message AlpsPacket {
     ERROR = 4;
     STREAM_REQUEST = 5;
     STREAM_RESPONSE = 6;
-    MODULE_AUTH = 7; // 模块认证帧
     GATEWAY_T = 8;
     ROUTING = 9;
     CUSTOM = 10;

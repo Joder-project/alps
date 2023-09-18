@@ -20,16 +20,8 @@ public class AlpsProperties {
      */
     private int socketType = 0;
 
-    private List<ModuleProperties> modules = new ArrayList<>();
+    private List<String> modules = new ArrayList<>();
 
     private AlpsConfig.MetaDataConfig metadataConfig = new AlpsConfig.MetaDataConfig();
     private AlpsConfig.DataConfig dataConfig = new AlpsConfig.DataConfig();
-
-    @Data
-    public static class ModuleProperties {
-        private String name;
-
-        private short version;
-        private long verifyToken;
-    }
 }

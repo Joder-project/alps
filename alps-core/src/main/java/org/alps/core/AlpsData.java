@@ -1,10 +1,5 @@
 package org.alps.core;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-
 /**
  * 协议中的数据
  * |isZip(1) | dataSize(15) | dataCoder(8) | data[0].length | data[0] | ... |

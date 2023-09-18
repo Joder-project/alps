@@ -12,7 +12,7 @@ public interface FrameCoder {
     Frame decode(AlpsMetadata metadata, AlpsData data, AlpsProtocol.AlpsPacket rawPacket) throws Exception;
 
     default AlpsPacket encode(int socketType, Frame frame) {
-        return encode(socketType, AlpsPacket.ZERO_MODULE,frame);
+        return encode(socketType, AlpsPacket.ZERO_MODULE, frame);
     }
 
     default AlpsPacket encode(int socketType, String module, Frame frame) {

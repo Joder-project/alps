@@ -24,7 +24,7 @@ public class AlpsJDKDataCoder implements AlpsDataCoder {
 
     @Override
     public byte[] decode(Object obj) {
-        try (var outputStream = new ByteArrayOutputStream(); var out = new ObjectOutputStream(outputStream);) {
+        try (var outputStream = new ByteArrayOutputStream(); var out = new ObjectOutputStream(outputStream)) {
             out.writeObject(obj);
             return outputStream.toByteArray();
         } catch (Exception e) {

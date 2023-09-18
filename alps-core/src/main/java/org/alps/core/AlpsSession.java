@@ -56,14 +56,4 @@ public interface AlpsSession {
         return this;
     }
 
-    /**
-     * 是否认证
-     */
-    boolean isAuth();
-
-    /**
-     * 认证
-     */
-    void auth(int version, long verifyToken);
-
 }

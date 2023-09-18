@@ -15,7 +15,7 @@ class ErrorFrameTest {
         var bytes = new byte[]{
                 1, 2, 3, 4, 5, 6
         };
-        var metadata = new AlpsMetadata(false, (short) 0, 0L, (byte) 0, bytes, (byte) 0, new HashMap<>(), null);
+        var metadata = new AlpsMetadata(false, (byte) 0, bytes, (byte) 0, new HashMap<>(), null);
         var data = AlpsData.EMPTY;
 
         var coder = new ErrorFrame.Coder();

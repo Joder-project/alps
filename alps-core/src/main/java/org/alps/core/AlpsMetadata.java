@@ -1,6 +1,7 @@
 package org.alps.core;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * 数据包元数据
@@ -15,8 +16,6 @@ import java.util.*;
  */
 public record AlpsMetadata(
         boolean isZip,
-        short version,
-        long verifyToken, // TODO: 支持module token验证
         byte frameType,
         byte[] frame,
         byte containerCoder,
