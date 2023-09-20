@@ -28,7 +28,7 @@ public class AlpsTcpServer extends AbstractAlpsServer {
     public AlpsTcpServer(EventLoopGroup bossGroup, EventLoopGroup workerGroup,
                          NettyServerConfig serverConfig, EnhancedSessionFactory sessionFactory,
                          List<String> supportModules, AlpsDataCoderFactory coderFactory) {
-        super(serverConfig, coderFactory, defaultGroup, sessionFactory, supportModules);
+        super(serverConfig, coderFactory, sessionFactory, supportModules);
         this.bossGroup = bossGroup;
         this.workerGroup = workerGroup;
     }

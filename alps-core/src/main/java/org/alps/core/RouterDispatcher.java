@@ -70,7 +70,7 @@ public class RouterDispatcher {
                     } catch (Exception e) {
                         log.info("Handle exception", e);
                         // TODO 定义默认
-                        session.error().code(Errors.Code.Handle_Error_VALUE).data().send().subscribe();
+                        session.error().code(Errors.Code.Handle_Error_VALUE).data().send();
                     }
                 }
             }
@@ -80,7 +80,7 @@ public class RouterDispatcher {
                 } catch (Exception e) {
                     log.info("Handle exception", e);
                     // TODO 定义默认
-                    session.error().code(Errors.Code.Global_Handle_Error_VALUE).data().send().subscribe();
+                    session.error().code(Errors.Code.Global_Handle_Error_VALUE).data().send();
                 }
             }
         });

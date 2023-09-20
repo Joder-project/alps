@@ -97,7 +97,7 @@ public abstract class AbstractAlpsClient implements AlpsClient, IAlpsClientReady
                     if (map != null) {
                         var session = map.get(AlpsPacket.ZERO_MODULE);
                         if (session != null) {
-                            session.idle().send().subscribe();
+                            session.idle().send();
                         }
                     }
                 }
