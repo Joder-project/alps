@@ -342,9 +342,13 @@ public class AlpsEnhancedSession implements AlpsSession {
                     );
                     session.send(protocol);
 
-                    responseResult.countDownLatch.await(5L, TimeUnit.SECONDS);
-                    var response = new Response(responseResult.result().orElseThrow());
-                    result.set(response.data(clazz).orElse(null));
+                    var ret = responseResult.countDownLatch.await(5L, TimeUnit.SECONDS);
+                    if (ret) {
+                        var response = new Response(responseResult.result().orElseThrow());
+                        result.set(response.data(clazz).orElse(null));
+                    } else {
+                        result.set(null);
+                    }
                 } catch (InterruptedException e) {
                     log.error("Error sending", e);
                     throw new AlpsException(e);
