@@ -500,6 +500,7 @@ public class AlpsEnhancedSession implements AlpsSession {
                     var data = dataBuilder.build();
                     var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
                             new ResponseFrame(reqId, metadata, data, null));
+                    session.send(protocol);
                 } catch (Exception ex) {
                     log.error("Error sending", ex);
                     throw new AlpsException(ex);

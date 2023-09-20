@@ -70,7 +70,7 @@ public class Server {
                             session.response()
                                     .reqId(requestFrame.id())
                                     .data(StringValue.of("Hello"))
-                                    .send().subscribe();
+                                    .send();
                         } else if (frame instanceof StreamRequestFrame streamRequestFrame) {
                             AtomicReference<Disposable> disposable = new AtomicReference<>();
                             disposable.set(Flux.interval(Duration.ofSeconds(1L))
@@ -106,7 +106,6 @@ public class Server {
         var certificate = new SelfSignedCertificate();
         var quicServerConfig = new QuicServerConfig(certificate.key(), null, Collections.singletonList(certificate.cert()));
         var server = new AlpsQuicServer(new NioEventLoopGroup(16),
-                new NioEventLoopGroup(32),
                 nettyServerConfig, quicServerConfig, enhancedSessionFactory,
                 enhancedSessionFactory.config.getModules(),
                 enhancedSessionFactory.dataCoderFactory);

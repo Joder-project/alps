@@ -22,15 +22,13 @@ public class Client {
     static void forget(SessionState state) throws ExecutionException, InterruptedException {
         state.session.forget(1)
                 .data(StringValue.of("1234".repeat(1024)))
-                .send().block();
+                .send();
     }
 
     static void request(SessionState state) throws ExecutionException, InterruptedException {
         var ret = state.session.request(1)
                 .data(StringValue.of("1234".repeat(1024)))
-                .send(StringValue.class)
-                .map(StringValue::getValue)
-                .block();
+                .send(StringValue.class).getValue();
         log.info("request: {}", ret);
     }
 
@@ -47,8 +45,8 @@ public class Client {
     public static void main(String[] args) throws Exception {
         var state = new SessionState();
         for (int i = 0; i < 1; i++) {
-//            request(state);
-            stream(state);
+            request(state);
+//            stream(state);
 //            forget(state);
         }
         while (true) {

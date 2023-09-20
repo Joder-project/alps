@@ -1,5 +1,6 @@
 package org.alps.core;
 
+import com.google.protobuf.StringValue;
 import org.alps.core.frame.ForgetFrame;
 import org.alps.core.frame.RequestFrame;
 import org.alps.core.frame.ResponseFrame;
@@ -22,14 +23,14 @@ public class AlpsEnhancedSessionBenchmark {
     public void forget(SessionState state) throws ExecutionException, InterruptedException {
         state.session.forget(1)
                 .data("1234".repeat(1024))
-                .send().block();
+                .send();
     }
 
     @Benchmark
     public void request(SessionState state) throws ExecutionException, InterruptedException {
-        state.session.forget(1)
+        state.session.request(1)
                 .data("1234".repeat(1024))
-                .send().block();
+                .send(StringValue.class);
     }
 
 
