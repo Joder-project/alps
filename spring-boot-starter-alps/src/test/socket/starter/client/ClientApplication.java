@@ -12,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.concurrent.Flow;
+
 @SpringBootApplication
 @AlpsClient
 @ActiveProfiles("client")
@@ -51,7 +53,26 @@ class Runner implements CommandLineRunner {
 
         session.stream(5).data(StringValue.of("1"))
                 .send(StringValue.class)
-                .doOnNext(s -> log.info("receive stream: {}", s))
-                .subscribe();
+                .subscribe(new Flow.Subscriber<>() {
+                    @Override
+                    public void onSubscribe(Flow.Subscription subscription) {
+
+                    }
+
+                    @Override
+                    public void onNext(StringValue item) {
+                        log.info("receive stream: {}", item.getValue());
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }

@@ -76,12 +76,12 @@ public class Server {
                             disposable.set(Flux.interval(Duration.ofSeconds(1L))
                                     .publishOn(Schedulers.boundedElastic())
                                     .doOnNext(n -> {
-                                        /*else if (n == 5) {
+                                        if (n == 5) {
                                             session.streamResponse()
                                                     .reqId(streamRequestFrame.id())
                                                     .finish(true)
-                                                    .send().subscribe();
-                                        }*/
+                                                    .send();
+                                        }
                                         if (session.isClose() && disposable.get() != null) {
                                             disposable.get().dispose();
                                         }

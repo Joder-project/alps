@@ -14,6 +14,7 @@ import org.openjdk.jmh.annotations.TearDown;
 
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Flow;
 
 @Slf4j
 public class Client {
@@ -35,18 +36,37 @@ public class Client {
     static void stream(SessionState state) throws ExecutionException, InterruptedException {
         var ret = state.session.streamRequest(1)
                 .data(StringValue.of("1234".repeat(1024)))
-                .send(StringValue.class)
-                .map(StringValue::getValue)
-                .doOnNext(v -> log.info("stream: {}", v))
-                .doOnComplete(() -> log.info("complete"))
-                .subscribe();
+                .send(StringValue.class);
+        var subscriber = new Flow.Subscriber<StringValue>() {
+
+            @Override
+            public void onSubscribe(Flow.Subscription subscription) {
+
+            }
+
+            @Override
+            public void onNext(StringValue item) {
+                log.info("stream: {}", item.getValue());
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                log.info("stream complete");
+            }
+        };
+        ret.subscribe(subscriber);
     }
 
     public static void main(String[] args) throws Exception {
         var state = new SessionState();
         for (int i = 0; i < 1; i++) {
-            request(state);
-//            stream(state);
+//            request(state);
+            stream(state);
 //            forget(state);
         }
         while (true) {

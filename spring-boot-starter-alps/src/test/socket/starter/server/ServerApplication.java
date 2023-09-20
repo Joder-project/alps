@@ -9,9 +9,8 @@ import org.alps.starter.anno.Command;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.test.context.ActiveProfiles;
-import reactor.core.publisher.Flux;
 
-import java.time.Duration;
+import java.util.concurrent.Flow;
 
 @SpringBootApplication
 @AlpsServer
@@ -41,9 +40,18 @@ class MyController {
     }
 
     @Command(command = 5, type = Command.Type.STREAM)
-    public Flux<StringValue> helloStream(StringValue message, AlpsExchange exchange) {
-        return Flux.interval(Duration.ofSeconds(1))
-                .map(n -> StringValue.of("Hello " + n))/*
-                .doOnNext(n -> log.info("send stream: {}", n))*/;
+    public Flow.Publisher<StringValue> helloStream(StringValue message, AlpsExchange exchange) {
+        return subscriber -> {
+            int n = 0;
+            while (true) {
+                try {
+                    subscriber.onNext(StringValue.of("Hello " + n));
+                    Thread.sleep(1000L);
+                    n++;
+                } catch (Exception e) {
+                    log.info("send stream: {}", n);
+                }
+            }
+        };
     }
 }

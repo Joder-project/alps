@@ -6,17 +6,12 @@ import org.alps.core.frame.*;
 import org.alps.core.proto.AlpsProtocol;
 import org.alps.core.support.AlpsDataBuilder;
 import org.alps.core.support.AlpsMetadataBuilder;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import reactor.core.publisher.Sinks;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.Flow;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,17 +29,6 @@ public class AlpsEnhancedSession implements AlpsSession {
     final AlpsConfig config;
     private final AtomicInteger idGenerator = new AtomicInteger(1);
 
-    private static final Scheduler ioScheduler = Schedulers.newParallel(Runtime.getRuntime().availableProcessors() * 2, new ThreadFactory() {
-
-        private final AtomicInteger id = new AtomicInteger(1);
-
-        @Override
-        public Thread newThread(Runnable r) {
-            var thread = new Thread(r);
-            thread.setName("alps-thread-" + id.getAndIncrement());
-            return thread;
-        }
-    });
 
     public AlpsEnhancedSession(AlpsSession session, FrameCoders frameCoders, AlpsDataCoderFactory dataCoderFactory, FrameListeners frameListeners, SessionListeners sessionListeners, AlpsConfig config) {
         this.session = session;
@@ -124,35 +108,35 @@ public class AlpsEnhancedSession implements AlpsSession {
         if (sessions == null || sessions.isEmpty()) {
             throw new IllegalArgumentException("sessions为空");
         }
-        return new BroadcastCommand(sessions, command, ioScheduler);
+        return new BroadcastCommand(sessions, command);
     }
 
     public ForgetCommand forget(int command) {
-        return new ForgetCommand(this, command, ioScheduler);
+        return new ForgetCommand(this, command);
     }
 
     public RequestCommand request(int command) {
-        return new RequestCommand(this, command, ioScheduler);
+        return new RequestCommand(this, command);
     }
 
     public IdleCommand idle() {
-        return new IdleCommand(this, ioScheduler);
+        return new IdleCommand(this);
     }
 
     public ErrorCommand error() {
-        return new ErrorCommand(this, ioScheduler);
+        return new ErrorCommand(this);
     }
 
     public ResponseCommand response() {
-        return new ResponseCommand(this, ioScheduler);
+        return new ResponseCommand(this);
     }
 
     public StreamRequestCommand streamRequest(int command) {
-        return new StreamRequestCommand(this, command, ioScheduler);
+        return new StreamRequestCommand(this, command);
     }
 
     public StreamResponseCommand streamResponse() {
-        return new StreamResponseCommand(this, ioScheduler);
+        return new StreamResponseCommand(this);
     }
 
     @Override
@@ -174,14 +158,12 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         final AlpsConfig config;
 
-        final Scheduler ioScheduler;
 
         AlpsMetadataBuilder metadataBuilder;
         AlpsDataBuilder dataBuilder;
 
 
-        public BaseCommand(AlpsEnhancedSession session, Scheduler ioScheduler) {
-            this.ioScheduler = ioScheduler;
+        public BaseCommand(AlpsEnhancedSession session) {
             this.session = session;
             this.config = session.config;
 
@@ -209,8 +191,8 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         final int command;
 
-        public BaseCommand2(AlpsEnhancedSession session, int command, Scheduler ioScheduler) {
-            super(session, ioScheduler);
+        public BaseCommand2(AlpsEnhancedSession session, int command) {
+            super(session);
             this.command = command;
         }
 
@@ -218,8 +200,8 @@ public class AlpsEnhancedSession implements AlpsSession {
 
     public static class ForgetCommand extends BaseCommand2 {
 
-        public ForgetCommand(AlpsEnhancedSession session, int command, Scheduler ioScheduler) {
-            super(session, command, ioScheduler);
+        public ForgetCommand(AlpsEnhancedSession session, int command) {
+            super(session, command);
         }
 
         @Override
@@ -254,8 +236,8 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         final Collection<AlpsEnhancedSession> sessions;
 
-        public BroadcastCommand(List<AlpsEnhancedSession> sessions, int command, Scheduler ioScheduler) {
-            super(sessions.get(0), command, ioScheduler);
+        public BroadcastCommand(List<AlpsEnhancedSession> sessions, int command) {
+            super(sessions.get(0), command);
             this.sessions = sessions;
         }
 
@@ -290,8 +272,8 @@ public class AlpsEnhancedSession implements AlpsSession {
     public static class RequestCommand extends BaseCommand2 {
 
 
-        public RequestCommand(AlpsEnhancedSession session, int command, Scheduler ioScheduler) {
-            super(session, command, ioScheduler);
+        public RequestCommand(AlpsEnhancedSession session, int command) {
+            super(session, command);
         }
 
         @Override
@@ -372,8 +354,8 @@ public class AlpsEnhancedSession implements AlpsSession {
     }
 
     public static class IdleCommand extends BaseCommand {
-        public IdleCommand(AlpsEnhancedSession session, Scheduler ioScheduler) {
-            super(session, ioScheduler);
+        public IdleCommand(AlpsEnhancedSession session) {
+            super(session);
         }
 
         public void send() {
@@ -395,8 +377,8 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         private int code;
 
-        public ErrorCommand(AlpsEnhancedSession session, Scheduler ioScheduler) {
-            super(session, ioScheduler);
+        public ErrorCommand(AlpsEnhancedSession session) {
+            super(session);
         }
 
         @Override
@@ -434,8 +416,8 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         private int reqId;
 
-        public ResponseCommand(AlpsEnhancedSession session, Scheduler ioScheduler) {
-            super(session, ioScheduler);
+        public ResponseCommand(AlpsEnhancedSession session) {
+            super(session);
         }
 
         @Override
@@ -505,8 +487,8 @@ public class AlpsEnhancedSession implements AlpsSession {
     public static class StreamRequestCommand extends BaseCommand2 {
 
 
-        public StreamRequestCommand(AlpsEnhancedSession session, int command, Scheduler ioScheduler) {
-            super(session, command, ioScheduler);
+        public StreamRequestCommand(AlpsEnhancedSession session, int command) {
+            super(session, command);
         }
 
         @Override
@@ -521,36 +503,40 @@ public class AlpsEnhancedSession implements AlpsSession {
             return this;
         }
 
-        public <T> Flux<T> send(Class<T> clazz) {
-            AtomicReference<FrameListener> listener = new AtomicReference<>(null);
-            var many = Sinks.many().unicast().<T>onBackpressureBuffer();
-            Mono.fromRunnable(() -> {
-                var id = session.nextId();
-                var frameBytes = StreamRequestFrame.toBytes(command, id);
-                var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.STREAM_REQUEST.frameType).frame(frameBytes).build();
-                var data = dataBuilder.build();
-                var requestFrame = new StreamRequestFrame(id, command, metadata, data, null);
-                var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
-                // 注册监听
-                listener.set((session, frame) -> {
-                    var streamResponseFrame = (StreamResponseFrame) frame;
-                    if (streamResponseFrame.finish()) {
-                        many.tryEmitComplete();
-                        ((AlpsEnhancedSession) session).frameListeners.removeFrameListener(StreamResponseFrame.class, listener.get());
-                    } else {
-                        var t = new ResponseStream(streamResponseFrame).data(clazz);
-                        t.ifPresent(many::tryEmitNext);
-                    }
-                });
-                session.frameListeners.addFrameListener(StreamResponseFrame.class, listener.get(), (AlpsSession session, Frame frame) -> {
-                    if (frame instanceof StreamResponseFrame responseFrame) {
-                        return session.equals(this.session) && responseFrame.reqId() == requestFrame.id();
-                    }
-                    return false;
-                });
-                session.send(protocol);
-            }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error)).subscribe();
-            return many.asFlux();
+        public <T> Flow.Publisher<T> send(Class<T> clazz) {
+            var id = session.nextId();
+            var frameBytes = StreamRequestFrame.toBytes(command, id);
+            var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.STREAM_REQUEST.frameType).frame(frameBytes).build();
+            var data = dataBuilder.build();
+            var requestFrame = new StreamRequestFrame(id, command, metadata, data, null);
+            var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
+            return new Flow.Publisher<>() {
+                private final AlpsEnhancedSession session = StreamRequestCommand.this.session;
+
+                @Override
+                public void subscribe(Flow.Subscriber<? super T> subscriber) {
+                    AtomicReference<FrameListener> listener = new AtomicReference<>(null);
+                    listener.set((session, frame) -> {
+                        var streamResponseFrame = (StreamResponseFrame) frame;
+                        if (streamResponseFrame.finish()) {
+                            subscriber.onComplete();
+                            if (listener.get() != null) {
+                                ((AlpsEnhancedSession) session).frameListeners.removeFrameListener(StreamResponseFrame.class, listener.get());
+                            }
+                        } else {
+                            var t = new ResponseStream(streamResponseFrame).data(clazz);
+                            t.ifPresent(subscriber::onNext);
+                        }
+                    });
+                    session.frameListeners.addFrameListener(StreamResponseFrame.class, listener.get(), (AlpsSession session, Frame frame) -> {
+                        if (frame instanceof StreamResponseFrame responseFrame) {
+                            return session.equals(this.session) && responseFrame.reqId() == requestFrame.id();
+                        }
+                        return false;
+                    });
+                    session.send(protocol);
+                }
+            };
         }
 
     }
@@ -560,8 +546,8 @@ public class AlpsEnhancedSession implements AlpsSession {
         private int reqId;
         private boolean finish;
 
-        public StreamResponseCommand(AlpsEnhancedSession session, Scheduler ioScheduler) {
-            super(session, ioScheduler);
+        public StreamResponseCommand(AlpsEnhancedSession session) {
+            super(session);
         }
 
         @Override

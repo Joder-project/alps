@@ -10,9 +10,6 @@ import org.alps.starter.anno.AlpsModule;
 import org.alps.starter.anno.Command;
 import org.alps.starter.anno.Metadata;
 import org.alps.starter.anno.RawPacket;
-import reactor.core.Disposable;
-import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -20,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.Flow;
 import java.util.function.Function;
 
 @Slf4j
@@ -36,29 +33,43 @@ record StreamRouter(String module, int command, Object target, Method method) im
         var alpsExchange = new AlpsExchange(session, frame.metadata(), frame.data());
         var descriptor = MethodDescriptor.create(alpsExchange, target, method);
         var ret = descriptor.invoke(frame);
-        if (ret instanceof Flux<?> flux) {
-            AtomicReference<Disposable> disposable = new AtomicReference<>();
-            // 关闭流
-            disposable.set(flux.doOnNext(d -> {
-                        var dis = disposable.get();
-                        if (session.isClose() && dis != null && !dis.isDisposed()) {
-                            dis.dispose();
-                        } else {
-                            var responseCommand = session.streamResponse().reqId(((StreamRequestFrame) frame).id());
-                            if (!alpsExchange.getMetadata().isEmpty()) {
-                                alpsExchange.getMetadata().forEach(responseCommand::metadata);
-                            }
-                            responseCommand.data(d);
-                            responseCommand.send();
-                        }
-                    })
-                    .publishOn(Schedulers.boundedElastic()).doOnComplete(() -> {
-                        session.streamResponse()
-                                .reqId(((StreamRequestFrame) frame).id())
-                                .finish(true)
-                                .send();
-                    })
-                    .subscribe());
+        if (ret == null) {
+            session.streamResponse()
+                    .reqId(((StreamRequestFrame) frame).id())
+                    .finish(true)
+                    .send();
+            return;
+        }
+        if (ret instanceof Flow.Publisher<?> flux) {
+            flux.subscribe(new Flow.Subscriber<Object>() {
+                @Override
+                public void onSubscribe(Flow.Subscription subscription) {
+
+                }
+
+                @Override
+                public void onNext(Object item) {
+                    var responseCommand = session.streamResponse().reqId(((StreamRequestFrame) frame).id());
+                    if (!alpsExchange.getMetadata().isEmpty()) {
+                        alpsExchange.getMetadata().forEach(responseCommand::metadata);
+                    }
+                    responseCommand.data(item);
+                    responseCommand.send();
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+                    log.error("stream error", throwable);
+                }
+
+                @Override
+                public void onComplete() {
+                    session.streamResponse()
+                            .reqId(((StreamRequestFrame) frame).id())
+                            .finish(true)
+                            .send();
+                }
+            });
         }
     }
 }
