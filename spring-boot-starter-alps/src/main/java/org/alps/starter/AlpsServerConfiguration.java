@@ -50,8 +50,7 @@ public class AlpsServerConfiguration {
         nettyConfig.getChildOptionSettings().forEach((k, v) -> childOptionSettings.put(ChannelOption.valueOf(k), v));
         serverConfig.setChildOptionSettings(childOptionSettings);
         return new AlpsTcpServer(new NioEventLoopGroup(nettyConfig.getBossThread()),
-                new NioEventLoopGroup(nettyConfig.getWorkerThread()),
-                new NioEventLoopGroup(nettyConfig.getBizThread()), serverConfig,
+                new NioEventLoopGroup(nettyConfig.getWorkerThread()), serverConfig,
                 sessionFactory,
                 alpsProperties.getModules(), coderFactory);
     }
@@ -76,8 +75,7 @@ public class AlpsServerConfiguration {
                 Collections.singletonList(certificate.cert()));
 
 
-        return new AlpsQuicServer(new NioEventLoopGroup(nettyConfig.getBossThread()),
-                new NioEventLoopGroup(nettyConfig.getWorkerThread()), serverConfig, quicServerConfig,
+        return new AlpsQuicServer(new NioEventLoopGroup(nettyConfig.getBossThread()), serverConfig, quicServerConfig,
                 sessionFactory, alpsProperties.getModules(), coderFactory);
 
     }
