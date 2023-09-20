@@ -46,8 +46,7 @@ public class AlpsEnhancedSession implements AlpsSession {
         }
     });
 
-    public AlpsEnhancedSession(AlpsSession session, FrameCoders frameCoders, AlpsDataCoderFactory dataCoderFactory,
-                               FrameListeners frameListeners, SessionListeners sessionListeners, AlpsConfig config) {
+    public AlpsEnhancedSession(AlpsSession session, FrameCoders frameCoders, AlpsDataCoderFactory dataCoderFactory, FrameListeners frameListeners, SessionListeners sessionListeners, AlpsConfig config) {
         this.session = session;
         this.frameCoders = frameCoders;
         this.dataCoderFactory = dataCoderFactory;
@@ -188,16 +187,11 @@ public class AlpsEnhancedSession implements AlpsSession {
 
             var code = config.getDataConfig().getCoder().getCode();
 
-            this.metadataBuilder = new AlpsMetadataBuilder().isZip(config.getMetaDataConfig().isEnabledZip())
-                    .containerCoder(code)
-                    .coder(session.dataCoderFactory.getCoder(code));
+            this.metadataBuilder = new AlpsMetadataBuilder().isZip(config.getMetaDataConfig().isEnabledZip()).containerCoder(code).coder(session.dataCoderFactory.getCoder(code));
 
 
             var code2 = config.getDataConfig().getCoder().getCode();
-            this.dataBuilder = new AlpsDataBuilder()
-                    .isZip(config.getDataConfig().isEnabledZip())
-                    .dataCoder(code2)
-                    .coder(session.dataCoderFactory.getCoder(code2));
+            this.dataBuilder = new AlpsDataBuilder().isZip(config.getDataConfig().isEnabledZip()).dataCoder(code2).coder(session.dataCoderFactory.getCoder(code2));
         }
 
         public BaseCommand data(Object... data) {
@@ -244,13 +238,9 @@ public class AlpsEnhancedSession implements AlpsSession {
             Thread.startVirtualThread(() -> {
                 try {
                     var frameBytes = ForgetFrame.toBytes(command);
-                    var metadata = metadataBuilder
-                            .frameType(FrameCoders.DefaultFrame.FORGET.frameType)
-                            .frame(frameBytes)
-                            .build();
+                    var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.FORGET.frameType).frame(frameBytes).build();
                     var data = dataBuilder.build();
-                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                            new ForgetFrame(command, metadata, data, null));
+                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), new ForgetFrame(command, metadata, data, null));
                     session.send(protocol);
                 } catch (Exception ex) {
                     log.error("Error sending", ex);
@@ -285,13 +275,9 @@ public class AlpsEnhancedSession implements AlpsSession {
             Thread.startVirtualThread(() -> {
                 try {
                     var frameBytes = ForgetFrame.toBytes(command);
-                    var metadata = metadataBuilder
-                            .frameType(FrameCoders.DefaultFrame.FORGET.frameType)
-                            .frame(frameBytes)
-                            .build();
+                    var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.FORGET.frameType).frame(frameBytes).build();
                     var data = dataBuilder.build();
-                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                            new ForgetFrame(command, metadata, data, null));
+                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), new ForgetFrame(command, metadata, data, null));
                     AlpsUtils.broadcast(sessions, protocol);
                 } catch (Exception ex) {
                     log.error("Error sending", ex);
@@ -322,48 +308,32 @@ public class AlpsEnhancedSession implements AlpsSession {
 
         public <T> T send(Class<T> clazz) {
             AtomicReference<T> result = new AtomicReference<>();
-            CountDownLatch latch = new CountDownLatch(1);
+            var id = session.nextId();
+            var frameBytes = RequestFrame.toBytes(command, id);
+            var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.REQUEST.frameType).frame(frameBytes).build();
+            var data = dataBuilder.build();
+            var requestFrame = new RequestFrame(command, id, metadata, data, null);
+            var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
+            var responseResult = new ResponseResult(session, requestFrame);
+            FrameListener listener = (session, frame) -> responseResult.receive(((ResponseFrame) frame));
             Thread.startVirtualThread(() -> {
-                FrameListener listener = null;
-                try {
-                    var id = session.nextId();
-                    var frameBytes = RequestFrame.toBytes(command, id);
-                    var metadata = metadataBuilder
-                            .frameType(FrameCoders.DefaultFrame.REQUEST.frameType)
-                            .frame(frameBytes)
-                            .build();
-                    var data = dataBuilder.build();
-                    var requestFrame = new RequestFrame(command, id, metadata, data, null);
-                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
-                    var responseResult = new ResponseResult(session, requestFrame);
-                    listener = (session, frame) -> responseResult.receive(((ResponseFrame) frame));
-                    session.frameListeners.addFrameListener(ResponseFrame.class,
-                            listener, responseResult::isResult
-                    );
-                    session.send(protocol);
-
-                    var ret = responseResult.countDownLatch.await(5L, TimeUnit.SECONDS);
-                    if (ret) {
-                        var response = new Response(responseResult.result().orElseThrow());
-                        result.set(response.data(clazz).orElse(null));
-                    } else {
-                        result.set(null);
-                    }
-                } catch (InterruptedException e) {
-                    log.error("Error sending", e);
-                    throw new AlpsException(e);
-                } finally {
-                    if (listener != null) {
-                        session.frameListeners.removeFrameListener(ResponseFrame.class, listener);
-                    }
-                    latch.countDown();
-                }
+                session.frameListeners.addFrameListener(ResponseFrame.class, listener, responseResult::isResult);
+                session.send(protocol);
             });
+
             try {
-                latch.await();
+                var ret = responseResult.countDownLatch.await(5L, TimeUnit.SECONDS);
+                if (ret) {
+                    var response = new Response(responseResult.result().orElseThrow());
+                    result.set(response.data(clazz).orElse(null));
+                } else {
+                    result.set(null);
+                }
             } catch (InterruptedException e) {
                 log.error("Error sending", e);
                 throw new AlpsException(e);
+            } finally {
+                session.frameListeners.removeFrameListener(ResponseFrame.class, listener);
             }
             return result.get();
         }
@@ -410,12 +380,8 @@ public class AlpsEnhancedSession implements AlpsSession {
             Thread.startVirtualThread(() -> {
                 try {
                     var frameBytes = IdleFrame.toIdleBytes();
-                    var metadata = metadataBuilder
-                            .frameType(FrameCoders.DefaultFrame.IDLE.frameType)
-                            .frame(frameBytes)
-                            .build();
-                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                            new IdleFrame(metadata, null));
+                    var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.IDLE.frameType).frame(frameBytes).build();
+                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), new IdleFrame(metadata, null));
                     session.send(protocol);
                 } catch (Exception ex) {
                     log.error("Error sending", ex);
@@ -452,13 +418,9 @@ public class AlpsEnhancedSession implements AlpsSession {
             Thread.startVirtualThread(() -> {
                 try {
                     var frameBytes = ErrorFrame.toBytes(code);
-                    var metadata = metadataBuilder
-                            .frameType(FrameCoders.DefaultFrame.ERROR.frameType)
-                            .frame(frameBytes)
-                            .build();
+                    var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.ERROR.frameType).frame(frameBytes).build();
                     var data = dataBuilder.build();
-                    var protocol = session.frameCoders.encode(config.getSocketType(), AlpsPacket.ZERO_MODULE,
-                            new ErrorFrame(code, metadata, data, null));
+                    var protocol = session.frameCoders.encode(config.getSocketType(), AlpsPacket.ZERO_MODULE, new ErrorFrame(code, metadata, data, null));
                     session.send(protocol);
                 } catch (Exception ex) {
                     log.error("Error sending", ex);
@@ -497,13 +459,9 @@ public class AlpsEnhancedSession implements AlpsSession {
             Thread.startVirtualThread(() -> {
                 try {
                     var frameBytes = ResponseFrame.toBytes(reqId);
-                    var metadata = metadataBuilder
-                            .frameType(FrameCoders.DefaultFrame.RESPONSE.frameType)
-                            .frame(frameBytes)
-                            .build();
+                    var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.RESPONSE.frameType).frame(frameBytes).build();
                     var data = dataBuilder.build();
-                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                            new ResponseFrame(reqId, metadata, data, null));
+                    var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), new ResponseFrame(reqId, metadata, data, null));
                     session.send(protocol);
                 } catch (Exception ex) {
                     log.error("Error sending", ex);
@@ -567,39 +525,31 @@ public class AlpsEnhancedSession implements AlpsSession {
             AtomicReference<FrameListener> listener = new AtomicReference<>(null);
             var many = Sinks.many().unicast().<T>onBackpressureBuffer();
             Mono.fromRunnable(() -> {
-                        var id = session.nextId();
-                        var frameBytes = StreamRequestFrame.toBytes(command, id);
-                        var metadata = metadataBuilder
-                                .frameType(FrameCoders.DefaultFrame.STREAM_REQUEST.frameType)
-                                .frame(frameBytes)
-                                .build();
-                        var data = dataBuilder.build();
-                        var requestFrame = new StreamRequestFrame(id, command, metadata, data, null);
-                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
-                        // 注册监听
-                        listener.set((session, frame) -> {
-                            var streamResponseFrame = (StreamResponseFrame) frame;
-                            if (streamResponseFrame.finish()) {
-                                many.tryEmitComplete();
-                                ((AlpsEnhancedSession) session).frameListeners
-                                        .removeFrameListener(StreamResponseFrame.class, listener.get());
-                            } else {
-                                var t = new ResponseStream(streamResponseFrame).data(clazz);
-                                t.ifPresent(many::tryEmitNext);
-                            }
-                        });
-                        session.frameListeners.addFrameListener(StreamResponseFrame.class,
-                                listener.get(), (AlpsSession session, Frame frame) -> {
-                                    if (frame instanceof StreamResponseFrame responseFrame) {
-                                        return session.equals(this.session) && responseFrame.reqId() == requestFrame.id();
-                                    }
-                                    return false;
-                                }
-                        );
-                        session.send(protocol);
-                    }).publishOn(ioScheduler)
-                    .doOnError(error -> log.error("Error sending", error))
-                    .subscribe();
+                var id = session.nextId();
+                var frameBytes = StreamRequestFrame.toBytes(command, id);
+                var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.STREAM_REQUEST.frameType).frame(frameBytes).build();
+                var data = dataBuilder.build();
+                var requestFrame = new StreamRequestFrame(id, command, metadata, data, null);
+                var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
+                // 注册监听
+                listener.set((session, frame) -> {
+                    var streamResponseFrame = (StreamResponseFrame) frame;
+                    if (streamResponseFrame.finish()) {
+                        many.tryEmitComplete();
+                        ((AlpsEnhancedSession) session).frameListeners.removeFrameListener(StreamResponseFrame.class, listener.get());
+                    } else {
+                        var t = new ResponseStream(streamResponseFrame).data(clazz);
+                        t.ifPresent(many::tryEmitNext);
+                    }
+                });
+                session.frameListeners.addFrameListener(StreamResponseFrame.class, listener.get(), (AlpsSession session, Frame frame) -> {
+                    if (frame instanceof StreamResponseFrame responseFrame) {
+                        return session.equals(this.session) && responseFrame.reqId() == requestFrame.id();
+                    }
+                    return false;
+                });
+                session.send(protocol);
+            }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error)).subscribe();
             return many.asFlux();
         }
 
@@ -636,19 +586,14 @@ public class AlpsEnhancedSession implements AlpsSession {
             return this;
         }
 
-        public Mono<Void> send() {
-            return Mono.fromRunnable(() -> {
-                        var frameBytes = StreamResponseFrame.toBytes(reqId, finish);
-                        var metadata = metadataBuilder
-                                .frameType(FrameCoders.DefaultFrame.STREAM_RESPONSE.frameType)
-                                .frame(frameBytes)
-                                .build();
-                        var data = dataBuilder.build();
-                        var protocol = session.frameCoders.encode(config.getSocketType(), session.module(),
-                                new StreamResponseFrame(reqId, finish, metadata, data, null));
-                        session.send(protocol);
-                    }).publishOn(ioScheduler).doOnError(error -> log.error("Error sending", error))
-                    .then();
+        public void send() {
+            Thread.startVirtualThread(() -> {
+                var frameBytes = StreamResponseFrame.toBytes(reqId, finish);
+                var metadata = metadataBuilder.frameType(FrameCoders.DefaultFrame.STREAM_RESPONSE.frameType).frame(frameBytes).build();
+                var data = dataBuilder.build();
+                var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), new StreamResponseFrame(reqId, finish, metadata, data, null));
+                session.send(protocol);
+            });
         }
     }
 

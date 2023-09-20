@@ -12,7 +12,6 @@ import org.alps.starter.anno.Metadata;
 import org.alps.starter.anno.RawPacket;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.lang.reflect.Method;
@@ -40,25 +39,24 @@ record StreamRouter(String module, int command, Object target, Method method) im
         if (ret instanceof Flux<?> flux) {
             AtomicReference<Disposable> disposable = new AtomicReference<>();
             // 关闭流
-            disposable.set(flux.flatMap(d -> {
+            disposable.set(flux.doOnNext(d -> {
                         var dis = disposable.get();
                         if (session.isClose() && dis != null && !dis.isDisposed()) {
                             dis.dispose();
-                            return Mono.empty();
                         } else {
                             var responseCommand = session.streamResponse().reqId(((StreamRequestFrame) frame).id());
                             if (!alpsExchange.getMetadata().isEmpty()) {
                                 alpsExchange.getMetadata().forEach(responseCommand::metadata);
                             }
                             responseCommand.data(d);
-                            return responseCommand.send();
+                            responseCommand.send();
                         }
                     })
                     .publishOn(Schedulers.boundedElastic()).doOnComplete(() -> {
                         session.streamResponse()
                                 .reqId(((StreamRequestFrame) frame).id())
                                 .finish(true)
-                                .send().subscribe();
+                                .send();
                     })
                     .subscribe());
         }

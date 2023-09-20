@@ -88,7 +88,7 @@ public class Server {
                                         session.streamResponse()
                                                 .reqId(streamRequestFrame.id())
                                                 .data(StringValue.of("Hello" + n))
-                                                .send().subscribe();
+                                                .send();
                                         log.info("send: {} {}", n, session.isClose());
                                     }).subscribe());
                         }
