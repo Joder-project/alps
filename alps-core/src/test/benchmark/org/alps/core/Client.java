@@ -104,7 +104,7 @@ public class Client {
                         }
 
                         @Override
-                        public void handle(AlpsEnhancedSession session, CommandFrame frame) {
+                        public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Throwable {
                             if (frame instanceof ForgetFrame forgetFrame) {
                                 log.info("2222");
                             } else if (frame instanceof RequestFrame requestFrame) {

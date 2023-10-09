@@ -67,7 +67,7 @@ public class RouterDispatcher {
                     try {
                         router.handle(session, frame);
                         return;
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         log.info("Handle exception", e);
                         // TODO 定义默认
                         session.error().code(Errors.Code.Handle_Error_VALUE).data().send();
@@ -77,7 +77,7 @@ public class RouterDispatcher {
             for (UnknownRouter unknownRouter : unknownRouters) {
                 try {
                     unknownRouter.handle(session, module, frame);
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     log.info("Handle exception", e);
                     // TODO 定义默认
                     session.error().code(Errors.Code.Global_Handle_Error_VALUE).data().send();

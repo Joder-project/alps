@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.alps.core.AlpsEnhancedSession;
 import org.alps.core.CommandFrame;
 import org.alps.core.Router;
+import org.alps.core.common.AlpsException;
 import org.alps.core.frame.RequestFrame;
 import org.alps.core.frame.StreamRequestFrame;
 import org.alps.starter.anno.AlpsModule;
@@ -11,6 +12,9 @@ import org.alps.starter.anno.Command;
 import org.alps.starter.anno.Metadata;
 import org.alps.starter.anno.RawPacket;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ record StreamRouter(String module, int command, Object target, Method method) im
 
 
     @Override
-    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Exception {
+    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Throwable {
         var alpsExchange = new AlpsExchange(session, frame.metadata(), frame.data());
         var descriptor = MethodDescriptor.create(alpsExchange, target, method);
         var ret = descriptor.invoke(frame);
@@ -82,7 +86,7 @@ record RequestRouter(String module, int command, Object target, Method method) i
 
 
     @Override
-    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Exception {
+    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Throwable {
         var alpsExchange = new AlpsExchange(session, frame.metadata(), frame.data());
         var descriptor = MethodDescriptor.create(alpsExchange, target, method);
         var ret = descriptor.invoke(frame);
@@ -104,7 +108,7 @@ record ForgetRouter(String module, int command, Object target, Method method) im
     }
 
     @Override
-    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Exception {
+    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Throwable {
         var alpsExchange = new AlpsExchange(session, frame.metadata(), frame.data());
         var descriptor = MethodDescriptor.create(alpsExchange, target, method);
         descriptor.invoke(frame);
@@ -128,9 +132,9 @@ class Utils {
     }
 }
 
-record MethodDescriptor(AlpsExchange exchange, Object target, Method method,
+record MethodDescriptor(AlpsExchange exchange, Object target, MethodHandle method,
                         List<Function<CommandFrame, Object>> suppliers) {
-
+    static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
     static MethodDescriptor create(AlpsExchange exchange, Object target, Method method) {
         var parameters = method.getParameters();
         List<Function<CommandFrame, Object>> suppliers = new ArrayList<>(parameters.length);
@@ -153,10 +157,15 @@ record MethodDescriptor(AlpsExchange exchange, Object target, Method method,
                 suppliers.add(frame -> frame.data().dataArray()[i].object(parameter.getType()));
             }
         }
-        return new MethodDescriptor(exchange, target, method, suppliers);
+        try {
+            var methodHandle = LOOKUP.findVirtual(target.getClass(), method.getName(), MethodType.methodType(method.getReturnType(), method.getParameterTypes()));
+            return new MethodDescriptor(exchange, target, methodHandle, suppliers);
+        } catch (Throwable ex) {
+            throw new AlpsException(ex);
+        }
     }
 
-    Object invoke(CommandFrame frame) throws Exception {
+    Object invoke(CommandFrame frame) throws Throwable {
         Object[] args = new Object[suppliers.size()];
         for (int i = 0; i < args.length; i++) {
             args[i] = suppliers.get(i).apply(frame);

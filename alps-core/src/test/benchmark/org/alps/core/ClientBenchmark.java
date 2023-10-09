@@ -70,7 +70,7 @@ public class ClientBenchmark {
                         }
 
                         @Override
-                        public void handle(AlpsEnhancedSession session, CommandFrame frame) {
+                        public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Throwable {
                             if (frame instanceof ForgetFrame forgetFrame) {
 
                             } else if (frame instanceof RequestFrame requestFrame) {

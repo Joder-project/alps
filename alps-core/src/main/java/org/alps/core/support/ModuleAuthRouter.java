@@ -16,7 +16,7 @@ public class ModuleAuthRouter implements Router {
     }
 
     @Override
-    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Exception {
+    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Throwable {
 
     }
 }

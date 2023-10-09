@@ -53,7 +53,7 @@ public class Server {
                     }
 
                     @Override
-                    public void handle(AlpsEnhancedSession session, CommandFrame frame) {
+                    public void handle(AlpsEnhancedSession session, CommandFrame frame) throws Throwable {
                         log.info("1: {}", frame.getClass());
 //                        log.info("Command Received: " + command);
 //                        try {
