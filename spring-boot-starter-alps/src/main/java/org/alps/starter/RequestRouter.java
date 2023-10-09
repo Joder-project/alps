@@ -14,7 +14,6 @@ import org.alps.starter.anno.RawPacket;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -158,7 +157,7 @@ record MethodDescriptor(AlpsExchange exchange, Object target, MethodHandle metho
             }
         }
         try {
-            var methodHandle = LOOKUP.findVirtual(target.getClass(), method.getName(), MethodType.methodType(method.getReturnType(), method.getParameterTypes()));
+            var methodHandle = LOOKUP.unreflect(method);
             return new MethodDescriptor(exchange, target, methodHandle, suppliers);
         } catch (Throwable ex) {
             throw new AlpsException(ex);
