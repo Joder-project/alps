@@ -5,7 +5,6 @@ option java_outer_classname = "AlpsProtocol";
 
 message AlpsPacket {
   ConnectType connectType = 1;
-  int32 magic = 2;
   string module = 3;
   AlpsMetadata metadata = 4;
   optional AlpsData data = 5;
