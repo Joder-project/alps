@@ -29,6 +29,8 @@ public class AlpsEnhancedSession implements AlpsSession {
     final AlpsConfig config;
     private final AtomicInteger idGenerator = new AtomicInteger(1);
 
+    volatile int delayMs = 0;
+
 
     public AlpsEnhancedSession(AlpsSession session, FrameCoders frameCoders, AlpsDataCoderFactory dataCoderFactory, FrameListeners frameListeners, SessionListeners sessionListeners, AlpsConfig config) {
         this.session = session;
@@ -67,6 +69,14 @@ public class AlpsEnhancedSession implements AlpsSession {
     @Override
     public String module() {
         return session.module();
+    }
+
+    @Override
+    public int delayMs() {
+        if (delayMs == 0) {
+            request(0).send(null);
+        }
+        return delayMs;
     }
 
     @Override
@@ -298,7 +308,10 @@ public class AlpsEnhancedSession implements AlpsSession {
             var protocol = session.frameCoders.encode(config.getSocketType(), session.module(), requestFrame);
             var responseResult = new ResponseResult(session, requestFrame);
             FrameListener listener = (session, frame) -> responseResult.receive(((ResponseFrame) frame));
+            var start = System.currentTimeMillis();
             Thread.startVirtualThread(() -> {
+                var end = System.currentTimeMillis();
+                session.delayMs = (int) (end - start) / 2;
                 session.frameListeners.addFrameListener(ResponseFrame.class, listener, responseResult::isResult);
                 session.send(protocol);
             });
@@ -337,6 +350,9 @@ public class AlpsEnhancedSession implements AlpsSession {
         }
 
         public <T> Optional<T> data(Class<T> clazz) {
+            if (clazz == null) {
+                return Optional.empty();
+            }
             return data(0, clazz);
         }
 

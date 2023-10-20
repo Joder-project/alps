@@ -96,6 +96,11 @@ public class AlpsEnhancedSessionBenchmark {
         }
 
         @Override
+        public int delayMs() {
+            return 0;
+        }
+
+        @Override
         public Optional<String> selfAddress() {
             return Optional.empty();
         }

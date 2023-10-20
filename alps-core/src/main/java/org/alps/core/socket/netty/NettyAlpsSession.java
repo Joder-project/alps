@@ -47,6 +47,11 @@ public class NettyAlpsSession implements AlpsSession {
     }
 
     @Override
+    public int delayMs() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Optional<String> selfAddress() {
         if (socketChannel == null) {
             return Optional.empty();

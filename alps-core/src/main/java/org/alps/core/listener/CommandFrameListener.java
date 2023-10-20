@@ -15,6 +15,7 @@ public class CommandFrameListener implements FrameListener {
     @Override
     public void listen(AlpsSession session, Frame frame) {
         var enhancedSession = (AlpsEnhancedSession) session;
-        routerDispatcher.dispatch(enhancedSession, ((CommandFrame) frame));
+        var commandFrame = (CommandFrame) frame;
+        routerDispatcher.dispatch(enhancedSession, commandFrame);
     }
 }

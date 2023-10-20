@@ -1,6 +1,7 @@
 package org.alps.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.alps.core.frame.RequestFrame;
 import org.alps.core.proto.Errors;
 
 import java.util.List;
@@ -62,6 +63,13 @@ public class RouterDispatcher {
             int command = frame.command();
             if (routes.containsKey(module)) {
                 var routerMap = routes.get(module);
+                if (command == 0) { // 0 指令默认处理
+                    if (frame instanceof RequestFrame requestFrame) {
+                        session.response()
+                                .reqId(requestFrame.id())
+                                .send();
+                    }
+                }
                 if (routerMap.containsKey(command)) {
                     var router = routerMap.get(command);
                     try {

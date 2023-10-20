@@ -13,6 +13,13 @@ public interface AlpsSession {
     String module();
 
     /**
+     * 延迟
+     *
+     * @return 毫米
+     */
+    int delayMs();
+
+    /**
      * 自身地址
      */
     Optional<String> selfAddress();
